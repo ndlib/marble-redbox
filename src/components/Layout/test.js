@@ -3,7 +3,5 @@ import { shallow } from 'enzyme'
 import Layout from './'
 
 describe('Layout', () => {
-  test('testing test', () => {
-
-  })
+  test('testing test', () => {})
 })
