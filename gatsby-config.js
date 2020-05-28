@@ -1,4 +1,5 @@
 const path = require('path')
+const theme = require(path.join(__dirname, 'src/assets/theme.js'))
 module.exports = {
   siteMetadata: {
     title: 'MARBLE RedBox',
@@ -26,7 +27,7 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'images',
-        path: `${__dirname}/src/images`,
+        path: `${__dirname}/src/assets/images`,
       },
     },
     {
@@ -35,10 +36,10 @@ module.exports = {
         name: 'marble-redbox',
         short_name: 'redbox',
         start_url: '/',
-        background_color: '#663399',
-        theme_color: '#663399',
+        background_color: theme.colors.primary,
+        theme_color: theme.colors.primary,
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+        icon: 'src/assets/images/manifestLogo.png', // This path is relative to the root of the site.
       },
     },
   ],
