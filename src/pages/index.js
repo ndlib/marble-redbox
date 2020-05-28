@@ -6,9 +6,8 @@ import Layout from 'components/Layout'
 
 const IndexPage = () => (
   <Layout>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to='/404'>Go to page 2</Link>
+    <p>Welcome to MARBLE RedBox a site that does stuff with stuff to make stuff for things that need stuff.</p>
+    <Link to='/collection'>Do stuff</Link>
   </Layout>
 )
 
