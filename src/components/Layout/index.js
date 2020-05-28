@@ -19,11 +19,12 @@ const Layout = ({ children }) => {
   return (
     <BaseStyles>
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div sx={{
-        margin: '0 auto',
-        maxWidth: ['100vw', '100vw', '64em'],
-        padding: '1.45rem 1.0875rem',
-      }}
+      <div
+        sx={{
+          margin: '0 auto',
+          maxWidth: ['100vw', '100vw', '64em'],
+          padding: '1.45rem 1.0875rem',
+        }}
       >
         <main>{children}</main>
       </div>
