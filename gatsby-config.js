@@ -9,6 +9,11 @@ module.exports = {
       collectionsURL: 'https://presentation-iiif.library.nd.edu/experimental/collections/',
       directoriesURL: 'https://presentation-iiif.library.nd.edu/experimental/directories/',
     },
+    auth: {
+      url: 'https://okta.nd.edu',
+      clientId: '0oa1f3ut0aKpdwap5357',
+      issuer: 'https://okta.nd.edu/oauth2/ausxosq06SDdaFNMB356',
+    },
   },
   plugins: [
     'gatsby-plugin-theme-ui',
