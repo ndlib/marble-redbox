@@ -4,6 +4,7 @@
   "description": "MARBLE RedBox",
   "version": "0.1.0",
   "dependencies": {
+    "@okta/okta-auth-js": "^3.1.1",
     "@theme-ui/color": "^0.3.1",
     "gatsby": "^2.21.37",
     "gatsby-image": "^2.4.4",
