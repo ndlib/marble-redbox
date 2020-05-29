@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import Loading from 'components/Layout/Loading'
 import ErrorMessage from 'components/Layout/ErrorMessage'
 import Content from './Content'
+import { useAPIContext } from 'context/APIContext'
 
 const AllCollections = ({ location }) => {
   const [content, setContent] = useState(<Loading />)
+  const { collectionsURL } = useAPIContext()
   useEffect(() => {
     const abortController = new AbortController()
     fetch(
-      'https://presentation-iiif.library.nd.edu/experimental/collections/',
+      collectionsURL,
       {
         method: 'GET',
         signal: abortController.signal,
@@ -27,7 +29,7 @@ const AllCollections = ({ location }) => {
     return () => {
       abortController.abort()
     }
-  }, [location])
+  }, [location, collectionsURL])
   return (
     <div>{content}</div>
   )

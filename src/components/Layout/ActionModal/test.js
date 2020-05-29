@@ -13,7 +13,7 @@ test('ActionModal', () => {
     closeFunc: closeFunc,
     fullscreen: true,
   }
-  const wrapper = mount(<ActionModal {...props} ><div className='children' /></ActionModal>)
+  const wrapper = mount(<ActionModal {...props}><div className='children' /></ActionModal>)
 
   expect(wrapper.find(ReactModal).props().contentLabel).toEqual('test label')
   expect(wrapper.find('h1').text()).toEqual('test label')

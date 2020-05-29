@@ -23,13 +23,12 @@ module.exports = {
   },
   button: {
     backgroundColor: 'primary',
+    border: 'none',
     color: 'background',
     cursor: 'pointer',
     float: 'right',
-    border: 'none',
-    borderLeft: '1px solid',
-    borderColor: 'background',
     lineHeight: '1.5rem',
+    outline: 'none',
     padding: '1rem',
   },
   svg: {

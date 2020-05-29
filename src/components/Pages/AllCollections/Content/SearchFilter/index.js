@@ -8,7 +8,7 @@ import {
 const SearchFilter = () => {
   return (
     <React.Fragment>
-      <Label htmlFor='username'>Search</Label>
+      <Label htmlFor='search'>Search</Label>
       <Input
         name='search'
         id='search'

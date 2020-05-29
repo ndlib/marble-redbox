@@ -7,7 +7,7 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
     navigate('/login')
     return null
   }
-  return <Component {...props} />
+  return <Component location={location} {...props} />
 }
 
 PrivateRoute.propTypes = {

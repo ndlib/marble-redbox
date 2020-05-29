@@ -5,6 +5,10 @@ module.exports = {
     title: 'MARBLE RedBox',
     description: 'A thing that does stuff for other things that need stuff.',
     author: 'WSE',
+    apis: {
+      collectionsURL: 'https://presentation-iiif.library.nd.edu/experimental/collections/',
+      directoriesURL: 'https://presentation-iiif.library.nd.edu/experimental/directories/',
+    },
   },
   plugins: [
     'gatsby-plugin-theme-ui',
