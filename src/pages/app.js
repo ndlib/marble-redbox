@@ -1,18 +1,18 @@
 import React from 'react'
 import { Router } from '@reach/router'
-import PrivateRoute from 'components/App/PrivateRoute'
+import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
-// import Profile from "../components/Profile"
-// import Details from "../components/Details"
-import Login from 'components/App/Login'
-import Default from 'components/App/Default'
+import Login from 'components/Pages/Login'
+import AllCollections from 'components/Pages/AllCollections'
+import Collection from 'components/Pages/Collection'
+
 const App = ({ location }) => {
   return (
     <Layout>
       <Router basepath='/app'>
-        <PrivateRoute path='/' component={Default} location={location} />
+        <PrivateRoute path='/' component={AllCollections} location={location} />
         <PrivateRoute path='/login' component={Login} location={location} />
-        <PrivateRoute path='/collection/:id' component={Default} location={location} />
+        <PrivateRoute path='/collection/:id' component={Collection} location={location} />
       </Router>
     </Layout>
   )

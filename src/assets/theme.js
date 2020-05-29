@@ -37,6 +37,26 @@ module.exports = {
       fontFamily: 'body',
       lineHeight: 'body',
       fontWeight: 'body',
+      '& .ReactModal__Overlay': {
+        opacity: '0',
+        transition: 'opacity 200ms ease-in-out',
+      },
+      '& .ReactModal__Content': {
+        transform: 'translate(-50%, -100px)',
+        transition: '200ms ease-in-out',
+      },
+      '& .ReactModal__Overlay--after-open': {
+        opacity: '1',
+      },
+      '& .ReactModal__Content--after-open': {
+        transform: 'translate(-50%, 0)',
+      },
+      '& .ReactModal__Overlay--before-close': {
+        opacity: '0',
+      },
+      '& .ReactModal__Content--before-close': {
+        transform: 'translate(-50%, -100px)',
+      },
     },
     h1: {
       variant: 'text.heading',

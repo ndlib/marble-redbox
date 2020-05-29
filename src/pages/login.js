@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import Login from 'components/Login'
-
 import Layout from 'components/Layout'
+import Login from 'components/Pages/Login'
 
 const IndexPage = () => (
   <Layout>

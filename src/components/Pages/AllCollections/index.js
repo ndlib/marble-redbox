@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import Loading from 'components/Layout/Loading'
+import ErrorMessage from 'components/Layout/ErrorMessage'
+import Content from './Content'
 
-const Collection = ({ location }) => {
-  const [content, setContent] = useState('collections')
+const AllCollections = ({ location }) => {
+  const [content, setContent] = useState(<Loading />)
   useEffect(() => {
     const abortController = new AbortController()
     fetch(
@@ -16,10 +19,10 @@ const Collection = ({ location }) => {
       })
       .then((data) => {
         console.log(data)
-        setContent(<code>{JSON.stringify(data)}</code>)
+        setContent(<Content collections={data} />)
       })
       .catch((error) => {
-        console.error(error)
+        setContent(<ErrorMessage error={error} />)
       })
     return () => {
       abortController.abort()
@@ -30,4 +33,4 @@ const Collection = ({ location }) => {
   )
 }
 
-export default Collection
+export default AllCollections

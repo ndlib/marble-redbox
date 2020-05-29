@@ -1,11 +1,11 @@
 import React from 'react'
 import { Router } from '@reach/router'
-import PrivateRoute from 'components/App/PrivateRoute'
+import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
 // import Profile from "../components/Profile"
 // import Details from "../components/Details"
-import AllCollections from 'components/App/AllCollections'
-import Collection from 'components/App/Collection'
+import AllCollections from 'components/Pages/AllCollections'
+import Collection from 'components/Pages/Collection'
 const App = ({ location }) => {
   return (
     <Layout>
