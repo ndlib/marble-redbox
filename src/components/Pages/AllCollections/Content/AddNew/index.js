@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
-import { Button } from 'theme-ui'
+/** @jsx jsx */
+import { useState } from 'react'
+import { Button, jsx } from 'theme-ui'
 import ActionModal from 'components/Layout/ActionModal'
 
 const AddNew = () => {
   const [open, setOpen] = useState(false)
   return (
-    <>
+    <span sx={{
+      display: 'block',
+      textAlign: 'right',
+    }}
+    >
       <Button
         variant='primary'
         onClick={() => setOpen(true)}
@@ -17,9 +22,9 @@ const AddNew = () => {
         closeFunc={() => setOpen(false)}
         // fullscreen
       >
-        <>Add new</>
+        Add new
       </ActionModal>
-    </>
+    </span>
   )
 }
 

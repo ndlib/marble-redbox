@@ -57,6 +57,20 @@ module.exports = {
       '& .ReactModal__Content--before-close': {
         transform: 'translate(-50%, -100px)',
       },
+      '& ul': {
+        listStyle: 'none',
+        paddingInlineStart: '0',
+      },
+      '& li': {
+        padding: '0.5rem',
+      },
+      '& li:nth-of-type(odd)': {
+        backgroundColor: 'muted',
+      },
+    },
+    a: {
+      color: 'primary',
+      textDecoration: 'none',
     },
     h1: {
       variant: 'text.heading',

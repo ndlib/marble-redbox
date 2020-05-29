@@ -1,4 +1,5 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx, BaseStyles } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
@@ -7,17 +8,19 @@ const CollectionList = ({ collections }) => {
     return <div>There are no matching collections.</div>
   }
   return (
-    <div>
-      {
-        collections.map(collection => {
-          return (
-            <div key={collection.id}>
-              <Link to={`/collection/${collection.id}`}>{collection.title}</Link>
-            </div>
-          )
-        })
-      }
-    </div>
+    <BaseStyles>
+      <ul>
+        {
+          collections.map(collection => {
+            return (
+              <li key={collection.id}>
+                <Link to={`/collection/${collection.id}`}>{collection.title}</Link>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </BaseStyles>
   )
 }
 

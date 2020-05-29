@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Router } from '@reach/router'
 import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
@@ -6,7 +7,8 @@ import Layout from 'components/Layout'
 // import Details from "../components/Details"
 import AllCollections from 'components/Pages/AllCollections'
 import Collection from 'components/Pages/Collection'
-const App = ({ location }) => {
+
+const CollectionPages = ({ location }) => {
   return (
     <Layout>
       <Router basepath='/collection'>
@@ -16,4 +18,8 @@ const App = ({ location }) => {
     </Layout>
   )
 }
-export default App
+
+CollectionPages.propTypes = {
+  location: PropTypes.object.isRequired,
+}
+export default CollectionPages

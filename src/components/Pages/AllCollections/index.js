@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import Loading from 'components/Layout/Loading'
 import ErrorMessage from 'components/Layout/ErrorMessage'
 import Content from './Content'
@@ -18,7 +19,6 @@ const AllCollections = ({ location }) => {
         return result.json()
       })
       .then((data) => {
-        console.log(data)
         setContent(<Content collections={data} />)
       })
       .catch((error) => {
@@ -33,4 +33,7 @@ const AllCollections = ({ location }) => {
   )
 }
 
+AllCollections.propTypes = {
+  location: PropTypes.object.isRequired,
+}
 export default AllCollections

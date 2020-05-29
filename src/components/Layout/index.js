@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import React from 'react'
 import { jsx, BaseStyles } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
@@ -17,18 +18,20 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <BaseStyles>
+    <React.Fragment>
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        sx={{
-          margin: '0 auto',
-          maxWidth: ['100vw', '100vw', '64em'],
-          padding: '1.45rem 1.0875rem',
-        }}
-      >
-        <main>{children}</main>
-      </div>
-    </BaseStyles>
+      <BaseStyles>
+        <div
+          sx={{
+            margin: '0 auto',
+            maxWidth: ['100vw', '100vw', '64em'],
+            padding: '1.45rem 1.0875rem',
+          }}
+        >
+          <main>{children}</main>
+        </div>
+      </BaseStyles>
+    </React.Fragment>
   )
 }
 

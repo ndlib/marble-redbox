@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import AddNew from './AddNew'
+import SearchFilter from './SearchFilter'
 import CollectionsList from './CollectionsList'
 
 const Content = ({ collections }) => {
   return (
     <div>
       <AddNew />
-      <div>Search</div>
+      <SearchFilter />
       <CollectionsList collections={collections} />
     </div>
   )

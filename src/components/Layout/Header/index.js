@@ -17,11 +17,15 @@ const Header = ({ siteTitle }) => (
         padding: '1.45rem 1.0875rem',
       }}
     >
-      <Styled.h1 sx={{ margin: 0 }}>
+      <Styled.h1 sx={{
+        color: 'background',
+        margin: 0,
+      }}
+      >
         <Link
           to='/'
           sx={{
-            color: 'white',
+            color: 'background',
             textDecoration: 'none',
           }}
         >
