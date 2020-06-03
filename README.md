@@ -21,3 +21,4 @@ Useful commands:
 - `yarn serve` - Starts a server at http://localhost:9000 using the last result of `yarn build`
 - `yarn test` - Runs unit tests once.
 - `yarn watch` - Runs unit tests and watches for changes and reruns tests as changes are detected. It also prints out coverage information.
+- `yarn lint` - Run eslint on project to find formatting and syntax issues.

@@ -65,7 +65,8 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "jest",
-    "watch": "jest --watchAll --coverage"
+    "watch": "jest --watchAll --coverage",
+    "lint": "eslint '*/**/*.{js,jsx,ts,tsx}'"
   },
   "jest": {
     "transform": {
