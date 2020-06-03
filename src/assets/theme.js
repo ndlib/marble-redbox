@@ -21,7 +21,7 @@ module.exports = {
     text: '#111',
     background: '#fff',
     primary: '#0C2340',
-    secondary: '#D39F10',
+    secondary: '#006BD6',
     muted: '#f6f6f6',
   },
   text: {
@@ -69,7 +69,7 @@ module.exports = {
       },
     },
     a: {
-      color: 'primary',
+      color: 'secondary',
       textDecoration: 'none',
     },
     h1: {

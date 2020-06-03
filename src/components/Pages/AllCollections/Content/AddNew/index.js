@@ -36,6 +36,7 @@ const AddNew = () => {
           name='add'
           id='add'
           mt={3}
+          autoComplete='off'
         />
         <span sx={rightAlign}>
           <Button

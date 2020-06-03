@@ -12,6 +12,7 @@ const SearchFilter = () => {
       <Input
         name='search'
         id='search'
+        autoComplete='off'
       />
     </React.Fragment>
   )
