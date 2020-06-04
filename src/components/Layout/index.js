@@ -1,8 +1,8 @@
 /** @jsx jsx */
-import React from 'react'
 import { jsx, BaseStyles } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
+import AuthWrapper from './AuthWrapper'
 
 import Header from './Header'
 
@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <React.Fragment>
+    <AuthWrapper>
       <Header siteTitle={data.site.siteMetadata.title} />
       <BaseStyles>
         <div
@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
           <main>{children}</main>
         </div>
       </BaseStyles>
-    </React.Fragment>
+    </AuthWrapper>
   )
 }
 
