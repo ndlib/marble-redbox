@@ -14,24 +14,23 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
     if (user) {
       setContent(render)
     }
-  }, [location, render, user])
-  if (!user && location.pathname !== '/user') {
-    const authClient = new OktaAuth({
-      ...authSettings,
-      redirectUri: `${location.origin}/user`,
-    })
-    authClient.tokenManager.get('idToken')
-      .then(idToken => {
-        if (idToken) {
-          setAuth(idToken.claims)
-          setContent(render)
-        } else {
-          // You're not logged in, you need a sessionToken
-          navigate('/user')
-        }
+    if (!user && location.pathname !== '/user') {
+      const authClient = new OktaAuth({
+        ...authSettings,
+        redirectUri: `${location.origin}/user`,
       })
-    return null
-  }
+      authClient.tokenManager.get('idToken')
+        .then(idToken => {
+          if (idToken) {
+            setAuth(idToken.claims)
+            setContent(render)
+          } else {
+            // You're not logged in, you need a sessionToken
+            navigate('/user')
+          }
+        })
+    }
+  }, [location, render, user, authSettings, setAuth])
   return <>{content}</>
 }
 
