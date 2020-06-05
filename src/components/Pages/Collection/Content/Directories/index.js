@@ -13,9 +13,9 @@ const SourceId = ({ directories, labelSx, valueSx }) => {
     <div>
       <Text sx={labelSx}>Directories:</Text>
       <Box sx={valueSx}>
-        {directories.map((path) => (
-          <Flex key={path}>
-            <Text>{path}</Text>
+        {directories.map((directory) => (
+          <Flex key={directory.path}>
+            <Text>{directory.path}</Text>
             <IconButton
               ml={2}
               aria-label='Remove'

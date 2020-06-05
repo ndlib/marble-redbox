@@ -10,10 +10,12 @@ import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
 import Directories from './Directories'
 import ItemDetails from './ItemDetails'
+import ImageGroups from './ImageGroups'
+import { dummyDirectories } from './dummyData'
 import sx from './sx'
 
 const Content = ({ collection }) => {
-  const [directories, setDirectories] = useState(['path/1', 'longer/path/to/a/place/2'])
+  const [directories, setDirectories] = useState(dummyDirectories)
 
   return (
     <div>
@@ -34,7 +36,10 @@ const Content = ({ collection }) => {
         </Flex>
       </Flex>
       <Divider />
-      <ItemDetails collection={collection} />
+      <Flex sx={sx.itemSection}>
+        <ItemDetails collection={collection} />
+        <ImageGroups directories={directories} />
+      </Flex>
     </div>
   )
 }

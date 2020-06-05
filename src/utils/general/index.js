@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import typy from 'typy'
 
 // From StackOverflow, with modifications: https://stackoverflow.com/a/41358305/1599426
 export const convertToRoman = (num) => {
@@ -36,4 +37,10 @@ export const requireAtLeastOne = (propsToCheck) => {
     }
     PropTypes.checkPropTypes(propsToCheck, props, propName, componentName)
   }
+}
+
+export const pluralize = (listOrCount, singularForm, pluralForm) => {
+  singularForm = singularForm || '' // If omitted, will return empty string in singular form
+  pluralForm = pluralForm || (singularForm + 's') // If omitted, will append s to singular form
+  return (typy(listOrCount).isNumber ? listOrCount : listOrCount.length) === 1 ? singularForm : pluralForm
 }

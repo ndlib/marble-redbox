@@ -47,4 +47,9 @@ module.exports = {
       marginBottom: 2,
     },
   },
+  itemSection: {
+    flexDirection: 'row',
+    flexWrap: ['wrap', 'wrap', 'nowrap'],
+    justifyContent: 'space-between',
+  },
 }

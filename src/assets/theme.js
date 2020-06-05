@@ -14,6 +14,18 @@ module.exports = {
       height: 'auto',
       width: 'auto',
     },
+    link: {
+      background: 'none',
+      border: 'none',
+      color: 'secondary',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      margin: '0 0.5em',
+      padding: '0 2px',
+      '&:hover': {
+        color: 'primary',
+      },
+    },
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
@@ -87,6 +99,9 @@ module.exports = {
     a: {
       color: 'secondary',
       textDecoration: 'none',
+      '&:hover': {
+        color: 'primary',
+      },
     },
     h1: {
       variant: 'text.heading',
