@@ -6,13 +6,12 @@ import Loading from 'components/Layout/Loading'
 import { useAuthContext } from 'context/AuthContext'
 
 const PrivateRoute = ({ component: Component, location, ...props }) => {
-  const [content, setContent] = useState(<Loading />)
+  const [shouldRender, setShouldRender] = useState(false)
   const { authSettings, user, setAuth } = useAuthContext()
-  const render = <Component location={location} {...props} />
 
   useEffect(() => {
     if (user) {
-      setContent(render)
+      setShouldRender(true)
     }
     if (!user && location.pathname !== '/user') {
       const authClient = new OktaAuth({
@@ -23,15 +22,15 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
         .then(idToken => {
           if (idToken) {
             setAuth(idToken.claims)
-            setContent(render)
+            setShouldRender(true)
           } else {
             // You're not logged in, you need a sessionToken
             navigate('/user')
           }
         })
     }
-  }, [location, render, user, authSettings, setAuth])
-  return <>{content}</>
+  }, [location, user, authSettings, setAuth, setShouldRender])
+  return shouldRender ? <Component location={location} {...props} /> : <Loading />
 }
 
 PrivateRoute.propTypes = {
