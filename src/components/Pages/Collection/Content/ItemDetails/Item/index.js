@@ -5,7 +5,7 @@ import {
   Heading,
 } from 'theme-ui'
 import { convertToRoman } from 'utils/general'
-import DefaultImage from './DefaultImage'
+import DefaultImage from '../../DefaultImage'
 
 const Item = ({ item, depth, index }) => {
   let headingPrefix = index + 1

@@ -5,10 +5,14 @@ import {
   Divider,
   Flex,
   Heading,
+  Label,
+  Input,
 } from 'theme-ui'
+import ActionModal from 'components/Layout/ActionModal'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
 import Directories from './Directories'
+import DefaultImageModal from './DefaultImageModal'
 import ItemDetails from './ItemDetails'
 import ImageGroups from './ImageGroups'
 import { dummyDirectories } from './dummyData'
@@ -16,6 +20,7 @@ import sx from './sx'
 
 const Content = ({ collection }) => {
   const [directories, setDirectories] = useState(dummyDirectories)
+  const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
 
   return (
     <div>
@@ -32,7 +37,30 @@ const Content = ({ collection }) => {
         <Flex sx={sx.buttons}>
           <Button>Re-Sync Metadata</Button>
           <Button>Build Manifest</Button>
-          <Button>Add Directory</Button>
+          <Button onClick={() => setDirectoryModalOpen(true)}>Add Directory</Button>
+          {directoryModalOpen && (
+            <DefaultImageModal
+              headerText={`Add Default Directory to ${collection.title}`}
+              onClose={() => setDirectoryModalOpen(false)}
+              onSave={(newValue) => setDirectories(directories.concat(newValue))}
+            />
+          )}
+          <ActionModal
+            isOpen={directoryModalOpen}
+            contentLabel={`Add Default Image to ${collection.title}`}
+            closeFunc={() => setDirectoryModalOpen(false)}
+          >
+            <Label htmlFor='directorySearch' mt={1}>
+              Search:
+            </Label>
+            <Input name='directorySearch' id='directorySearch' autoComplete='off' />
+            <Label htmlFor='imageSelect' mt={1}>
+              Select Default Image
+            </Label>
+            <Button mt={3} onClick={() => setDirectoryModalOpen(false)}>
+              Save
+            </Button>
+          </ActionModal>
         </Flex>
       </Flex>
       <Divider />

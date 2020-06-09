@@ -17,6 +17,15 @@ module.exports = {
     fontWeight: '700',
     color: 'black',
   },
+  itemGroup: {
+    cursor: 'pointer',
+  },
+  selected: {
+    fontWeight: '500',
+    ':after': {
+      content: '" *"',
+    },
+  },
   itemText: {
     mb: 4,
   },
