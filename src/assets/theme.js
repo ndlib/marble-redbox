@@ -1,5 +1,32 @@
 module.exports = {
   breakpoints: ['40em', '52em', '64em'],
+  buttons: {
+    primary: {
+      cursor: 'pointer',
+    },
+    icon: {
+      borderRadius: '4px',
+      color: 'primary',
+      cursor: 'pointer',
+      fontSize: '1rem',
+      minHeight: '24px',
+      minWidth: '24px',
+      height: 'auto',
+      width: 'auto',
+    },
+    link: {
+      background: 'none',
+      border: 'none',
+      color: 'secondary',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      margin: '0 0.5em',
+      padding: '0 2px',
+      '&:hover': {
+        color: 'primary',
+      },
+    },
+  },
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body:
@@ -29,6 +56,7 @@ module.exports = {
       fontFamily: 'heading',
       lineHeight: 'heading',
       fontWeight: 'heading',
+      marginBottom: '0.5em',
     },
   },
   styles: {
@@ -71,6 +99,9 @@ module.exports = {
     a: {
       color: 'secondary',
       textDecoration: 'none',
+      '&:hover': {
+        color: 'primary',
+      },
     },
     h1: {
       variant: 'text.heading',
@@ -95,6 +126,10 @@ module.exports = {
     h6: {
       variant: 'text.heading',
       fontSize: 0,
+    },
+    hr: {
+      color: 'primary',
+      borderBottom: '2px solid',
     },
     pre: {
       fontFamily: 'monospace',
