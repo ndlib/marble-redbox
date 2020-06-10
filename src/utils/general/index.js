@@ -1,6 +1,21 @@
 import PropTypes from 'prop-types'
 import typy from 'typy'
 
+export const orderedListStyle = (depth = 0) => {
+  switch (depth) {
+    case 0:
+      return 'upper-roman'
+    case 1:
+      return 'lower-roman'
+    case 2:
+      return 'upper-alpha'
+    case 3:
+      return 'lower-alpha'
+    default:
+      return 'decimal'
+  }
+}
+
 // From StackOverflow, with modifications: https://stackoverflow.com/a/41358305/1599426
 export const convertToRoman = (num) => {
   const roman = {

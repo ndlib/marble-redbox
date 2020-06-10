@@ -1,32 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
   Heading,
 } from 'theme-ui'
-import { convertToRoman } from 'utils/general'
+import { MdExpandLess, MdExpandMore } from 'react-icons/md'
+import { orderedListStyle } from 'utils/general'
 import DefaultImage from './DefaultImage'
+import sx from '../sx'
 
-const Item = ({ item, depth, index }) => {
-  let headingPrefix = index + 1
-  if (depth < 2) {
-    headingPrefix = (depth === 0)
-      ? convertToRoman(headingPrefix).toUpperCase()
-      : convertToRoman(headingPrefix).toLowerCase()
-  }
+const Item = ({ item, depth }) => {
+  const [expanded, setExpanded] = useState(true)
+  const tooltip = (`${expanded ? 'Collapse' : 'Expand'} ${item.title}`)
+
   return (
     <Box>
-      <Heading as={`h${depth + 2}`} ml={`${depth}rem`}>
-        {headingPrefix}. {item.title}
-      </Heading>
-      {item.level !== 'collection' && (
-        <Box ml={`${depth + 1}rem`} mb='1rem'>
-          <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
+      <Box
+        sx={sx.expandHandle(depth)}
+        title={tooltip}
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? <MdExpandLess sx={sx.expandIcon} /> : <MdExpandMore sx={sx.expandIcon} />}
+        <Box sx={sx.listItemHeader(depth, orderedListStyle(depth))}>
+          <Heading as={`h${depth + 2}`}>
+            {item.title}
+          </Heading>
+        </Box>
+      </Box>
+      {expanded && (
+        <Box>
+          {item.level !== 'collection' && (
+            <Box ml={`${depth + 2}rem`} mb='1rem'>
+              <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
+            </Box>
+          )}
+          {item.items.map((item, idx) => (
+            <Item key={item.id} item={item} depth={depth + 1} index={idx} />
+          ))}
         </Box>
       )}
-      {item.items.map((item, idx) => (
-        <Item key={item.id} item={item} depth={depth + 1} index={idx} />
-      ))}
     </Box>
   )
 }
@@ -40,7 +52,6 @@ Item.propTypes = {
     items: PropTypes.array.isRequired,
   }).isRequired,
   depth: PropTypes.number,
-  index: PropTypes.number,
 }
 
 Item.defaultProps = {

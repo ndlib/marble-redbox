@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Box } from 'theme-ui'
 import Item from './Item'
+import sx from './sx'
 
 const ItemDetails = ({ collection, depth }) => {
   return (
-    <Box mt={3}>
+    <Box mt={3} sx={sx.itemsList}>
       <Item item={collection} depth={depth} />
     </Box>
   )
