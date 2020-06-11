@@ -27,18 +27,16 @@ const Item = ({ item, depth }) => {
           </Heading>
         </Box>
       </Box>
-      {expanded && (
-        <Box>
-          {item.level !== 'collection' && (
-            <Box ml={`${depth + 2}rem`} mb='1rem'>
-              <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
-            </Box>
-          )}
-          {item.items.map((item, idx) => (
-            <Item key={item.id} item={item} depth={depth + 1} index={idx} />
-          ))}
-        </Box>
-      )}
+      <Box sx={{ display: expanded ? 'block' : 'none' }}>
+        {item.level !== 'collection' && (
+          <Box ml={`${depth + 2}rem`} mb='1rem'>
+            <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
+          </Box>
+        )}
+        {item.items.map((item, idx) => (
+          <Item key={item.id} item={item} depth={depth + 1} index={idx} />
+        ))}
+      </Box>
     </Box>
   )
 }
