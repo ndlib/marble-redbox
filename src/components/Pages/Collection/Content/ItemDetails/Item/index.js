@@ -6,7 +6,7 @@ import {
 } from 'theme-ui'
 import { MdExpandLess, MdExpandMore } from 'react-icons/md'
 import { orderedListStyle } from 'utils/general'
-import DefaultImage from './DefaultImage'
+import DefaultImage from '../../DefaultImage'
 import sx from '../sx'
 
 const Item = ({ item, depth }) => {

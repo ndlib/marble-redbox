@@ -51,3 +51,9 @@ export const dummyDirectories = [
     ],
   },
 ]
+
+export const dummyImageOptions = [
+  { label: 'BPP_1001-001-F2', value: 'https://image-iiif.library.nd.edu/iiif/2/BPP1001_EAD%2FBPP_1001-001-F2' },
+  { label: 'BPP_1001-002-F2', value: 'https://image-iiif.library.nd.edu/iiif/2/BPP1001_EAD%2FBPP_1001-002-F2' },
+  { label: 'BPP_1001-003-F2', value: 'https://image-iiif.library.nd.edu/iiif/2/BPP1001_EAD%2FBPP_1001-003-F2' },
+]

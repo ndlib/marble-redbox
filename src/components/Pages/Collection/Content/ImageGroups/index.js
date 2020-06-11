@@ -12,6 +12,7 @@ import {
   Text,
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
+import { useCollectionContext } from 'context/CollectionContext'
 import sx from './sx'
 
 const getItemGroupsOfType = (folder, type, groups = []) => {
@@ -28,6 +29,10 @@ const getItemGroupsOfType = (folder, type, groups = []) => {
 
 const ImageGroups = ({ directories }) => {
   const [selectedType, setSelectedType] = useState('image')
+  const { imageGroup, setImageGroup } = useCollectionContext()
+  const setGroup = (group) => {
+    setImageGroup(group)
+  }
 
   const groupData = {
     image: [].concat(...directories.map(directory => getItemGroupsOfType(directory, 'image'))),
@@ -55,10 +60,29 @@ const ImageGroups = ({ directories }) => {
         </Flex>
         <Box>
           {typy(groupData[selectedType]).safeArray.map(group => (
-            <Text key={group.folderPath} sx={sx.itemText}>
-              {group.folderPath} ({group.itemCount} {pluralize(group.itemCount, selectedType)})
-            </Text>
+            <Box
+              key={group.folderPath}
+              onClick={() => setGroup(group)}
+              sx={sx.itemGroup}
+            >
+              <Text
+                sx={{
+                  ...sx.itemText,
+                  ...(group.folderPath === typy(imageGroup, 'folderPath').safeString ? sx.selected : {}),
+                }}
+              >
+                {group.folderPath} ({group.itemCount} {pluralize(group.itemCount, selectedType)})
+              </Text>
+            </Box>
           ))}
+          {imageGroup && (
+            <Button
+              variant='link'
+              onClick={() => setGroup(null)}
+            >
+              Clear Selection
+            </Button>
+          )}
         </Box>
       </section>
     </BaseStyles>
