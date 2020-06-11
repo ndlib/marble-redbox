@@ -3,6 +3,11 @@ module.exports = {
   buttons: {
     primary: {
       cursor: 'pointer',
+      '&:disabled': {
+        cursor: 'not-allowed',
+        backgroundColor: 'muted',
+        color: 'mutedText',
+      },
     },
     icon: {
       borderRadius: '4px',
@@ -50,6 +55,7 @@ module.exports = {
     primary: '#0C2340',
     secondary: '#006BD6',
     muted: '#f6f6f6',
+    mutedText: '#999999',
   },
   text: {
     heading: {
