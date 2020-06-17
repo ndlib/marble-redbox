@@ -7,8 +7,10 @@ import {
   Text,
 } from 'theme-ui'
 import { MdClear } from 'react-icons/md'
+import { useDirectoriesContext } from 'context/DirectoriesContext'
 
-const SourceId = ({ directories, labelSx, valueSx }) => {
+const Content = ({ labelSx, valueSx }) => {
+  const { directories } = useDirectoriesContext()
   return (
     <div>
       <Text sx={labelSx}>Directories:</Text>
@@ -29,10 +31,9 @@ const SourceId = ({ directories, labelSx, valueSx }) => {
   )
 }
 
-SourceId.propTypes = {
-  directories: PropTypes.array.isRequired,
+Content.propTypes = {
   labelSx: PropTypes.object,
   valueSx: PropTypes.object,
 }
 
-export default SourceId
+export default Content

@@ -3,6 +3,7 @@ export const initialContext = {
   collection: null,
   imageGroup: null,
   updateCollection: () => {},
+  setCollection: () => {},
   setImageGroup: () => {},
 }
 export const CollectionContext = createContext(initialContext)

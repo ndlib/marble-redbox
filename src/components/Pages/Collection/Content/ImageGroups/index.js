@@ -1,7 +1,6 @@
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import typy from 'typy'
 import {
   jsx,
@@ -13,6 +12,8 @@ import {
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
 import { useCollectionContext } from 'context/CollectionContext'
+import { useDirectoriesContext } from 'context/DirectoriesContext'
+import { dummyDirectories } from '../dummyData'
 import sx from './sx'
 
 const getItemGroupsOfType = (folder, type, groups = []) => {
@@ -27,11 +28,17 @@ const getItemGroupsOfType = (folder, type, groups = []) => {
   return groups
 }
 
-const ImageGroups = ({ directories }) => {
+const ImageGroups = () => {
+  // const { directories } = useDirectoriesContext()
+  const directories = dummyDirectories
   const [selectedType, setSelectedType] = useState('image')
-  const { imageGroup, setImageGroup } = useCollectionContext()
+  const { imageGroup, setImageGroup, collection } = useCollectionContext()
   const setGroup = (group) => {
-    setImageGroup(group)
+    setImageGroup(collection, group)
+  }
+  const setType = (type) => {
+    setSelectedType(type)
+    setGroup(null)
   }
 
   const groupData = {
@@ -46,14 +53,14 @@ const ImageGroups = ({ directories }) => {
           <Button
             variant='link'
             sx={selectedType === 'image' ? sx.typeButtonSelected : sx.typeButton}
-            onClick={() => setSelectedType('image')}
+            onClick={() => setType('image')}
           >
             Images
           </Button>
           <Button
             variant='link'
             sx={selectedType === 'pdf' ? sx.typeButtonSelected : sx.typeButton}
-            onClick={() => setSelectedType('pdf')}
+            onClick={() => setType('pdf')}
           >
             PDFs
           </Button>
@@ -87,26 +94,6 @@ const ImageGroups = ({ directories }) => {
       </section>
     </BaseStyles>
   )
-}
-
-ImageGroups.propTypes = {
-  directories: PropTypes.arrayOf(PropTypes.shape({
-    path: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      path: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-    })),
-    folders: PropTypes.arrayOf(PropTypes.shape({
-      path: PropTypes.string.isRequired,
-      items: PropTypes.arrayOf(PropTypes.shape({
-        path: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-      })),
-      folders: PropTypes.array, // Assume this is recursive
-    })),
-  })),
 }
 
 export default ImageGroups
