@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Input,
   Label,
   Radio,
   Text,
@@ -10,6 +9,7 @@ import {
 import { useCollectionContext } from 'context/CollectionContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
+import SearchFilter from 'components/Shared/SearchFilter'
 import DefaultImage from '../DefaultImage'
 import { dummyImageOptions } from '../dummyData'
 import sx from './sx'
@@ -18,6 +18,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
   const options = dummyImageOptions
   const defaultOption = options.find((opt) => opt.value === defaultSelected)
   const [selected, setSelected] = useState(defaultOption)
+  const [filteredOptions, setFilteredOptions] = useState(options)
   let { imageGroup } = useCollectionContext()
   if (!imageGroup && defaultSelected) {
     // TODO: Get group based on currently selected default image
@@ -25,6 +26,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       folderPath: defaultSelected,
     }
   }
+  const searchFields = ['label', 'value']
 
   return (
     <ActionModal
@@ -32,19 +34,16 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       contentLabel={headerText}
       closeFunc={onClose}
     >
-      <Label htmlFor='imageModalSearch' mt={1}>
-        Search:
-      </Label>
-      <Input name='imageModalSearch' id='imageModalSearch' autoComplete='off' />
       {imageGroup && (
-        <Text mt={3}>
+        <Text mb={3}>
           Selected Group: {imageGroup.folderPath}
         </Text>
       )}
+      <SearchFilter data={options} fields={searchFields} onChange={setFilteredOptions} />
       <Label htmlFor='imageModalSelect' mt={3}>
         Select Default Image
       </Label>
-      {options.map((opt) => (
+      {filteredOptions.map((opt) => (
         <Label key={opt.value} sx={sx.option}>
           <Radio
             name='imageModalSelect'

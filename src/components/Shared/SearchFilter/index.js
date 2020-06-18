@@ -8,13 +8,11 @@ import {
   jsx,
 } from 'theme-ui'
 
-const searchFields = ['id', 'url', 'title']
-
-const SearchFilter = ({ collections, onChange }) => {
+const SearchFilter = ({ data, fields, onChange }) => {
   const filter = (event) => {
     const inputValue = typy(event, 'target.value').safeString.toLowerCase()
-    const filteredList = collections.filter((col) => {
-      return searchFields.some((field) => typy(col[field]).safeString.toLowerCase().includes(inputValue))
+    const filteredList = data.filter((item) => {
+      return fields.some((field) => typy(item[field]).safeString.toLowerCase().includes(inputValue))
     })
     onChange(filteredList)
   }
@@ -32,13 +30,8 @@ const SearchFilter = ({ collections, onChange }) => {
 }
 
 SearchFilter.propTypes = {
-  collections: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+  data: PropTypes.array.isRequired,
+  fields: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
 }
 

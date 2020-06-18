@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Input,
   Label,
   Radio,
   Text,
@@ -11,6 +10,7 @@ import { useCollectionContext } from 'context/CollectionContext'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
+import SearchFilter from 'components/Shared/SearchFilter'
 import { pluralize } from 'utils/general'
 import sx from './sx'
 
@@ -18,6 +18,8 @@ const AddDirectoryModal = ({ onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
   const { collection } = useCollectionContext()
   const [selected, setSelected] = useState()
+  const [filtered, setFiltered] = useState(directories)
+  const searchFields = ['path']
 
   return (
     <ActionModal
@@ -25,14 +27,11 @@ const AddDirectoryModal = ({ onSave, onClose }) => {
       contentLabel={`Add Default Directory to ${collection.title}`}
       closeFunc={onClose}
     >
-      <Label htmlFor='addDirectoryModalSearch' mt={1}>
-        Search:
-      </Label>
-      <Input name='addDirectoryModalSearch' id='addDirectoryModalSearch' autoComplete='off' />
+      <SearchFilter data={directories} fields={searchFields} onChange={setFiltered} />
       <Label htmlFor='addDirectoryModalSelect' mt={3}>
         Select Directory
       </Label>
-      {directories.map((opt) => (
+      {filtered.map((opt) => (
         <Label key={opt.id} sx={sx.option}>
           <Radio
             name='addDirectorySelect'

@@ -8,8 +8,10 @@ import sx from './sx'
 const ItemDetails = ({ depth }) => {
   const { collection } = useCollectionContext()
   return (
-    <Box mt={3} sx={sx.itemsList}>
-      <Item item={collection} depth={depth} />
+    <Box mt={3}>
+      <Box sx={sx.itemsList}>
+        <Item item={collection} depth={depth} />
+      </Box>
     </Box>
   )
 }
