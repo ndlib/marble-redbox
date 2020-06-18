@@ -4,22 +4,31 @@ import {
   Box,
   Flex,
   IconButton,
+  Link,
   Text,
 } from 'theme-ui'
 import { MdModeEdit } from 'react-icons/md'
 import { useCollectionContext } from 'context/CollectionContext'
 import Modal from './Modal'
+import sx from './sx'
 
 const SourceId = ({ labelSx, valueSx }) => {
   const { collection } = useCollectionContext()
   const [modalOpen, setModalOpen] = useState(false)
-  const [sourceId, setSourceId] = useState(collection.id)
+  const [sourceUri, setSourceUri] = useState(collection.sourceSystemUri)
   return (
     <div>
       <Text sx={labelSx}>Source ID:</Text>
       <Box sx={valueSx}>
         <Flex>
-          {sourceId}
+          {collection.id}
+          {sourceUri && (
+            <Text ml={2}>
+              (
+              <Link href={sourceUri} target='_blank' sx={sx.sourceUrl}>{sourceUri}</Link>
+              )
+            </Text>
+          )}
           <IconButton
             ml={2}
             aria-label='Edit'
@@ -31,10 +40,9 @@ const SourceId = ({ labelSx, valueSx }) => {
       </Box>
       {modalOpen && (
         <Modal
-          sourceId={sourceId}
           onClose={() => setModalOpen(false)}
           onSave={(newValue) => {
-            setSourceId(newValue)
+            setSourceUri(newValue)
             setModalOpen(false)
           }}
         />

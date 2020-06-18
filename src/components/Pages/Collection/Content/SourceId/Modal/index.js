@@ -5,11 +5,13 @@ import {
   Input,
   Label,
 } from 'theme-ui'
+import { useCollectionContext } from 'context/CollectionContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
 
-const Modal = ({ sourceId, onSave, onClose }) => {
-  const [newSourceId, setNewSourceId] = useState(sourceId)
+const Modal = ({ onSave, onClose }) => {
+  const { collection } = useCollectionContext()
+  const [newSourceId, setNewSourceId] = useState(collection.sourceSystemUri)
 
   return (
     <ActionModal
@@ -35,7 +37,6 @@ const Modal = ({ sourceId, onSave, onClose }) => {
 }
 
 Modal.propTypes = {
-  sourceId: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 }

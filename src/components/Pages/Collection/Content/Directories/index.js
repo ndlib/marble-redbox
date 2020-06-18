@@ -16,8 +16,8 @@ const Content = ({ labelSx, valueSx }) => {
       <Text sx={labelSx}>Directories:</Text>
       <Box sx={valueSx}>
         {directories.map((directory) => (
-          <Flex key={directory.path}>
-            <Text>{directory.path}</Text>
+          <Flex key={directory.id}>
+            <Text>{directory.Path}</Text>
             <IconButton
               ml={2}
               aria-label='Remove'

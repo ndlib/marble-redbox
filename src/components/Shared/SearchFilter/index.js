@@ -10,9 +10,13 @@ import {
 
 const SearchFilter = ({ data, fields, onChange }) => {
   const filter = (event) => {
-    const inputValue = typy(event, 'target.value').safeString.toLowerCase()
+    // Split search terms on spaces for a quick-and-dirty multiterm search
+    const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
     const filteredList = data.filter((item) => {
-      return fields.some((field) => typy(item[field]).safeString.toLowerCase().includes(inputValue))
+      // EVERY term must be included in the search fields. They can be in different fields.
+      return inputTerms.every(term => {
+        return fields.some((field) => typy(item[field]).safeString.toLowerCase().includes(term))
+      })
     })
     onChange(filteredList)
   }

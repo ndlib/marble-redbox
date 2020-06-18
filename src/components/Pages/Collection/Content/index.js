@@ -22,6 +22,7 @@ const Content = () => {
   const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
   const { collection } = useCollectionContext()
   const { directories, updateDirectories } = useDirectoriesContext()
+  const imageGroups = directories.map(directory => directory.groups).flat()
 
   return (
     <div>
@@ -66,7 +67,7 @@ const Content = () => {
       <Divider />
       <Flex sx={sx.itemSection}>
         <ItemDetails collection={collection} />
-        <ImageGroups />
+        <ImageGroups groups={imageGroups} />
       </Flex>
     </div>
   )

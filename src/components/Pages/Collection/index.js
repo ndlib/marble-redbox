@@ -17,7 +17,7 @@ const Collection = ({ id, location }) => {
   const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
   const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
-  const { collectionsURL, directoriesURL } = useAPIContext()
+  const { collectionsURL } = useAPIContext()
   const { setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
 
@@ -47,11 +47,11 @@ const Collection = ({ id, location }) => {
     }
   }, [id, location, collectionsURL, setCollection])
 
-  // Directories fetch
+  // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
     const abortController = new AbortController()
     fetch(
-      directoriesURL,
+      `${collectionsURL}${id}/directories`,
       {
         method: 'GET', // Just a default. Can be overridden
         signal: abortController.signal,
@@ -71,7 +71,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [directoriesURL, setDirectories])
+  }, [id, collectionsURL, setDirectories])
 
   const allStatuses = [collectionStatus, directoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {

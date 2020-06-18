@@ -1,6 +1,7 @@
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import typy from 'typy'
 import {
   jsx,
@@ -12,25 +13,9 @@ import {
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
 import { useCollectionContext } from 'context/CollectionContext'
-import { useDirectoriesContext } from 'context/DirectoriesContext'
-import { dummyDirectories } from '../dummyData'
 import sx from './sx'
 
-const getItemGroupsOfType = (folder, type, groups = []) => {
-  const items = typy(folder.items).safeArray.filter(item => item.type === type)
-  if (items.length) {
-    groups.push({
-      folderPath: folder.path,
-      itemCount: items.length,
-    })
-  }
-  typy(folder.folders).safeArray.forEach(folder => getItemGroupsOfType(folder, type, groups))
-  return groups
-}
-
-const ImageGroups = () => {
-  // const { directories } = useDirectoriesContext()
-  const directories = dummyDirectories
+const ImageGroups = ({ groups }) => {
   const [selectedType, setSelectedType] = useState('image')
   const { imageGroup, setImageGroup, collection } = useCollectionContext()
   const setGroup = (group) => {
@@ -42,8 +27,8 @@ const ImageGroups = () => {
   }
 
   const groupData = {
-    image: [].concat(...directories.map(directory => getItemGroupsOfType(directory, 'image'))),
-    pdf: [].concat(...directories.map(directory => getItemGroupsOfType(directory, 'pdf'))),
+    image: groups,
+    pdf: [],
   }
 
   return (
@@ -68,17 +53,17 @@ const ImageGroups = () => {
         <Box>
           {typy(groupData[selectedType]).safeArray.map(group => (
             <Box
-              key={group.folderPath}
+              key={group.id}
               onClick={() => setGroup(group)}
               sx={sx.itemGroup}
             >
               <Text
                 sx={{
                   ...sx.itemText,
-                  ...(group.folderPath === typy(imageGroup, 'folderPath').safeString ? sx.selected : {}),
+                  ...(group.id === typy(imageGroup, 'id').safeString ? sx.selected : {}),
                 }}
               >
-                {group.folderPath} ({group.itemCount} {pluralize(group.itemCount, selectedType)})
+                {group.Label} ({group.files.length} {pluralize(group.files.length, selectedType)})
               </Text>
             </Box>
           ))}
@@ -94,6 +79,14 @@ const ImageGroups = () => {
       </section>
     </BaseStyles>
   )
+}
+
+ImageGroups.propTypes = {
+  groups: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    Label: PropTypes.string.isRequired,
+    files: PropTypes.array.isRequired,
+  })).isRequired,
 }
 
 export default ImageGroups
