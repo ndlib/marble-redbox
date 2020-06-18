@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import AddNew from './AddNew'
 import SearchFilter from './SearchFilter'
 import CollectionsList from './CollectionsList'
 
 const Content = ({ collections }) => {
+  const [filtered, setFiltered] = useState(collections)
   return (
     <div>
       <AddNew />
-      <SearchFilter />
-      <CollectionsList collections={collections} />
+      <SearchFilter collections={collections} onChange={setFiltered} />
+      <CollectionsList collections={filtered} />
     </div>
   )
 }
