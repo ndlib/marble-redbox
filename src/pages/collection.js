@@ -5,6 +5,7 @@ import { Router } from '@reach/router'
 import APIContext, { initialContext as initialApiContext } from 'context/APIContext'
 import CollectionContext, { initialContext as initialCollectionContext } from 'context/CollectionContext'
 import DirectoriesContext, { initialContext as initialDirectoriesContext } from 'context/DirectoriesContext'
+import ImageGroupContext, { initialContext as initialImageGroupContext } from 'context/ImageGroupContext'
 import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
 import AllCollections from 'components/Pages/AllCollections'
@@ -44,17 +45,19 @@ const CollectionPages = ({ location }) => {
       collection: collection,
     })
   }
-  const setImageGroup = (collection, imageGroup) => {
-    // TODO: Figure out why I can't set imageGroup without also setting collection...
-    setCollectionContext({
-      ...collectionContext,
-      collection: collection,
-      imageGroup: imageGroup,
-    })
-  }
   const [collectionContext, setCollectionContext] = useState({
     ...initialCollectionContext,
     setCollection: setCollection,
+  })
+
+  const setImageGroup = (imageGroup) => {
+    setImageGroupContext({
+      ...imageGroupContext,
+      imageGroup: imageGroup,
+    })
+  }
+  const [imageGroupContext, setImageGroupContext] = useState({
+    ...initialImageGroupContext,
     setImageGroup: setImageGroup,
   })
 
@@ -74,10 +77,12 @@ const CollectionPages = ({ location }) => {
       <APIContext.Provider value={apiContext}>
         <CollectionContext.Provider value={collectionContext}>
           <DirectoriesContext.Provider value={directoriesContext}>
-            <Router basepath='/collection'>
-              <PrivateRoute path='/' component={AllCollections} location={location} />
-              <PrivateRoute path='/:id' component={Collection} location={location} />
-            </Router>
+            <ImageGroupContext.Provider value={imageGroupContext}>
+              <Router basepath='/collection'>
+                <PrivateRoute path='/' component={AllCollections} location={location} />
+                <PrivateRoute path='/:id' component={Collection} location={location} />
+              </Router>
+            </ImageGroupContext.Provider>
           </DirectoriesContext.Provider>
         </CollectionContext.Provider>
       </APIContext.Provider>

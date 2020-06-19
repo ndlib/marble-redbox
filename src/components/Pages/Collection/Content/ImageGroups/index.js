@@ -12,18 +12,15 @@ import {
   Text,
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
-import { useCollectionContext } from 'context/CollectionContext'
+import { useImageGroupContext } from 'context/ImageGroupContext'
 import sx from './sx'
 
 const ImageGroups = ({ groups }) => {
   const [selectedType, setSelectedType] = useState('image')
-  const { imageGroup, setImageGroup, collection } = useCollectionContext()
-  const setGroup = (group) => {
-    setImageGroup(collection, group)
-  }
+  const { imageGroup, setImageGroup } = useImageGroupContext()
   const setType = (type) => {
     setSelectedType(type)
-    setGroup(null)
+    setImageGroup(null)
   }
 
   const groupData = {
@@ -54,7 +51,7 @@ const ImageGroups = ({ groups }) => {
           {typy(groupData[selectedType]).safeArray.map(group => (
             <Box
               key={group.id}
-              onClick={() => setGroup(group)}
+              onClick={() => setImageGroup(group)}
               sx={sx.itemGroup}
             >
               <Text
@@ -70,7 +67,7 @@ const ImageGroups = ({ groups }) => {
           {imageGroup && (
             <Button
               variant='link'
-              onClick={() => setGroup(null)}
+              onClick={() => setImageGroup(null)}
             >
               Clear Selection
             </Button>

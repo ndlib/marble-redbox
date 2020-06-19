@@ -8,7 +8,7 @@ import {
   Radio,
   Text,
 } from 'theme-ui'
-import { useCollectionContext } from 'context/CollectionContext'
+import { useImageGroupContext } from 'context/ImageGroupContext'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
@@ -18,7 +18,7 @@ import sx from './sx'
 
 const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
-  let { imageGroup } = useCollectionContext()
+  let { imageGroup } = useImageGroupContext()
   if (!imageGroup) {
     // Find the group that contains the current default image.
     directories.forEach((directory) => {
