@@ -3,7 +3,6 @@ module.exports = {
     backgroundColor: 'primary',
     display: 'block',
     overflow: 'hidden',
-    position: 'absolute',
     width: '100%',
     zIndex: '1',
   },
@@ -37,7 +36,6 @@ module.exports = {
   },
   content: {
     maxHeight: 'calc(100vh - 80px - 3rem)',
-    marginTop: '3rem',
     padding: '1rem',
     overflowX: 'hidden',
     overflowY: 'auto',

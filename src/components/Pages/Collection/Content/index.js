@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import {
   Button,
   Divider,
@@ -8,19 +7,22 @@ import {
   Label,
   Input,
 } from 'theme-ui'
+import { useCollectionContext } from 'context/CollectionContext'
+import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ActionModal from 'components/Layout/ActionModal'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
 import Directories from './Directories'
-import DefaultImageModal from './DefaultImageModal'
+import AddDirectoryModal from './AddDirectoryModal'
 import ItemDetails from './ItemDetails'
 import ImageGroups from './ImageGroups'
-import { dummyDirectories } from './dummyData'
 import sx from './sx'
 
-const Content = ({ collection }) => {
-  const [directories, setDirectories] = useState(dummyDirectories)
+const Content = () => {
   const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
+  const { collection } = useCollectionContext()
+  const { directories, updateDirectories } = useDirectoriesContext()
+  const imageGroups = directories.map(directory => directory.groups).flat()
 
   return (
     <div>
@@ -32,17 +34,16 @@ const Content = ({ collection }) => {
         <Flex sx={sx.collectionInfo}>
           <SourceId labelSx={sx.label} valueSx={sx.values} />
           <PartiallyDigitized labelSx={sx.label} valueSx={sx.values} />
-          <Directories directories={directories} labelSx={sx.label} valueSx={sx.values} />
+          <Directories labelSx={sx.label} valueSx={sx.values} />
         </Flex>
         <Flex sx={sx.buttons}>
           <Button>Re-Sync Metadata</Button>
           <Button>Build Manifest</Button>
           <Button onClick={() => setDirectoryModalOpen(true)}>Add Directory</Button>
           {directoryModalOpen && (
-            <DefaultImageModal
-              headerText={`Add Default Directory to ${collection.title}`}
+            <AddDirectoryModal
               onClose={() => setDirectoryModalOpen(false)}
-              onSave={(newValue) => setDirectories(directories.concat(newValue))}
+              onSave={(newValue) => updateDirectories(directories.concat(newValue))}
             />
           )}
           <ActionModal
@@ -66,17 +67,10 @@ const Content = ({ collection }) => {
       <Divider />
       <Flex sx={sx.itemSection}>
         <ItemDetails collection={collection} />
-        <ImageGroups directories={directories} />
+        <ImageGroups groups={imageGroups} />
       </Flex>
     </div>
   )
-}
-
-Content.propTypes = {
-  collection: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    items: PropTypes.array.isRequired,
-  }).isRequired,
 }
 
 export default Content

@@ -16,11 +16,13 @@ module.exports = {
   }),
   expandHandle: (depth) => ({
     cursor: 'pointer',
-    display: 'block',
+    display: 'flex',
+    flexFlow: 'row nowrap',
     fontSize: 4 - Math.min(depth, 4),
     ml: `${depth}rem`,
     '& > *': {
-      display: 'inline-block',
+      display: 'inline-flex',
+      flexFlow: 'row nowrap',
     },
   }),
 }

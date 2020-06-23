@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button } from 'theme-ui'
-import { useCollectionContext } from 'context/CollectionContext'
+import { useImageGroupContext } from 'context/ImageGroupContext'
 import DefaultImageModal from '../../DefaultImageModal'
 
 const UpdateButton = ({ selectedImageUrl, itemTitle }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const label = selectedImageUrl ? 'Change Default Image' : 'Set Default Image'
-  const { imageGroup } = useCollectionContext()
+  const { imageGroup } = useImageGroupContext()
   const buttonEnabled = selectedImageUrl || imageGroup
 
   return (

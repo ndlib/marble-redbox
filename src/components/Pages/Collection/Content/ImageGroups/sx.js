@@ -27,6 +27,6 @@ module.exports = {
     },
   },
   itemText: {
-    mb: 4,
+    mb: 3,
   },
 }

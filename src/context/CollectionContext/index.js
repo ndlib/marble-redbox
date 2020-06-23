@@ -1,9 +1,8 @@
 import { createContext, useContext } from 'react'
 export const initialContext = {
   collection: null,
-  imageGroup: null,
   updateCollection: () => {},
-  setImageGroup: () => {},
+  setCollection: () => {},
 }
 export const CollectionContext = createContext(initialContext)
 export const useCollectionContext = () => useContext(CollectionContext)

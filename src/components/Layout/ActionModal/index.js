@@ -76,7 +76,7 @@ export const modalStyle = (fullscreen) => {
       position: 'absolute',
       overflow: 'hidden',
       height: fullscreen ? 'calc(100vh - 80px)' : 'auto',
-      width: fullscreen ? '95vw' : '500px',
+      width: fullscreen ? '95vw' : '650px',
       maxWidth: '95vw',
     },
   }

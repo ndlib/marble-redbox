@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import AddNew from './AddNew'
-import SearchFilter from './SearchFilter'
+import SearchFilter from 'components/Shared/SearchFilter'
 import CollectionsList from './CollectionsList'
 
 const Content = ({ collections }) => {
+  const [filtered, setFiltered] = useState(collections)
+  const searchFields = ['id', 'url', 'title', 'sourceSystemUri']
   return (
     <div>
       <AddNew />
-      <SearchFilter />
-      <CollectionsList collections={collections} />
+      <SearchFilter data={collections} fields={searchFields} onChange={setFiltered} />
+      <CollectionsList collections={filtered} />
     </div>
   )
 }

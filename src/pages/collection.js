@@ -4,6 +4,8 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { Router } from '@reach/router'
 import APIContext, { initialContext as initialApiContext } from 'context/APIContext'
 import CollectionContext, { initialContext as initialCollectionContext } from 'context/CollectionContext'
+import DirectoriesContext, { initialContext as initialDirectoriesContext } from 'context/DirectoriesContext'
+import ImageGroupContext, { initialContext as initialImageGroupContext } from 'context/ImageGroupContext'
 import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
 import AllCollections from 'components/Pages/AllCollections'
@@ -37,25 +39,51 @@ const CollectionPages = ({ location }) => {
     setAPIs: setAPIs,
   })
 
-  const setImageGroup = (imageGroup) => {
+  const setCollection = (collection) => {
     setCollectionContext({
       ...collectionContext,
-      imageGroup: imageGroup,
+      collection: collection,
     })
   }
   const [collectionContext, setCollectionContext] = useState({
     ...initialCollectionContext,
+    setCollection: setCollection,
+  })
+
+  const setImageGroup = (imageGroup) => {
+    setImageGroupContext({
+      ...imageGroupContext,
+      imageGroup: imageGroup,
+    })
+  }
+  const [imageGroupContext, setImageGroupContext] = useState({
+    ...initialImageGroupContext,
     setImageGroup: setImageGroup,
+  })
+
+  const setDirectories = (directories) => {
+    setDirectoriesContext({
+      ...directoriesContext,
+      directories: directories,
+    })
+  }
+  const [directoriesContext, setDirectoriesContext] = useState({
+    ...initialDirectoriesContext,
+    setDirectories: setDirectories,
   })
 
   return (
     <Layout>
       <APIContext.Provider value={apiContext}>
         <CollectionContext.Provider value={collectionContext}>
-          <Router basepath='/collection'>
-            <PrivateRoute path='/' component={AllCollections} location={location} />
-            <PrivateRoute path='/:id' component={Collection} location={location} />
-          </Router>
+          <DirectoriesContext.Provider value={directoriesContext}>
+            <ImageGroupContext.Provider value={imageGroupContext}>
+              <Router basepath='/collection'>
+                <PrivateRoute path='/' component={AllCollections} location={location} />
+                <PrivateRoute path='/:id' component={Collection} location={location} />
+              </Router>
+            </ImageGroupContext.Provider>
+          </DirectoriesContext.Provider>
         </CollectionContext.Provider>
       </APIContext.Provider>
     </Layout>

@@ -1,7 +1,12 @@
 /** @jsx jsx */
-import { jsx, BaseStyles } from 'theme-ui'
+import {
+  jsx,
+  BaseStyles,
+  Text,
+} from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
+import sx from './sx'
 
 const CollectionList = ({ collections }) => {
   if (collections.length === 0) {
@@ -14,7 +19,12 @@ const CollectionList = ({ collections }) => {
           collections.map(collection => {
             return (
               <li key={collection.id}>
-                <Link to={`/collection/${collection.id}`}>{collection.title}</Link>
+                <Link to={`/collection/${collection.id}`}>
+                  {collection.title}
+                  {collection.sourceSystemUri && (
+                    <Text sx={sx.sourceUrl}>&nbsp;– {collection.sourceSystemUri}</Text>
+                  )}
+                </Link>
               </li>
             )
           })
