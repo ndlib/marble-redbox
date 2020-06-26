@@ -24,6 +24,9 @@ const CollectionList = ({ collections }) => {
                   {collection.sourceSystemUri && (
                     <Text sx={sx.sourceUrl}>&nbsp;– {collection.sourceSystemUri}</Text>
                   )}
+                  {collection.partiallyDigitized && (
+                    <Text sx={sx.tag}>Partially Digitized</Text>
+                  )}
                 </Link>
               </li>
             )

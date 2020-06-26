@@ -33,7 +33,12 @@ const Content = () => {
       <Flex sx={sx.topControls}>
         <Flex sx={sx.collectionInfo}>
           <SourceId labelSx={sx.label} valueSx={sx.values} />
-          <PartiallyDigitized labelSx={sx.label} valueSx={sx.values} />
+          <PartiallyDigitized
+            defaultChecked={collection.partiallyDigitized}
+            labelSx={sx.label}
+            valueSx={sx.values}
+            disabled
+          />
           <Directories labelSx={sx.label} valueSx={sx.values} />
         </Flex>
         <Flex sx={sx.buttons}>
