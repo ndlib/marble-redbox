@@ -4,6 +4,7 @@ module.exports = {
     ml: [0, 0, 2],
     mt: 3,
     textAlign: 'right',
+    flex: '1 1 auto',
   },
   typeSelect: {
     justifyContent: 'space-evenly',
