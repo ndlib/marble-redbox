@@ -28,10 +28,7 @@ const ActionModal = ({
       shouldCloseOnOverlayClick
     >
       <div sx={sx.wrapper}>
-        <Styled.h1
-          sx={sx.heading}
-          dangerouslySetInnerHTML={{ __html: contentLabel }}
-        />
+        <Styled.h1 sx={sx.heading}>{contentLabel}</Styled.h1>
         <button
           onClick={closeFunc}
           sx={sx.button}
