@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import {
   Button,
   Label,
-  Radio,
+  Checkbox,
   Text,
 } from 'theme-ui'
 import { useCollectionContext } from 'context/CollectionContext'
-import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
 import SearchFilter from 'components/Shared/SearchFilter'
@@ -16,33 +15,51 @@ import sx from './sx'
 
 const Content = ({ directories, onSave, onClose }) => {
   const { collection } = useCollectionContext()
-  const [selected, setSelected] = useState()
+  const [selected, setSelected] = useState([])
   const [filtered, setFiltered] = useState(directories)
   const searchFields = ['path']
+
+  const toggleOption = (option) => {
+    const previouslyChecked = selected.some(item => item === option)
+    if (previouslyChecked) {
+      setSelected(selected.filter(item => item !== option))
+    } else {
+      setSelected(selected.concat([option]))
+    }
+  }
+
+  const searchChanged = (newOptions) => {
+    // Deselect any items that are no longer in the filtered list
+    setSelected(selected.filter(item => newOptions.includes(item)))
+    setFiltered(newOptions)
+  }
+
+  const selectAll = () => {
+    setSelected(filtered)
+  }
 
   return (
     <ActionModal
       isOpen
-      contentLabel={`Add Default Directory to ${collection.title}`}
+      contentLabel={`Add Default Directories to ${collection.title}`}
       closeFunc={onClose}
     >
-      <SearchFilter data={directories} fields={searchFields} onChange={setFiltered} />
+      <SearchFilter data={directories} fields={searchFields} onChange={searchChanged} />
       <Label htmlFor='addDirectorySelect' mt={3}>
-        Select Directory
+        Select Directories
       </Label>
       {filtered.map((opt) => (
         <Label key={opt.id} sx={sx.option}>
-          <Radio
-            name='addDirectorySelect'
-            id='addDirectorySelect'
-            value={opt.id}
-            onChange={() => setSelected(opt)}
+          <Checkbox
+            onChange={() => toggleOption(opt)}
+            checked={selected.includes(opt)}
           />
           <Text>{opt.path} ({opt.numberOfFiles} {pluralize(opt.numberOfFiles, 'File')})</Text>
         </Label>
       ))}
       <ActionButtons>
-        <Button onClick={() => onSave(selected)}>Save</Button>
+        <Button onClick={selectAll}>Select All</Button>
+        <Button onClick={() => onSave(selected)} disabled={!selected.length}>Save</Button>
       </ActionButtons>
     </ActionModal>
   )
