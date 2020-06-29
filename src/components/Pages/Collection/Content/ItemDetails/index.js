@@ -1,16 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import typy from 'typy'
 import { Box } from 'theme-ui'
 import { useCollectionContext } from 'context/CollectionContext'
 import Item from './Item'
+import Search from './Search'
 import sx from './sx'
 
 const ItemDetails = ({ depth }) => {
   const { collection } = useCollectionContext()
+  const [filteredCollection, setFilteredCollection] = useState(collection)
+  const searchFields = ['title', 'defaultImage', 'id', 'collectionId']
+
+  const itemFilterRecursive = (item, searchTerms) => {
+    // Return true if this item or any of its children contain ALL search terms in searchable field(s)
+    return searchTerms.every(term => {
+      return searchFields.some((field) => typy(item[field]).safeString.toLowerCase().includes(term))
+    }) || typy(item, 'items').safeArray.some(child => itemFilterRecursive(child, searchTerms))
+  }
+
+  const filter = (event) => {
+    const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
+    const outData = Object.assign({}, collection)
+    outData.items = collection.items.filter((item) => itemFilterRecursive(item, inputTerms))
+    setFilteredCollection(outData)
+  }
+
   return (
     <Box mt={3}>
+      <Search onFilter={filter} sx={sx.search} />
       <Box sx={sx.itemsList}>
-        <Item item={collection} depth={depth} />
+        <Item item={filteredCollection} depth={depth} />
       </Box>
     </Box>
   )

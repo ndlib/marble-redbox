@@ -25,4 +25,7 @@ module.exports = {
       flexFlow: 'row nowrap',
     },
   }),
+  search: {
+    mb: 3,
+  },
 }

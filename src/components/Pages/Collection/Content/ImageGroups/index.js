@@ -13,24 +13,28 @@ import {
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
 import { useImageGroupContext } from 'context/ImageGroupContext'
+import SearchFilter from 'components/Shared/SearchFilter'
 import sx from './sx'
 
 const ImageGroups = ({ groups }) => {
-  const [selectedType, setSelectedType] = useState('image')
-  const { imageGroup, setImageGroup } = useImageGroupContext()
-  const setType = (type) => {
-    setSelectedType(type)
-    setImageGroup(null)
-  }
-
   const groupData = {
     image: groups,
     pdf: [],
   }
 
+  const [selectedType, setSelectedType] = useState('image')
+  const [filteredData, setFilteredData] = useState(typy(groupData[selectedType]).safeArray)
+  const { imageGroup, setImageGroup } = useImageGroupContext()
+  const setType = (type) => {
+    setSelectedType(type)
+    setImageGroup(null)
+    setFilteredData(typy(groupData[type]).safeArray)
+  }
+  const groupSearchFields = ['Label', 'id', 'directoryId']
+
   return (
-    <BaseStyles>
-      <section sx={sx.container}>
+    <BaseStyles sx={sx.container}>
+      <section>
         <Flex sx={sx.typeSelect}>
           <Button
             variant='link'
@@ -48,7 +52,15 @@ const ImageGroups = ({ groups }) => {
           </Button>
         </Flex>
         <Box>
-          {typy(groupData[selectedType]).safeArray.map(group => (
+          <Box mb={3}>
+            <SearchFilter
+              key={selectedType} // Force new component when selected type changes so search input is reset
+              data={typy(groupData[selectedType]).safeArray}
+              fields={groupSearchFields}
+              onChange={setFilteredData}
+            />
+          </Box>
+          {filteredData.map(group => (
             <Box
               key={group.id}
               onClick={() => setImageGroup(group)}
