@@ -20,9 +20,9 @@ const CollectionList = ({ collections }) => {
             return (
               <li key={collection.id}>
                 <Link to={`/collection/${collection.id}`}>
-                  {collection.title}
+                  {collection.title} - {collection.id}
                   {collection.sourceSystemUri && (
-                    <Text sx={sx.sourceUrl}>&nbsp;– {collection.sourceSystemUri}</Text>
+                    <Text sx={sx.sourceUrl}>&nbsp;({collection.sourceSystemUri})</Text>
                   )}
                   {collection.partiallyDigitized && (
                     <Text sx={sx.tag}>Partially Digitized</Text>
