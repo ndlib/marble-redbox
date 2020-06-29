@@ -65,6 +65,13 @@ module.exports = {
       marginBottom: '0.5em',
     },
   },
+  forms: {
+    input: {
+      '&:disabled': {
+        cursor: 'not-allowed',
+      },
+    },
+  },
   styles: {
     root: {
       backgroundColor: 'background',

@@ -2,34 +2,31 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
-  Heading,
 } from 'theme-ui'
-import { MdExpandLess, MdExpandMore } from 'react-icons/md'
-import { orderedListStyle } from 'utils/general'
+import PartiallyDigitized from '../../PartiallyDigitized'
 import DefaultImage from '../../DefaultImage'
-import sx from '../sx'
+import ItemHeading from './ItemHeading'
 
 const Item = ({ item, depth }) => {
   const [expanded, setExpanded] = useState(true)
-  const tooltip = (`${expanded ? 'Collapse' : 'Expand'} ${item.title}`)
-
   return (
     <Box>
-      <Box
-        sx={sx.expandHandle(depth)}
-        title={tooltip}
-        onClick={() => setExpanded(!expanded)}
+      <ItemHeading
+        depth={depth}
+        expanded={expanded}
+        onCollapseToggle={() => setExpanded(!expanded)}
       >
-        {expanded ? <MdExpandLess sx={sx.expandIcon} /> : <MdExpandMore sx={sx.expandIcon} />}
-        <Box sx={sx.listItemHeader(depth, orderedListStyle(depth))}>
-          <Heading as={`h${depth + 2}`}>
-            {item.title}
-          </Heading>
-        </Box>
-      </Box>
+        {item.title}
+      </ItemHeading>
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
           <Box ml={`${depth + 2}rem`} mb='1rem'>
+            {item.defaultImage && (
+              <PartiallyDigitized
+                defaultChecked={item.partiallyDigitized}
+                labelSx={{ mb: 2 }}
+              />
+            )}
             <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
           </Box>
         )}
@@ -47,6 +44,7 @@ Item.propTypes = {
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
     defaultImage: PropTypes.string,
+    partiallyDigitized: PropTypes.bool,
     items: PropTypes.array.isRequired,
   }).isRequired,
   depth: PropTypes.number,

@@ -6,13 +6,17 @@ import {
   Label,
 } from 'theme-ui'
 
-const PartiallyDigitized = ({ labelSx, valueSx }) => {
+const PartiallyDigitized = ({ defaultChecked, disabled, onChange, labelSx, valueSx }) => {
   return (
     <div>
       <Label sx={labelSx}>
         Partially Digitized:
-        <Box sx={{ ...valueSx, verticalAlign: 'bottom' }}>
-          <Checkbox defaultChecked={false} />
+        <Box sx={{ ...valueSx, verticalAlign: 'bottom', cursor: (disabled ? 'not-allowed' : 'default') }}>
+          <Checkbox
+            defaultChecked={defaultChecked}
+            disabled={disabled}
+            onChange={onChange}
+          />
         </Box>
       </Label>
     </div>
@@ -20,6 +24,9 @@ const PartiallyDigitized = ({ labelSx, valueSx }) => {
 }
 
 PartiallyDigitized.propTypes = {
+  defaultChecked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
   labelSx: PropTypes.object,
   valueSx: PropTypes.object,
 }
