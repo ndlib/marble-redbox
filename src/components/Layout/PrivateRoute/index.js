@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
-import OktaAuth from '@okta/okta-auth-js'
+import { OktaAuth } from '@okta/okta-auth-js'
 import Loading from 'components/Layout/Loading'
 import { useAuthContext } from 'context/AuthContext'
 

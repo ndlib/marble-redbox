@@ -11,7 +11,7 @@ module.exports = {
     },
     auth: {
       url: 'https://okta.nd.edu',
-      clientId: '0oa1f3ut0aKpdwap5357',
+      clientId: '0oa4tlda8nvJGLv9i357',
       issuer: 'https://okta.nd.edu/oauth2/ausxosq06SDdaFNMB356',
     },
   },
