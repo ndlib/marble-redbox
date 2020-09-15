@@ -48,6 +48,7 @@
     "eslint-plugin-react-hooks": "^4.0.4",
     "eslint-plugin-standard": "^4.0.1",
     "gatsby-plugin-root-import": "^2.0.5",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.0.1",
     "jest-environment-enzyme": "^7.1.2",
     "jest-enzyme": "^7.1.2",
