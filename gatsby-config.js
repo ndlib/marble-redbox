@@ -6,8 +6,8 @@ module.exports = {
     description: 'A thing that does stuff for other things that need stuff.',
     author: 'WSE',
     apis: {
-      collectionsURL: 'https://presentation-iiif.library.nd.edu/experimental/collections/',
-      directoriesURL: 'https://presentation-iiif.library.nd.edu/experimental/directories/',
+      collectionsURL: 'https://presentation-iiif.library.nd.edu/collections/archivesspace/',
+      directoriesURL: 'https://presentation-iiif.library.nd.edu/objectFiles/all/',
     },
     auth: {
       url: 'https://okta.nd.edu',
