@@ -57,7 +57,7 @@ const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle }) => 
         return result.json()
       })
       .then((data) => {
-        fetchAndParseCollection(data.data.updateGeneralSettings.id, abortController)
+        fetchAndParseCollection(itemId, abortController)
           .then((result) => {
             console.log("reset ? ")
             setCollection(result)
@@ -73,7 +73,9 @@ const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle }) => 
         console.log("error", error)
       })
 
-    return false
+      return () => {
+        abortController.abort()
+      }
   }
 
   return (
