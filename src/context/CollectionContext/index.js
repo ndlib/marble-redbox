@@ -3,8 +3,105 @@ export const initialContext = {
   collection: null,
   updateCollection: () => {},
   setCollection: () => {},
-  updateRedboxDefaultImage: () => {},
 }
 export const CollectionContext = createContext(initialContext)
 export const useCollectionContext = () => useContext(CollectionContext)
 export default CollectionContext
+
+const collectionGrapgqlQuery = (id) => {
+  return `query {
+    getMarbleItems(id: "${id}") {
+      id
+      title
+      level
+      objectFileGroupId
+      collectionId
+      defaultImageId
+      redbox {
+        generalDefaultImageId
+        generalObjectFileGroupId
+        generalPartiallyDigitized
+      }
+      items (limit: 1000){
+        items {
+          id
+          title
+          level
+          objectFileGroupId
+          collectionId
+          defaultImageId
+          redbox {
+            generalDefaultImageId
+            generalObjectFileGroupId
+            generalPartiallyDigitized
+          }
+          files {
+            items {
+              id
+              label
+              fileId
+            }
+          }
+        }
+      }
+      files {
+        items {
+          id
+          label
+          fileId
+        }
+      }
+    }
+  }
+  `
+}
+
+
+const updateOverwrittenItemData = (data) => {
+  console.log("overwrite=", data)
+  if (data.redbox) {
+    if (data.redbox.generalDefaultImageId) {
+      data.defaultImageId = data.redbox.generalDefaultImageId
+    }
+    if (data.redbox.generalObjectFileGroupId) {
+      data.objectFileGroupId = data.redbox.generalObjectFileGroupId
+    }
+    if (data.redbox.generalPartiallyDigitized) {
+      data.partiallyDigitized = data.redbox.generalPartiallyDigitized
+    }
+  }
+
+  if (data.items && data.items.items) {
+    data.items.items.forEach(item => updateOverwrittenItemData(item))
+  }
+
+
+  return data
+}
+
+export const fetchAndParseCollection = (id, abortController) => {
+  console.log("id=", id)
+  const query = collectionGrapgqlQuery(id)
+
+  return fetch(
+    process.env.GRAPHQL_API_URL,
+    {
+      headers: {
+        'x-api-key': process.env.GRAPHQL_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      signal: abortController.signal,
+      mode: 'cors',
+      body: JSON.stringify({ query: query })
+
+    })
+    .then(result => {
+      return result.json()
+    })
+    .then((data) => {
+      console.log("fetch result=", data)
+      const result = data.data.getMarbleItems
+      return updateOverwrittenItemData(result)
+    })
+}

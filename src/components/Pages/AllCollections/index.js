@@ -20,10 +20,10 @@ const AllCollections = ({ location }) => {
       }
     `
     fetch(
-      "https://u6j4kl5davbdvhhnf4miuugf2a.appsync-api.us-east-1.amazonaws.com/graphql",
+      process.env.GRAPHQL_API_URL,
       {
         headers: {
-          'x-api-key': 'da2-wh6ulmemfraztlcibgz6zzlckm',
+          'x-api-key': process.env.GRAPHQL_API_KEY,
           'Content-Type': 'application/json',
         },
         method: 'POST',
