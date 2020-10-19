@@ -21,9 +21,8 @@ import sx from './sx'
 const Content = () => {
   const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
   const { collection } = useCollectionContext()
-  const { directories, updateDirectories } = useDirectoriesContext()
-  const imageGroups = directories.map(directory => directory.groups).flat()
-
+  const { updateDirectories } = useDirectoriesContext()
+  const imageGroups = [] // directories.map(directory => directory.groups).flat()
   return (
     <div>
       <Flex sx={sx.headingRow}>
@@ -39,7 +38,6 @@ const Content = () => {
             valueSx={sx.values}
             disabled
           />
-          <Directories labelSx={sx.label} valueSx={sx.values} />
         </Flex>
         <Flex sx={sx.buttons}>
           <Button>Re-Sync Metadata</Button>

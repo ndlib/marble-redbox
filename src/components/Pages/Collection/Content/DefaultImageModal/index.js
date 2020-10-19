@@ -19,6 +19,7 @@ import sx from './sx'
 const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
   let { imageGroup } = useImageGroupContext()
+  /*
   if (!imageGroup) {
     // Find the group that contains the current default image.
     directories.forEach((directory) => {
@@ -32,6 +33,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       }
     })
   }
+  */
   const defaultOption = imageGroup.files.find((opt) => opt.value === defaultSelected)
   const [selected, setSelected] = useState(defaultOption)
   const [filteredOptions, setFilteredOptions] = useState(imageGroup.files)

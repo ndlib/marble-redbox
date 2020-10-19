@@ -6,6 +6,7 @@ import {
 import PartiallyDigitized from '../../PartiallyDigitized'
 import DefaultImage from '../../DefaultImage'
 import ItemHeading from './ItemHeading'
+import typy from 'typy'
 
 const Item = ({ item, depth }) => {
   const [expanded, setExpanded] = useState(true)
@@ -27,10 +28,12 @@ const Item = ({ item, depth }) => {
                 labelSx={{ mb: 2 }}
               />
             )}
-            <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
+            <p>{item.objectFileGroupId}</p>
+
+            <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
           </Box>
         )}
-        {item.items.map((item, idx) => (
+        {typy(item, 'items.items').safeArray.map((item, idx) => (
           <Item key={item.id} item={item} depth={depth + 1} index={idx} />
         ))}
       </Box>
@@ -45,7 +48,7 @@ Item.propTypes = {
     level: PropTypes.string.isRequired,
     defaultImage: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
-    items: PropTypes.array.isRequired,
+    items: PropTypes.object .isRequired,
   }).isRequired,
   depth: PropTypes.number,
 }
