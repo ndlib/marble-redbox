@@ -20,7 +20,7 @@ import sx from './sx'
 const ImageGroups = ({ groups }) => {
 
   const { directories } = useDirectoriesContext()
-  console.log(directories)
+
   const groupData = {
     image: Object.values(directories),
     pdf: [],

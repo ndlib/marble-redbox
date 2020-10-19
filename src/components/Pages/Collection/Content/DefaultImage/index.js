@@ -35,14 +35,6 @@ const DefaultImage = ({ collectionId, itemId, imageUrl, itemTitle, inModal }) =>
       <Box sx={sx.imageInfo}>
         <Flex>
           <Text>{imageName}</Text>
-          {!inModal && (
-            <IconButton
-              ml={2}
-              aria-label='Remove'
-            >
-              <MdClear />
-            </IconButton>
-          )}
         </Flex>
         {updateButton}
       </Box>

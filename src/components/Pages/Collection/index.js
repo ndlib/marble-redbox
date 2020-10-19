@@ -43,6 +43,10 @@ const Collection = ({ id, location }) => {
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
+    if (directoriesStatus === fetchStatus.SUCCESS) {
+      return
+    }
+
     const abortController = new AbortController()
     const query = ` {
       listFiles(limit: 10000) {
@@ -71,6 +75,7 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
+        console.log("get dirs")
         setDirectories(getDirectories(data.data.listFiles.items))
         setDirectoriesStatus(fetchStatus.SUCCESS)
       })
