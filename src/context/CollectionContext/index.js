@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 export const initialContext = {
-  collection: null,
+  collection: { id: undefined },
   updateCollection: () => {},
   setCollection: () => {},
 }

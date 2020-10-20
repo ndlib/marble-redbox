@@ -42,29 +42,6 @@ const Content = () => {
         <Flex sx={sx.buttons}>
           <Button>Re-Sync Metadata</Button>
           <Button>Build Manifest</Button>
-          <Button onClick={() => setDirectoryModalOpen(true)}>Add Directory</Button>
-          {directoryModalOpen && (
-            <AddDirectoryModal
-              onClose={() => setDirectoryModalOpen(false)}
-              onSave={(newValue) => updateDirectories(directories.concat(newValue))}
-            />
-          )}
-          <ActionModal
-            isOpen={directoryModalOpen}
-            contentLabel={`Add Default Image to ${collection.title}`}
-            closeFunc={() => setDirectoryModalOpen(false)}
-          >
-            <Label htmlFor='directorySearch' mt={1}>
-              Search:
-            </Label>
-            <Input name='directorySearch' id='directorySearch' autoComplete='off' />
-            <Label htmlFor='imageSelect' mt={1}>
-              Select Default Image
-            </Label>
-            <Button mt={3} onClick={() => setDirectoryModalOpen(false)}>
-              Save
-            </Button>
-          </ActionModal>
         </Flex>
       </Flex>
       <Divider />

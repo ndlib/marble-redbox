@@ -20,7 +20,7 @@ const Collection = ({ id, location }) => {
   const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
   const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
-  const { setCollection } = useCollectionContext()
+  const { collection, setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
 
   // Collection fetch
@@ -29,6 +29,7 @@ const Collection = ({ id, location }) => {
 
     fetchAndParseCollection(id, abortController)
       .then((result) => {
+        console.log("fetched and setting!")
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -39,14 +40,10 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, setCollection])
+  }, [id, location, collection.id])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
-    if (directoriesStatus === fetchStatus.SUCCESS) {
-      return
-    }
-
     const abortController = new AbortController()
     const query = ` {
       listFiles(limit: 10000) {
@@ -75,7 +72,7 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
-        console.log("get dirs")
+        console.log("Load Directories")
         setDirectories(getDirectories(data.data.listFiles.items))
         setDirectoriesStatus(fetchStatus.SUCCESS)
       })
@@ -86,7 +83,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, setDirectories])
+  }, [id])
 
   const allStatuses = [collectionStatus, directoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {

@@ -57,6 +57,7 @@ const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle }) => 
         return result.json()
       })
       .then((data) => {
+        // after update recall collection 
         fetchAndParseCollection(itemId, abortController)
           .then((result) => {
             console.log("reset ? ")
