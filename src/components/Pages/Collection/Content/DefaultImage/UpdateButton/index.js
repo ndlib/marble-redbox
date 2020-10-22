@@ -14,69 +14,17 @@ export const fetchStatus = {
   ERROR: 'ERROR',
 }
 
-const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle }) => {
+const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const label = selectedImageUrl ? 'Change Default Image' : 'Set Default Image'
   const { imageGroup } = useImageGroupContext()
 
-  const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
-  const { setCollection } = useCollectionContext()
   const buttonEnabled = selectedImageUrl || imageGroup
 
   const callBackOnClick = (selected) => {
-    const abortController = new AbortController()
-
     setModalOpen(false)
-    const query = `mutation {
-      updateGeneralSettings(input: {
-        collectionId: "${collectionId}",
-        generalDefaultImageId: "${selected.id}",
-        generalObjectFileGroupId: "${selected.fileId}",
-        id: "${itemId}"
-      }) {
-        id
-      }
-    }
-    `
-    setCollectionStatus(fetchStatus.FETCHING)
-
-    fetch(
-      process.env.GRAPHQL_API_URL,
-      {
-        headers: {
-          'x-api-key': process.env.GRAPHQL_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query })
-
-      })
-      .then(result => {
-        return result.json()
-      })
-      .then((data) => {
-        // after update recall collection 
-        fetchAndParseCollection(itemId, abortController)
-          .then((result) => {
-            console.log("reset ? ")
-            setCollection(result)
-            setCollectionStatus(fetchStatus.SUCCESS)
-          })
-          .catch((error) => {
-            console.log("error", error)
-            // setErrorMsg(error)
-            setCollectionStatus(fetchStatus.ERROR)
-          })
-      })
-      .catch((error) => {
-        console.log("error", error)
-      })
-
-      return () => {
-        abortController.abort()
-      }
+    //(itemId, generalDefaultImageId, generalObjectFileGroupId)
+    updateItemFunction(itemId, selected.id, selected.fileId)
   }
 
   return (

@@ -18,7 +18,7 @@ import ItemDetails from './ItemDetails'
 import ImageGroups from './ImageGroups'
 import sx from './sx'
 
-const Content = () => {
+const Content = ({ updateItemFunction }) => {
   const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
   const { collection } = useCollectionContext()
   const { updateDirectories } = useDirectoriesContext()
@@ -46,7 +46,7 @@ const Content = () => {
       </Flex>
       <Divider />
       <Flex sx={sx.itemSection}>
-        <ItemDetails collection={collection} />
+        <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
         <ImageGroups groups={imageGroups} />
       </Flex>
     </div>

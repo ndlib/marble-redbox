@@ -1,12 +1,20 @@
 import { createContext, useContext } from 'react'
+export const fetchStatus = {
+  FETCHING: 'FETCHING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+}
+
 export const initialContext = {
-  collection: { id: undefined },
+  collection: { },
   updateCollection: () => {},
   setCollection: () => {},
 }
 export const CollectionContext = createContext(initialContext)
 export const useCollectionContext = () => useContext(CollectionContext)
 export default CollectionContext
+
+
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
@@ -58,7 +66,6 @@ const collectionGrapgqlQuery = (id) => {
 
 
 const updateOverwrittenItemData = (data) => {
-  console.log("overwrite=", data)
   if (data.redbox) {
     if (data.redbox.generalDefaultImageId) {
       data.defaultImageId = data.redbox.generalDefaultImageId
@@ -80,7 +87,6 @@ const updateOverwrittenItemData = (data) => {
 }
 
 export const fetchAndParseCollection = (id, abortController) => {
-  console.log("id=", id)
   const query = collectionGrapgqlQuery(id)
 
   return fetch(

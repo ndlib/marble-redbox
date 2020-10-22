@@ -23,6 +23,7 @@ const Collection = ({ id, location }) => {
   const { collection, setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
 
+  console.log("collectionStatus", collectionStatus)
   // Collection fetch
   useEffect(() => {
     const abortController = new AbortController()
@@ -40,7 +41,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, collection.id])
+  }, [id, location, collectionStatus])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
@@ -83,13 +84,62 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id])
+  }, [])
+
+
+    const updateItemFunction = (itemId, generalDefaultImageId, generalObjectFileGroupId) => {
+      const abortController = new AbortController()
+
+      const query = `mutation {
+        updateGeneralSettings(input: {
+          collectionId: "${id}",
+          generalDefaultImageId: "${generalDefaultImageId}",
+          generalObjectFileGroupId: "${generalObjectFileGroupId}",
+          id: "${itemId}"
+        }) {
+          id
+        }
+      }
+      `
+      setCollectionStatus(fetchStatus.FETCHING)
+
+      fetch(
+        process.env.GRAPHQL_API_URL,
+        {
+          headers: {
+            'x-api-key': process.env.GRAPHQL_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query })
+
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then((data) => {
+
+        })
+        .catch((error) => {
+          setCollectionStatus(fetchStatus.ERROR)
+          console.log("error", error)
+        })
+
+        return () => {
+          abortController.abort()
+        }
+    }
+
+
 
   const allStatuses = [collectionStatus, directoriesStatus]
+  console.log("all: ", allStatuses)
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
-    return <Content />
+    return <Content updateItemFunction={updateItemFunction} />
   } else {
     return <Loading />
   }

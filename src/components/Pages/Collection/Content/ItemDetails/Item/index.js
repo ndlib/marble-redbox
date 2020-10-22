@@ -8,7 +8,7 @@ import DefaultImage from '../../DefaultImage'
 import ItemHeading from './ItemHeading'
 import typy from 'typy'
 
-const Item = ({ item, depth }) => {
+const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
   return (
     <Box>
@@ -30,11 +30,11 @@ const Item = ({ item, depth }) => {
             )}
             <p>{item.objectFileGroupId}</p>
 
-            <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
+            <DefaultImage updateItemFunction={updateItemFunction} imageUrl={item.defaultImage} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
           </Box>
         )}
         {typy(item, 'items.items').safeArray.map((item, idx) => (
-          <Item key={item.id} item={item} depth={depth + 1} index={idx} />
+          <Item updateItemFunction={updateItemFunction} key={item.id} item={item} depth={depth + 1} index={idx} />
         ))}
       </Box>
     </Box>
