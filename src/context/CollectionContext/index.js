@@ -1,20 +1,12 @@
 import { createContext, useContext } from 'react'
-export const fetchStatus = {
-  FETCHING: 'FETCHING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-}
 
 export const initialContext = {
   collection: { },
-  updateCollection: () => {},
   setCollection: () => {},
 }
 export const CollectionContext = createContext(initialContext)
 export const useCollectionContext = () => useContext(CollectionContext)
 export default CollectionContext
-
-
 
 const collectionGrapgqlQuery = (id) => {
   return `query {

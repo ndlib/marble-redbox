@@ -35,11 +35,9 @@ const AllCollections = ({ location }) => {
         return result.json()
       })
       .then((result) => {
-        console.log("notError", result.data.listMarbleItems.items, result.data.listMarbleItems.items.map)
         setContent(<Content collections={result.data.listMarbleItems.items} />)
       })
       .catch((result) => {
-        console.log("error", result)
         setContent(<ErrorMessage error={result.error} />)
       })
     return () => {

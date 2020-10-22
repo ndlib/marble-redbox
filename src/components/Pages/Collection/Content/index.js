@@ -22,7 +22,6 @@ const Content = ({ updateItemFunction }) => {
   const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
   const { collection } = useCollectionContext()
   const { updateDirectories } = useDirectoriesContext()
-  const imageGroups = [] // directories.map(directory => directory.groups).flat()
   return (
     <div>
       <Flex sx={sx.headingRow}>
@@ -47,7 +46,7 @@ const Content = ({ updateItemFunction }) => {
       <Divider />
       <Flex sx={sx.itemSection}>
         <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
-        <ImageGroups groups={imageGroups} />
+        <ImageGroups groups={[]} />
       </Flex>
     </div>
   )

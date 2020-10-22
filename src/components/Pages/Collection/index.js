@@ -11,26 +11,29 @@ import Loading from 'components/Layout/Loading'
 import Content from './Content'
 
 export const fetchStatus = {
+  RELOAD: 'RELOAD'
   FETCHING: 'FETCHING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',
 }
 
 const Collection = ({ id, location }) => {
-  const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
+  const [collectionStatus, setCollectionStatus] = useState(fetchStatus.RELOAD)
   const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
   const { collection, setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
 
-  console.log("collectionStatus", collectionStatus)
   // Collection fetch
   useEffect(() => {
-    const abortController = new AbortController()
+    if (collectionStatus !== fetchStatus.RELOAD) {
+      return
+    }
+    setCollectionStatus(fetchStatus.FETCHING)
 
+    const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
-        console.log("fetched and setting!")
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -73,7 +76,6 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
-        console.log("Load Directories")
         setDirectories(getDirectories(data.data.listFiles.items))
         setDirectoriesStatus(fetchStatus.SUCCESS)
       })
@@ -120,11 +122,10 @@ const Collection = ({ id, location }) => {
           return result.json()
         })
         .then((data) => {
-
+          setCollectionStatus(fetchStatus.RELOAD)
         })
         .catch((error) => {
           setCollectionStatus(fetchStatus.ERROR)
-          console.log("error", error)
         })
 
         return () => {
@@ -135,7 +136,6 @@ const Collection = ({ id, location }) => {
 
 
   const allStatuses = [collectionStatus, directoriesStatus]
-  console.log("all: ", allStatuses)
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {

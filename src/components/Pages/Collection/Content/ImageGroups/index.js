@@ -17,7 +17,7 @@ import { useDirectoriesContext } from 'context/DirectoriesContext'
 import SearchFilter from 'components/Shared/SearchFilter'
 import sx from './sx'
 
-const ImageGroups = ({ groups }) => {
+const ImageGroups = () => {
 
   const { directories } = useDirectoriesContext()
 
@@ -94,11 +94,6 @@ const ImageGroups = ({ groups }) => {
 }
 
 ImageGroups.propTypes = {
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    Label: PropTypes.string.isRequired,
-    files: PropTypes.array.isRequired,
-  })).isRequired,
 }
 
 export default ImageGroups
