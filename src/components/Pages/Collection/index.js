@@ -11,7 +11,7 @@ import Loading from 'components/Layout/Loading'
 import Content from './Content'
 
 export const fetchStatus = {
-  RELOAD: 'RELOAD'
+  RELOAD: 'RELOAD',
   FETCHING: 'FETCHING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',
