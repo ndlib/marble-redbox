@@ -79,14 +79,6 @@ const ImageGroups = () => {
               </Text>
             </Box>
           ))}
-          {imageGroup && (
-            <Button
-              variant='link'
-              onClick={() => setImageGroup(null)}
-            >
-              Clear Selection
-            </Button>
-          )}
         </Box>
       </section>
     </BaseStyles>
