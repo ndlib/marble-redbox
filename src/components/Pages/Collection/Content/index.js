@@ -1,27 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Divider,
   Flex,
   Heading,
-  Label,
-  Input,
 } from 'theme-ui'
 import { useCollectionContext } from 'context/CollectionContext'
-import { useDirectoriesContext } from 'context/DirectoriesContext'
-import ActionModal from 'components/Layout/ActionModal'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
-import Directories from './Directories'
-import AddDirectoryModal from './AddDirectoryModal'
 import ItemDetails from './ItemDetails'
 import ImageGroups from './ImageGroups'
 import sx from './sx'
 
 const Content = ({ updateItemFunction }) => {
-  const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
   const { collection } = useCollectionContext()
-  const { updateDirectories } = useDirectoriesContext()
   return (
     <div>
       <Flex sx={sx.headingRow}>
@@ -35,7 +28,9 @@ const Content = ({ updateItemFunction }) => {
             defaultChecked={collection.partiallyDigitized}
             labelSx={sx.label}
             valueSx={sx.values}
-            disabled
+            disabled={false}
+            itemId={collection.id}
+            updateItemFunction={updateItemFunction}
           />
         </Flex>
         <Flex sx={sx.buttons}>
@@ -52,4 +47,7 @@ const Content = ({ updateItemFunction }) => {
   )
 }
 
+Content.propTypes = {
+  updateItemFunction: PropTypes.func.isRequired,
+}
 export default Content

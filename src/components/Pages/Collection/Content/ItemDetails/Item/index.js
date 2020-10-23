@@ -24,8 +24,10 @@ const Item = ({ item, depth, updateItemFunction }) => {
           <Box ml={`${depth + 2}rem`} mb='1rem'>
             {item.defaultImage && (
               <PartiallyDigitized
+                itemId={item.id}
                 defaultChecked={item.partiallyDigitized}
                 labelSx={{ mb: 2 }}
+                updateItemFunction={updateItemFunction}
               />
             )}
             <p>{item.objectFileGroupId}</p>

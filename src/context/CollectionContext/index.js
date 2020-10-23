@@ -78,7 +78,6 @@ const updateOverwrittenItemData = (data) => {
 
 export const fetchAndParseCollection = (id, abortController) => {
   const query = collectionGrapgqlQuery(id)
-  console.log(query)
   return fetch(
     process.env.GRAPHQL_API_URL,
     {

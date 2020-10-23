@@ -6,7 +6,11 @@ import {
   Label,
 } from 'theme-ui'
 
-const PartiallyDigitized = ({ defaultChecked, disabled, onChange, labelSx, valueSx }) => {
+const PartiallyDigitized = ({ itemId, defaultChecked, disabled, labelSx, valueSx, updateItemFunction }) => {
+  const callBackOnClick = (selected) => {
+    updateItemFunction({ itemId: itemId, generalPartiallyDigitized: selected.target.checked })
+  }
+
   return (
     <div>
       <Label sx={labelSx}>
@@ -15,7 +19,7 @@ const PartiallyDigitized = ({ defaultChecked, disabled, onChange, labelSx, value
           <Checkbox
             defaultChecked={defaultChecked}
             disabled={disabled}
-            onChange={onChange}
+            onChange={callBackOnClick}
           />
         </Box>
       </Label>
@@ -24,11 +28,12 @@ const PartiallyDigitized = ({ defaultChecked, disabled, onChange, labelSx, value
 }
 
 PartiallyDigitized.propTypes = {
+  itemId: PropTypes.string.isRequired,
   defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
-  onChange: PropTypes.func,
   labelSx: PropTypes.object,
   valueSx: PropTypes.object,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 export default PartiallyDigitized

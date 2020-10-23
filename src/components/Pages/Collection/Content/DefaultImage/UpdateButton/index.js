@@ -2,10 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button } from 'theme-ui'
 import { useImageGroupContext } from 'context/ImageGroupContext'
-import {
-  useCollectionContext,
-  fetchAndParseCollection,
-} from 'context/CollectionContext'
 import DefaultImageModal from '../../DefaultImageModal'
 
 export const fetchStatus = {
@@ -14,7 +10,7 @@ export const fetchStatus = {
   ERROR: 'ERROR',
 }
 
-const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle, updateItemFunction }) => {
+const UpdateButton = ({ itemId, selectedImageUrl, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const label = selectedImageUrl ? 'Change Default Image' : 'Set Default Image'
   const { imageGroup } = useImageGroupContext()
@@ -23,7 +19,7 @@ const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle, updat
 
   const callBackOnClick = (selected) => {
     setModalOpen(false)
-    updateItemFunction(itemId, selected.id, selected.fileId)
+    updateItemFunction({ itemId: itemId, generalDefaultImageId: selected.id, generalObjectFileGroupId: selected.fileId })
   }
 
   return (
@@ -48,8 +44,10 @@ const UpdateButton = ({ collectionId, itemId, selectedImageUrl, itemTitle, updat
 }
 
 UpdateButton.propTypes = {
+  itemId: PropTypes.string.isRequired,
   selectedImageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 export default UpdateButton

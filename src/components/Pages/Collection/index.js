@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useAPIContext } from 'context/APIContext'
 import {
   useCollectionContext,
   fetchAndParseCollection,
@@ -83,15 +82,16 @@ const Collection = ({ id, location }) => {
     }
   }, [setDirectories])
 
-  const updateItemFunction = (itemId, generalDefaultImageId, generalObjectFileGroupId) => {
+  const updateItemFunction = ({ itemId, generalDefaultImageId, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
 
     const query = `mutation {
         updateGeneralSettings(input: {
           collectionId: "${id}",
-          generalDefaultImageId: "${generalDefaultImageId}",
-          generalObjectFileGroupId: "${generalObjectFileGroupId}",
           id: "${itemId}"
+          ${(typeof generalDefaultImageId !== 'undefined') ? `generalDefaultImageId: "${generalDefaultImageId}",` : ''}
+          ${(typeof generalObjectFileGroupId !== 'undefined') ? `generalObjectFileGroupId: "${generalObjectFileGroupId}",` : ''}
+          ${(typeof generalPartiallyDigitized !== 'undefined') ? `generalPartiallyDigitized: ${generalPartiallyDigitized},` : ''}
         }) {
           id
         }
