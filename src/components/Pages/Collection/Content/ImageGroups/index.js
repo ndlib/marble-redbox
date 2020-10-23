@@ -13,15 +13,18 @@ import {
 } from 'theme-ui'
 import { pluralize } from 'utils/general'
 import { useImageGroupContext } from 'context/ImageGroupContext'
+import { useDirectoriesContext } from 'context/DirectoriesContext'
 import SearchFilter from 'components/Shared/SearchFilter'
 import sx from './sx'
 
-const ImageGroups = ({ groups }) => {
+const ImageGroups = () => {
+
+  const { directories } = useDirectoriesContext()
+
   const groupData = {
-    image: groups,
+    image: Object.values(directories),
     pdf: [],
   }
-
   const [selectedType, setSelectedType] = useState('image')
   const [filteredData, setFilteredData] = useState(typy(groupData[selectedType]).safeArray)
   const { imageGroup, setImageGroup } = useImageGroupContext()
@@ -30,7 +33,7 @@ const ImageGroups = ({ groups }) => {
     setImageGroup(null)
     setFilteredData(typy(groupData[type]).safeArray)
   }
-  const groupSearchFields = ['Label', 'id', 'directoryId']
+  const groupSearchFields = ['id']
 
   return (
     <BaseStyles sx={sx.container}>
@@ -54,6 +57,7 @@ const ImageGroups = ({ groups }) => {
         <Box>
           <Box mb={3}>
             <SearchFilter
+              id='searchImagesGroups'
               key={selectedType} // Force new component when selected type changes so search input is reset
               data={typy(groupData[selectedType]).safeArray}
               fields={groupSearchFields}
@@ -72,18 +76,10 @@ const ImageGroups = ({ groups }) => {
                   ...(group.id === typy(imageGroup, 'id').safeString ? sx.selected : {}),
                 }}
               >
-                {group.Label} ({group.files.length} {pluralize(group.files.length, selectedType)})
+                {group.id} ({group.files.length} {pluralize(group.files.length, selectedType)})
               </Text>
             </Box>
           ))}
-          {imageGroup && (
-            <Button
-              variant='link'
-              onClick={() => setImageGroup(null)}
-            >
-              Clear Selection
-            </Button>
-          )}
         </Box>
       </section>
     </BaseStyles>
@@ -91,11 +87,6 @@ const ImageGroups = ({ groups }) => {
 }
 
 ImageGroups.propTypes = {
-  groups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    Label: PropTypes.string.isRequired,
-    files: PropTypes.array.isRequired,
-  })).isRequired,
 }
 
 export default ImageGroups

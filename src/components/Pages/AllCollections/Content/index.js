@@ -6,7 +6,7 @@ import CollectionsList from './CollectionsList'
 
 const Content = ({ collections }) => {
   const [filtered, setFiltered] = useState(collections)
-  const searchFields = ['id', 'url', 'title', 'sourceSystemUri']
+  const searchFields = ['id', 'title'] // 'url', , 'sourceSystemUri'
   return (
     <div>
       <AddNew />

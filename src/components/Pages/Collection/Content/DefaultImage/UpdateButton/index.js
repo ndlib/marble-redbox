@@ -4,11 +4,23 @@ import { Button } from 'theme-ui'
 import { useImageGroupContext } from 'context/ImageGroupContext'
 import DefaultImageModal from '../../DefaultImageModal'
 
-const UpdateButton = ({ selectedImageUrl, itemTitle }) => {
+export const fetchStatus = {
+  FETCHING: 'FETCHING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+}
+
+const UpdateButton = ({ itemId, selectedImageUrl, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const label = selectedImageUrl ? 'Change Default Image' : 'Set Default Image'
   const { imageGroup } = useImageGroupContext()
+
   const buttonEnabled = selectedImageUrl || imageGroup
+
+  const callBackOnClick = (selected) => {
+    setModalOpen(false)
+    updateItemFunction({ itemId: itemId, generalDefaultImageId: selected.id, generalObjectFileGroupId: selected.fileId })
+  }
 
   return (
     <>
@@ -24,7 +36,7 @@ const UpdateButton = ({ selectedImageUrl, itemTitle }) => {
           defaultSelected={selectedImageUrl}
           headerText={`${label} for ${itemTitle}`}
           onClose={() => setModalOpen(false)}
-          onSave={(newValue) => setModalOpen(false)}
+          onSave={(newValue) => callBackOnClick(newValue)}
         />
       )}
     </>
@@ -32,8 +44,10 @@ const UpdateButton = ({ selectedImageUrl, itemTitle }) => {
 }
 
 UpdateButton.propTypes = {
+  itemId: PropTypes.string.isRequired,
   selectedImageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 export default UpdateButton

@@ -19,6 +19,7 @@ import sx from './sx'
 const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
   let { imageGroup } = useImageGroupContext()
+  /*
   if (!imageGroup) {
     // Find the group that contains the current default image.
     directories.forEach((directory) => {
@@ -32,6 +33,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       }
     })
   }
+  */
   const defaultOption = imageGroup.files.find((opt) => opt.value === defaultSelected)
   const [selected, setSelected] = useState(defaultOption)
   const [filteredOptions, setFilteredOptions] = useState(imageGroup.files)
@@ -46,13 +48,13 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       <Text mb={3}>
         Selected Group: {imageGroup.Label}
       </Text>
-      <SearchFilter data={imageGroup.files} fields={searchFields} onChange={setFilteredOptions} />
+      <SearchFilter id='searchFiels' data={imageGroup.files} fields={searchFields} onChange={setFilteredOptions} />
       <Label htmlFor='imageModalSelect' mt={3}>
         Select Default Image
       </Label>
       <Box sx={sx.optionsContainer}>
         {filteredOptions.map((opt) => (
-          <Label key={opt.Key} sx={sx.option}>
+          <Label key={opt.id} sx={sx.option}>
             <Radio
               name='imageModalSelect'
               id='imageModalSelect'

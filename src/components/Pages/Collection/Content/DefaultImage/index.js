@@ -11,7 +11,7 @@ import Image from 'components/Shared/Image'
 import UpdateButton from './UpdateButton'
 import sx from './sx'
 
-const DefaultImage = ({ imageUrl, itemTitle, inModal }) => {
+const DefaultImage = ({ collectionId, itemId, imageUrl, itemTitle, inModal, updateItemFunction }) => {
   const decoded = decodeURIComponent(imageUrl)
   const imageName = decoded.substring(decoded.lastIndexOf('/') + 1)
 
@@ -19,6 +19,9 @@ const DefaultImage = ({ imageUrl, itemTitle, inModal }) => {
     <UpdateButton
       selectedImageUrl={imageUrl}
       itemTitle={itemTitle}
+      collectionId={collectionId}
+      itemId={itemId}
+      updateItemFunction={updateItemFunction}
     />
   ) : null
 
@@ -33,14 +36,6 @@ const DefaultImage = ({ imageUrl, itemTitle, inModal }) => {
       <Box sx={sx.imageInfo}>
         <Flex>
           <Text>{imageName}</Text>
-          {!inModal && (
-            <IconButton
-              ml={2}
-              aria-label='Remove'
-            >
-              <MdClear />
-            </IconButton>
-          )}
         </Flex>
         {updateButton}
       </Box>
@@ -49,7 +44,7 @@ const DefaultImage = ({ imageUrl, itemTitle, inModal }) => {
 }
 
 DefaultImage.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
   inModal: PropTypes.bool,
 }

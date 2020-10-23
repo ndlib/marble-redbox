@@ -7,7 +7,7 @@ import Item from './Item'
 import Search from './Search'
 import sx from './sx'
 
-const ItemDetails = ({ depth }) => {
+const ItemDetails = ({ depth, updateItemFunction }) => {
   const { collection } = useCollectionContext()
   const [filteredCollection, setFilteredCollection] = useState(collection)
   const searchFields = ['title', 'defaultImage', 'id', 'collectionId']
@@ -22,7 +22,7 @@ const ItemDetails = ({ depth }) => {
   const filter = (event) => {
     const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
     const outData = Object.assign({}, collection)
-    outData.items = collection.items.filter((item) => itemFilterRecursive(item, inputTerms))
+    outData.items = collection.items.items.filter((item) => itemFilterRecursive(item, inputTerms))
     setFilteredCollection(outData)
   }
 
@@ -30,7 +30,7 @@ const ItemDetails = ({ depth }) => {
     <Box mt={3}>
       <Search onFilter={filter} sx={sx.search} />
       <Box sx={sx.itemsList}>
-        <Item item={filteredCollection} depth={depth} />
+        <Item item={filteredCollection} depth={depth} updateItemFunction={updateItemFunction} />
       </Box>
     </Box>
   )

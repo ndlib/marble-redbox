@@ -41,7 +41,6 @@ CollectionList.propTypes = {
   collections: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
     }),
   ).isRequired,

@@ -6,8 +6,9 @@ import {
 import PartiallyDigitized from '../../PartiallyDigitized'
 import DefaultImage from '../../DefaultImage'
 import ItemHeading from './ItemHeading'
+import typy from 'typy'
 
-const Item = ({ item, depth }) => {
+const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
   return (
     <Box>
@@ -23,15 +24,19 @@ const Item = ({ item, depth }) => {
           <Box ml={`${depth + 2}rem`} mb='1rem'>
             {item.defaultImage && (
               <PartiallyDigitized
+                itemId={item.id}
                 defaultChecked={item.partiallyDigitized}
                 labelSx={{ mb: 2 }}
+                updateItemFunction={updateItemFunction}
               />
             )}
-            <DefaultImage imageUrl={item.defaultImage} itemTitle={item.title} />
+            <p>{item.objectFileGroupId}</p>
+
+            <DefaultImage updateItemFunction={updateItemFunction} imageUrl={item.defaultImage} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
           </Box>
         )}
-        {item.items.map((item, idx) => (
-          <Item key={item.id} item={item} depth={depth + 1} index={idx} />
+        {typy(item, 'items.items').safeArray.map((item, idx) => (
+          <Item updateItemFunction={updateItemFunction} key={item.id} item={item} depth={depth + 1} index={idx} />
         ))}
       </Box>
     </Box>
@@ -43,11 +48,14 @@ Item.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
+    objectFileGroupId: PropTypes.string.isRequired,
+    collectionId: PropTypes.string.isRequired,
     defaultImage: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
-    items: PropTypes.array.isRequired,
+    items: PropTypes.object,
   }).isRequired,
   depth: PropTypes.number,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 Item.defaultProps = {

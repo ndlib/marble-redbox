@@ -1,29 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Divider,
   Flex,
   Heading,
-  Label,
-  Input,
 } from 'theme-ui'
 import { useCollectionContext } from 'context/CollectionContext'
-import { useDirectoriesContext } from 'context/DirectoriesContext'
-import ActionModal from 'components/Layout/ActionModal'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
-import Directories from './Directories'
-import AddDirectoryModal from './AddDirectoryModal'
 import ItemDetails from './ItemDetails'
 import ImageGroups from './ImageGroups'
 import sx from './sx'
 
-const Content = () => {
-  const [directoryModalOpen, setDirectoryModalOpen] = useState(false)
+const Content = ({ updateItemFunction }) => {
   const { collection } = useCollectionContext()
-  const { directories, updateDirectories } = useDirectoriesContext()
-  const imageGroups = directories.map(directory => directory.groups).flat()
-
   return (
     <div>
       <Flex sx={sx.headingRow}>
@@ -37,45 +28,26 @@ const Content = () => {
             defaultChecked={collection.partiallyDigitized}
             labelSx={sx.label}
             valueSx={sx.values}
-            disabled
+            disabled={false}
+            itemId={collection.id}
+            updateItemFunction={updateItemFunction}
           />
-          <Directories labelSx={sx.label} valueSx={sx.values} />
         </Flex>
         <Flex sx={sx.buttons}>
           <Button>Re-Sync Metadata</Button>
           <Button>Build Manifest</Button>
-          <Button onClick={() => setDirectoryModalOpen(true)}>Add Directory</Button>
-          {directoryModalOpen && (
-            <AddDirectoryModal
-              onClose={() => setDirectoryModalOpen(false)}
-              onSave={(newValue) => updateDirectories(directories.concat(newValue))}
-            />
-          )}
-          <ActionModal
-            isOpen={directoryModalOpen}
-            contentLabel={`Add Default Image to ${collection.title}`}
-            closeFunc={() => setDirectoryModalOpen(false)}
-          >
-            <Label htmlFor='directorySearch' mt={1}>
-              Search:
-            </Label>
-            <Input name='directorySearch' id='directorySearch' autoComplete='off' />
-            <Label htmlFor='imageSelect' mt={1}>
-              Select Default Image
-            </Label>
-            <Button mt={3} onClick={() => setDirectoryModalOpen(false)}>
-              Save
-            </Button>
-          </ActionModal>
         </Flex>
       </Flex>
       <Divider />
       <Flex sx={sx.itemSection}>
-        <ItemDetails collection={collection} />
-        <ImageGroups groups={imageGroups} />
+        <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
+        <ImageGroups groups={[]} />
       </Flex>
     </div>
   )
 }
 
+Content.propTypes = {
+  updateItemFunction: PropTypes.func.isRequired,
+}
 export default Content

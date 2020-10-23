@@ -8,7 +8,7 @@ import {
   jsx,
 } from 'theme-ui'
 
-const SearchFilter = ({ data, fields, onChange }) => {
+const SearchFilter = ({ id, data, fields, onChange }) => {
   const filter = (event) => {
     // Split search terms on spaces for a quick-and-dirty multiterm search
     const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
@@ -25,7 +25,7 @@ const SearchFilter = ({ data, fields, onChange }) => {
       <Label htmlFor='search'>Search</Label>
       <Input
         name='search'
-        id='search'
+        id={id}
         autoComplete='off'
         onChange={filter}
       />

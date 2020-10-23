@@ -10,21 +10,35 @@ const AllCollections = ({ location }) => {
   const { collectionsURL } = useAPIContext()
   useEffect(() => {
     const abortController = new AbortController()
+    const query = `query {
+        listMarbleItems(filter: {parentId: {eq: "root"}, sourceSystem: {eq: "ArchivesSpace"}}, limit: 1000) {
+          items {
+            id
+            title
+          }
+        }
+      }
+    `
     fetch(
-      collectionsURL,
+      process.env.GRAPHQL_API_URL,
       {
-        method: 'GET',
+        headers: {
+          'x-api-key': process.env.GRAPHQL_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
         signal: abortController.signal,
         mode: 'cors',
+        body: JSON.stringify({ query: query })
       })
       .then(result => {
         return result.json()
       })
-      .then((data) => {
-        setContent(<Content collections={data} />)
+      .then((result) => {
+        setContent(<Content collections={result.data.listMarbleItems.items} />)
       })
-      .catch((error) => {
-        setContent(<ErrorMessage error={error} />)
+      .catch((result) => {
+        setContent(<ErrorMessage error={result.error} />)
       })
     return () => {
       abortController.abort()
