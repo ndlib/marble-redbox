@@ -56,7 +56,6 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-
 const updateOverwrittenItemData = (data) => {
   if (data.redbox) {
     if (data.redbox.generalDefaultImageId) {
@@ -74,13 +73,12 @@ const updateOverwrittenItemData = (data) => {
     data.items.items.forEach(item => updateOverwrittenItemData(item))
   }
 
-
   return data
 }
 
 export const fetchAndParseCollection = (id, abortController) => {
   const query = collectionGrapgqlQuery(id)
-
+  console.log(query)
   return fetch(
     process.env.GRAPHQL_API_URL,
     {
@@ -91,14 +89,14 @@ export const fetchAndParseCollection = (id, abortController) => {
       method: 'POST',
       signal: abortController.signal,
       mode: 'cors',
-      body: JSON.stringify({ query: query })
-
+      body: JSON.stringify({ query: query }),
     })
     .then(result => {
+      console.log('here')
       return result.json()
     })
     .then((data) => {
-      console.log("fetch result=", data)
+      console.log('fetch result=', data)
       const result = data.data.getMarbleItems
       return updateOverwrittenItemData(result)
     })

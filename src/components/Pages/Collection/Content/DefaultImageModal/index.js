@@ -48,13 +48,13 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
       <Text mb={3}>
         Selected Group: {imageGroup.Label}
       </Text>
-      <SearchFilter data={imageGroup.files} fields={searchFields} onChange={setFilteredOptions} />
+      <SearchFilter id='searchFiels' data={imageGroup.files} fields={searchFields} onChange={setFilteredOptions} />
       <Label htmlFor='imageModalSelect' mt={3}>
         Select Default Image
       </Label>
       <Box sx={sx.optionsContainer}>
         {filteredOptions.map((opt) => (
-          <Label key={opt.Key} sx={sx.option}>
+          <Label key={opt.id} sx={sx.option}>
             <Radio
               name='imageModalSelect'
               id='imageModalSelect'

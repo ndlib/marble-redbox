@@ -57,6 +57,7 @@ const ImageGroups = () => {
         <Box>
           <Box mb={3}>
             <SearchFilter
+              id='searchImagesGroups'
               key={selectedType} // Force new component when selected type changes so search input is reset
               data={typy(groupData[selectedType]).safeArray}
               fields={groupSearchFields}

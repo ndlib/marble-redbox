@@ -11,44 +11,35 @@ import Loading from 'components/Layout/Loading'
 import Content from './Content'
 
 export const fetchStatus = {
-  RELOAD: 'RELOAD',
   FETCHING: 'FETCHING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',
 }
 
 const Collection = ({ id, location }) => {
-  const [collectionStatus, setCollectionStatus] = useState(fetchStatus.RELOAD)
+  const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
+  const [collectionNeedsReloaded, setCollectionNeedsReloaded] = useState(1)
   const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
-  const { collection, setCollection } = useCollectionContext()
+  const { setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
 
   // Collection fetch
   useEffect(() => {
-    if (collectionStatus !== fetchStatus.RELOAD) {
-      return
-    }
-    setCollectionStatus(fetchStatus.FETCHING)
-
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
-        console.log(1)
         setCollection(result)
-        console.log(2)
         setCollectionStatus(fetchStatus.SUCCESS)
-        console.log(3)
       })
       .catch((error) => {
-        console.log('BIG ERROR', error)
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
     return () => {
       abortController.abort()
     }
-  }, [id, location, collectionStatus, setCollection])
+  }, [id, location, setCollection, collectionNeedsReloaded])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
@@ -124,10 +115,11 @@ const Collection = ({ id, location }) => {
       .then(result => {
         return result.json()
       })
-      .then((data) => {
-        setCollectionStatus(fetchStatus.RELOAD)
+      .then(() => {
+        setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
+        setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
 

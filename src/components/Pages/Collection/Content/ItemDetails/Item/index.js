@@ -46,11 +46,14 @@ Item.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
+    objectFileGroupId: PropTypes.string.isRequired,
+    collectionId: PropTypes.string.isRequired,
     defaultImage: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
-    items: PropTypes.object .isRequired,
+    items: PropTypes.object,
   }).isRequired,
   depth: PropTypes.number,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 Item.defaultProps = {

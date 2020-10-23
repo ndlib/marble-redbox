@@ -22,7 +22,7 @@ const ItemDetails = ({ depth, updateItemFunction }) => {
   const filter = (event) => {
     const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
     const outData = Object.assign({}, collection)
-    outData.items = collection.items.filter((item) => itemFilterRecursive(item, inputTerms))
+    outData.items = collection.items.items.filter((item) => itemFilterRecursive(item, inputTerms))
     setFilteredCollection(outData)
   }
 

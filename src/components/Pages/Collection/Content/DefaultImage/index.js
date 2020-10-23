@@ -44,7 +44,7 @@ const DefaultImage = ({ collectionId, itemId, imageUrl, itemTitle, inModal, upda
 }
 
 DefaultImage.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
   inModal: PropTypes.bool,
 }
