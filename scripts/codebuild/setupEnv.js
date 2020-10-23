@@ -4,10 +4,8 @@ const AWS = require('aws-sdk')
 
 const appConfig = process.argv.slice(2)[0]
 const possibleKeys = [
-  'SEARCH_URL',
-  'SEARCH_INDEX',
-  'GOOGLE_MAP_KEY',
-  'USER_CONTENT_PATH',
+  'GRAPHQL_API_KEY',
+  'GRAPHQL_API_URL',
   'AUTH_CLIENT_ID',
   'AUTH_CLIENT_URL',
   'AUTH_CLIENT_ISSUER',
@@ -35,7 +33,7 @@ const retrieveStageParameters = async () => {
     })
     params['Parameters'].forEach(node => {
       const paramName = node['Name']
-      const envName = paramName.substring(paramName.lastIndexOf('/') + 1, paramName.length).toUpperCase()
+      const envName = paramName.substring(paramName.lastIndexOf('/') + 1, paramName.length).toUpperCase().replace(/[-]/g, '_')
       env[envName] = node['Value']
     })
   }
@@ -46,7 +44,7 @@ const retrieveStageParameters = async () => {
       env[key] = envValue
     }
     if (env[key] !== undefined) {
-      console.log(`${key}=${env[key]}`)
+      console.log(`${key}='${env[key]}'`)
     }
   })
 }

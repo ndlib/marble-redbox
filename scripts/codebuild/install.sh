@@ -1,7 +1,7 @@
 #!/bin/bash
 magenta=`tput setaf 5`
 reset=`tput sgr0`
-PARAM_CONFIG_PATH=''
+PARAM_CONFIG_PATH='/all/atacks/AppSyncPlayground'
 ENV_FILE='../../.env.production'
 
 echo "${magenta}----- INSTALLATIONS -------${reset}"
@@ -18,6 +18,7 @@ cp ./scripts/codebuild/config.json ~/.config/gatsby/
 pushd scripts/codebuild/
 
 yarn install
+
 node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
 
 popd
