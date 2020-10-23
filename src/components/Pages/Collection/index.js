@@ -34,17 +34,21 @@ const Collection = ({ id, location }) => {
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
+        console.log(1)
         setCollection(result)
+        console.log(2)
         setCollectionStatus(fetchStatus.SUCCESS)
+        console.log(3)
       })
       .catch((error) => {
+        console.log('BIG ERROR', error)
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
     return () => {
       abortController.abort()
     }
-  }, [id, location, collectionStatus])
+  }, [id, location, collectionStatus, setCollection])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
@@ -70,7 +74,7 @@ const Collection = ({ id, location }) => {
         method: 'POST', // Just a default. Can be overridden
         signal: abortController.signal,
         mode: 'cors',
-        body: JSON.stringify({ query: query })
+        body: JSON.stringify({ query: query }),
       })
       .then(result => {
         return result.json()
@@ -86,13 +90,12 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [])
+  }, [setDirectories])
 
+  const updateItemFunction = (itemId, generalDefaultImageId, generalObjectFileGroupId) => {
+    const abortController = new AbortController()
 
-    const updateItemFunction = (itemId, generalDefaultImageId, generalObjectFileGroupId) => {
-      const abortController = new AbortController()
-
-      const query = `mutation {
+    const query = `mutation {
         updateGeneralSettings(input: {
           collectionId: "${id}",
           generalDefaultImageId: "${generalDefaultImageId}",
@@ -103,37 +106,35 @@ const Collection = ({ id, location }) => {
         }
       }
       `
-      setCollectionStatus(fetchStatus.FETCHING)
+    setCollectionStatus(fetchStatus.FETCHING)
 
-      fetch(
-        process.env.GRAPHQL_API_URL,
-        {
-          headers: {
-            'x-api-key': process.env.GRAPHQL_API_KEY,
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          signal: abortController.signal,
-          mode: 'cors',
-          body: JSON.stringify({ query: query })
+    fetch(
+      process.env.GRAPHQL_API_URL,
+      {
+        headers: {
+          'x-api-key': process.env.GRAPHQL_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        signal: abortController.signal,
+        mode: 'cors',
+        body: JSON.stringify({ query: query }),
 
-        })
-        .then(result => {
-          return result.json()
-        })
-        .then((data) => {
-          setCollectionStatus(fetchStatus.RELOAD)
-        })
-        .catch((error) => {
-          setCollectionStatus(fetchStatus.ERROR)
-        })
+      })
+      .then(result => {
+        return result.json()
+      })
+      .then((data) => {
+        setCollectionStatus(fetchStatus.RELOAD)
+      })
+      .catch((error) => {
+        setCollectionStatus(fetchStatus.ERROR)
+      })
 
-        return () => {
-          abortController.abort()
-        }
+    return () => {
+      abortController.abort()
     }
-
-
+  }
 
   const allStatuses = [collectionStatus, directoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {
@@ -151,14 +152,13 @@ const getDirectories = (data) => {
     if (!directories[d.fileId]) {
       directories[d.fileId] = {
         id: d.fileId,
-        files: []
+        files: [],
       }
     }
     directories[d.fileId].files.push(d)
   })
   return directories
 }
-
 
 Collection.propTypes = {
   id: PropTypes.string.isRequired,
