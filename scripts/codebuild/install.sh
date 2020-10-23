@@ -19,8 +19,8 @@ pushd scripts/codebuild/
 
 yarn install
 
-node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
-
+# node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
+curl https://presentation-iiif.library.nd.edu/save > ${ENV_FILE}
 popd
 
 
