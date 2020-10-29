@@ -92,11 +92,9 @@ export const fetchAndParseCollection = (id, abortController) => {
       body: JSON.stringify({ query: query }),
     })
     .then(result => {
-      console.log('here')
       return result.json()
     })
     .then((data) => {
-      console.log('fetch result=', data)
       const result = data.data.getMergedMetadata
       return updateOverwrittenItemData(result)
     })
