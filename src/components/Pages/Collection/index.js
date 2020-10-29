@@ -99,7 +99,6 @@ const Collection = ({ id, location }) => {
         }
       }
       `
-    console.log('query', query)
     setCollectionStatus(fetchStatus.FETCHING)
 
     fetch(
