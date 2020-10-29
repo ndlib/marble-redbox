@@ -1,18 +1,39 @@
 const path = require('path')
 const theme = require(path.join(__dirname, 'src/assets/theme.js'))
+const activeEnv =
+  process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
+console.log(`Using environment config: '${activeEnv}'`)
+require('dotenv').config({
+  path: `.env.${activeEnv}`,
+})
+
+const graphqlApiKey = process.env.GRAPHQL_API_KEY || ''
+const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
+const authClientURL = process.env.AUTH_CLIENT_URL || ''
+const authClientClientId = process.env.AUTH_CLIENT_ID || ''
+const authClientIssuer = process.env.AUTH_CLIENT_ISSUER || ''
+
+console.table([
+  { variable: 'GRAPHQL_API_KEY:', value: graphqlApiKey },
+  { variable: 'GRAPHQL_API_URL:', value: graphqlApiUrl },
+  { variable: 'AUTH_CLIENT_URL:', value: authClientURL },
+  { variable: 'AUTH_CLIENT_ID:', value: authClientClientId },
+  { variable: 'AUTH_CLIENT_ISSUER:', value: authClientIssuer },
+])
+
 module.exports = {
   siteMetadata: {
     title: 'MARBLE RedBox',
     description: 'A thing that does stuff for other things that need stuff.',
     author: 'WSE',
     apis: {
-      collectionsURL: 'https://presentation-iiif.library.nd.edu/collections/archivesspace/',
-      directoriesURL: 'https://presentation-iiif.library.nd.edu/objectFiles/all/',
+      graphqlApiKey: graphqlApiKey,
+      graphqlApiUrl: graphqlApiUrl,
     },
     auth: {
-      url: 'https://okta.nd.edu',
-      clientId: '0oa4tlda8nvJGLv9i357',
-      issuer: 'https://okta.nd.edu/oauth2/ausxosq06SDdaFNMB356',
+      url: authClientURL,
+      clientId: authClientClientId,
+      issuer: authClientIssuer,
     },
   },
   plugins: [

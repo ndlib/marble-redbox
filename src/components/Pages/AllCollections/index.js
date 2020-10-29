@@ -7,11 +7,11 @@ import { useAPIContext } from 'context/APIContext'
 
 const AllCollections = ({ location }) => {
   const [content, setContent] = useState(<Loading />)
-  const { collectionsURL } = useAPIContext()
+  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
   useEffect(() => {
     const abortController = new AbortController()
     const query = `query {
-        listMarbleItems(filter: {parentId: {eq: "root"}, sourceSystem: {eq: "ArchivesSpace"}}, limit: 1000) {
+        listMergedMetadata(filter: {parentId: {eq: "root"}, sourceSystem: {eq: "ArchivesSpace"}}, limit: 1000) {
           items {
             id
             title
@@ -20,22 +20,22 @@ const AllCollections = ({ location }) => {
       }
     `
     fetch(
-      process.env.GRAPHQL_API_URL,
+      graphqlApiUrl,
       {
         headers: {
-          'x-api-key': process.env.GRAPHQL_API_KEY,
+          'x-api-key': graphqlApiKey,
           'Content-Type': 'application/json',
         },
         method: 'POST',
         signal: abortController.signal,
         mode: 'cors',
-        body: JSON.stringify({ query: query })
+        body: JSON.stringify({ query: query }),
       })
       .then(result => {
         return result.json()
       })
       .then((result) => {
-        setContent(<Content collections={result.data.listMarbleItems.items} />)
+        setContent(<Content collections={result.data.listMergedMetadata.items} />)
       })
       .catch((result) => {
         setContent(<ErrorMessage error={result.error} />)
@@ -43,7 +43,7 @@ const AllCollections = ({ location }) => {
     return () => {
       abortController.abort()
     }
-  }, [location, collectionsURL])
+  }, [location, graphqlApiUrl, graphqlApiKey])
   return (
     <div>{content}</div>
   )
