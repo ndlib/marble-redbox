@@ -8,6 +8,7 @@ import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ErrorMessage from 'components/Layout/ErrorMessage'
 import Loading from 'components/Layout/Loading'
 import Content from './Content'
+import { useAPIContext } from 'context/APIContext'
 
 export const fetchStatus = {
   FETCHING: 'FETCHING',
@@ -22,6 +23,7 @@ const Collection = ({ id, location }) => {
   const [errorMsg, setErrorMsg] = useState()
   const { setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
+  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
 
   // Collection fetch
   useEffect(() => {
@@ -46,7 +48,7 @@ const Collection = ({ id, location }) => {
     const query = ` {
       listFiles(limit: 10000) {
         items {
-          fileId
+          objectFileGroupId
           id
           label
           iiifImageUri
@@ -55,10 +57,10 @@ const Collection = ({ id, location }) => {
     }
     `
     fetch(
-      process.env.GRAPHQL_API_URL,
+      graphqlApiUrl,
       {
         headers: {
-          'x-api-key': process.env.GRAPHQL_API_KEY,
+          'x-api-key': graphqlApiKey,
           'Content-Type': 'application/json',
         },
         method: 'POST', // Just a default. Can be overridden
@@ -80,16 +82,16 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [setDirectories])
+  }, [graphqlApiKey, graphqlApiUrl, setDirectories])
 
   const updateItemFunction = ({ itemId, generalDefaultImageId, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
 
     const query = `mutation {
-        updateGeneralSettings(input: {
+        updateMetadataAugmentation(input: {
           collectionId: "${id}",
           id: "${itemId}"
-          ${(typeof generalDefaultImageId !== 'undefined') ? `generalDefaultImageId: "${generalDefaultImageId}",` : ''}
+          ${(typeof generalDefaultImageId !== 'undefined') ? `generalDefaultFilePath: "${generalDefaultImageId}",` : ''}
           ${(typeof generalObjectFileGroupId !== 'undefined') ? `generalObjectFileGroupId: "${generalObjectFileGroupId}",` : ''}
           ${(typeof generalPartiallyDigitized !== 'undefined') ? `generalPartiallyDigitized: ${generalPartiallyDigitized},` : ''}
         }) {
@@ -100,10 +102,10 @@ const Collection = ({ id, location }) => {
     setCollectionStatus(fetchStatus.FETCHING)
 
     fetch(
-      process.env.GRAPHQL_API_URL,
+      graphqlApiUrl,
       {
         headers: {
-          'x-api-key': process.env.GRAPHQL_API_KEY,
+          'x-api-key': graphqlApiKey,
           'Content-Type': 'application/json',
         },
         method: 'POST',
@@ -141,13 +143,13 @@ const Collection = ({ id, location }) => {
 const getDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
-    if (!directories[d.fileId]) {
-      directories[d.fileId] = {
-        id: d.fileId,
+    if (!directories[d.objectFileGroupId]) {
+      directories[d.objectFileGroupId] = {
+        id: d.objectFileGroupId,
         files: [],
       }
     }
-    directories[d.fileId].files.push(d)
+    directories[d.objectFileGroupId].files.push(d)
   })
   return directories
 }

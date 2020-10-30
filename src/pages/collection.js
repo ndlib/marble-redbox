@@ -17,8 +17,8 @@ const CollectionPages = ({ location }) => {
       site {
         siteMetadata {
           apis {
-            collectionsURL
-            directoriesURL
+            graphqlApiKey
+            graphqlApiUrl
           }
         }
       }
@@ -28,14 +28,14 @@ const CollectionPages = ({ location }) => {
   const setAPIs = (apis) => {
     setApiContext({
       ...apiContext,
-      collectionsURL: apis.collectionsURL,
-      directoriesURL: apis.directoriesURL,
+      graphqlApiKey: apis.graphqlApiKey,
+      graphqlApiUrl: apis.graphqlApiUrl,
     })
   }
   const [apiContext, setApiContext] = useState({
     ...initialApiContext,
-    collectionsURL: apis.collectionsURL,
-    directoriesURL: apis.directoriesURL,
+    graphqlApiKey: apis.graphqlApiKey,
+    graphqlApiUrl: apis.graphqlApiUrl,
     setAPIs: setAPIs,
   })
 

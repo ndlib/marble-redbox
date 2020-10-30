@@ -19,7 +19,7 @@ const UpdateButton = ({ itemId, selectedImageUrl, itemTitle, updateItemFunction 
 
   const callBackOnClick = (selected) => {
     setModalOpen(false)
-    updateItemFunction({ itemId: itemId, generalDefaultImageId: selected.id, generalObjectFileGroupId: selected.fileId })
+    updateItemFunction({ itemId: itemId, generalDefaultImageId: selected.id, generalObjectFileGroupId: selected.objectFileGroupId })
   }
 
   return (

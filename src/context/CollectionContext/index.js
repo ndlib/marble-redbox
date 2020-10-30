@@ -10,14 +10,14 @@ export default CollectionContext
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
-    getMarbleItems(id: "${id}") {
+    getMergedMetadata(id: "${id}") {
       id
       title
       level
       objectFileGroupId
       collectionId
-      defaultImageId
-      redbox {
+      defaultFilePath
+      metadataAugmentation {
         generalDefaultImageId
         generalObjectFileGroupId
         generalPartiallyDigitized
@@ -29,9 +29,9 @@ const collectionGrapgqlQuery = (id) => {
           level
           objectFileGroupId
           collectionId
-          defaultImageId
-          redbox {
-            generalDefaultImageId
+          defaultFilePath
+          metadataAugmentation {
+            generalDefaultFilePath
             generalObjectFileGroupId
             generalPartiallyDigitized
           }
@@ -57,15 +57,16 @@ const collectionGrapgqlQuery = (id) => {
 }
 
 const updateOverwrittenItemData = (data) => {
-  if (data.redbox) {
-    if (data.redbox.generalDefaultImageId) {
-      data.defaultImageId = data.redbox.generalDefaultImageId
+  if (data.metadataAugmentation) {
+    console.log(data.metadataAugmentation)
+    if (data.metadataAugmentation.generalDefaultImageId) {
+      data.defaultFilePath = data.metadataAugmentation.generalDefaultFilePath
     }
-    if (data.redbox.generalObjectFileGroupId) {
-      data.objectFileGroupId = data.redbox.generalObjectFileGroupId
+    if (data.metadataAugmentation.generalObjectFileGroupId) {
+      data.objectFileGroupId = data.metadataAugmentation.generalObjectFileGroupId
     }
-    if (data.redbox.generalPartiallyDigitized) {
-      data.partiallyDigitized = data.redbox.generalPartiallyDigitized
+    if (data.metadataAugmentation.generalPartiallyDigitized) {
+      data.partiallyDigitized = data.metadataAugmentation.generalPartiallyDigitized
     }
   }
 
@@ -91,12 +92,10 @@ export const fetchAndParseCollection = (id, abortController) => {
       body: JSON.stringify({ query: query }),
     })
     .then(result => {
-      console.log('here')
       return result.json()
     })
     .then((data) => {
-      console.log('fetch result=', data)
-      const result = data.data.getMarbleItems
+      const result = data.data.getMergedMetadata
       return updateOverwrittenItemData(result)
     })
 }
