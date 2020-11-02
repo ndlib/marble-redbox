@@ -4,9 +4,9 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/261cd264e5bba50fe394/test_coverage)](https://codeclimate.com/github/ndlib/marble-redbox/test_coverage)
 [![Build Status](https://travis-ci.org/ndlib/marble-redbox.svg?branch=master)](https://travis-ci.org/ndlib/marble-redbox)
 
-Description of what RedBox is and does. [Reference diagram](https://projects.invisionapp.com/freehand/document/pOlUlLdlz).
+Description of what Red Box is and does. [Reference diagram](https://projects.invisionapp.com/freehand/document/pOlUlLdlz).
 
-RedBox uses these libraries:
+Red Box uses these libraries:
 
 - [Gatsby](https://www.gatsbyjs.com/)
 - [Reach Router](https://reach.tech/router) (included with Gatsby)
