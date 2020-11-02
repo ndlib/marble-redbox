@@ -1,4 +1,4 @@
-# Marble RedBox
+# Marble Red Box
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/261cd264e5bba50fe394/maintainability)](https://codeclimate.com/github/ndlib/marble-redbox/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/261cd264e5bba50fe394/test_coverage)](https://codeclimate.com/github/ndlib/marble-redbox/test_coverage)
