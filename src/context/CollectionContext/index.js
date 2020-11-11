@@ -39,7 +39,7 @@ const collectionGrapgqlQuery = (id) => {
             items {
               id
               label
-              fileId
+              objectFileGroupId
             }
           }
         }
@@ -48,7 +48,7 @@ const collectionGrapgqlQuery = (id) => {
         items {
           id
           label
-          fileId
+          objectFileGroupId
         }
       }
     }
