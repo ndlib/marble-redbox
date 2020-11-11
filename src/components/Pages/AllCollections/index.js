@@ -11,7 +11,7 @@ const AllCollections = ({ location }) => {
   useEffect(() => {
     const abortController = new AbortController()
     const query = `query {
-        listMergedMetadata(filter: {parentId: {eq: "root"}, sourceSystem: {eq: "ArchivesSpace"}}, limit: 1000) {
+        listMergedMetadata(filter: {parentId: {eq: "root"}, sourceSystem: {ne: "EmbARK"}}, limit: 1000) {
           items {
             id
             title

@@ -27,9 +27,11 @@ const Collection = ({ id, location }) => {
 
   // Collection fetch
   useEffect(() => {
+    console.log('reload')
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
+        console.log(result)
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -99,7 +101,8 @@ const Collection = ({ id, location }) => {
         }
       }
       `
-    setCollectionStatus(fetchStatus.FETCHING)
+    console.log(query)
+    // setCollectionStatus(fetchStatus.FETCHING)
 
     fetch(
       graphqlApiUrl,
