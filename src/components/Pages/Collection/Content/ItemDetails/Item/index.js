@@ -52,7 +52,7 @@ Item.propTypes = {
     collectionId: PropTypes.string.isRequired,
     defaultImage: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
-    items: PropTypes.object,
+    items: PropTypes.array,
   }).isRequired,
   depth: PropTypes.number,
   updateItemFunction: PropTypes.func.isRequired,

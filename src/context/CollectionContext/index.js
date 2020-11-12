@@ -58,7 +58,6 @@ const collectionGrapgqlQuery = (id) => {
 
 const updateOverwrittenItemData = (data) => {
   if (data.metadataAugmentation) {
-    console.log(data.metadataAugmentation)
     if (data.metadataAugmentation.generalDefaultImageId) {
       data.defaultFilePath = data.metadataAugmentation.generalDefaultFilePath
     }
