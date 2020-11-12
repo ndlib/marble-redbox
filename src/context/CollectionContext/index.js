@@ -18,7 +18,7 @@ const collectionGrapgqlQuery = (id) => {
       collectionId
       defaultFilePath
       metadataAugmentation {
-        generalDefaultImageId
+        generalDefaultFilePath
         generalObjectFileGroupId
         generalPartiallyDigitized
       }
@@ -58,7 +58,7 @@ const collectionGrapgqlQuery = (id) => {
 
 const updateOverwrittenItemData = (data) => {
   if (data.metadataAugmentation) {
-    if (data.metadataAugmentation.generalDefaultImageId) {
+    if (data.metadataAugmentation.generalDefaultFilePath) {
       data.defaultFilePath = data.metadataAugmentation.generalDefaultFilePath
     }
     if (data.metadataAugmentation.generalObjectFileGroupId) {

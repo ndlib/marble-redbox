@@ -25,6 +25,12 @@ const DefaultImage = ({ collectionId, itemId, imageUrl, itemTitle, inModal, upda
     />
   ) : null
 
+  if (imageUrl) {
+    imageUrl = imageUrl.replace(/[/]/g, '%2F')
+    imageUrl = imageUrl.replace('.tif', '').replace('.jpg', '')
+    // imageUrl = 'https://image-iiif.library.nd.edu/iiif/2/' + imageUrl + '/full/250,/0/default.jpg'
+  }
+  console.log(imageUrl)
   return imageUrl ? (
     <Box>
       <Image

@@ -18,7 +18,7 @@ import sx from './sx'
 
 const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
-  let { imageGroup } = useImageGroupContext()
+  const { imageGroup } = useImageGroupContext()
   /*
   if (!imageGroup) {
     // Find the group that contains the current default image.
@@ -62,7 +62,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, onSave, onClose }) => 
               defaultChecked={defaultSelected === opt.iiifImageUri}
               onChange={() => setSelected(opt)}
             />
-            <DefaultImage imageUrl={opt.iiifImageUri} inModal />
+            <DefaultImage imageUrl={opt.id} inModal />
           </Label>
         ))}
       </Box>
