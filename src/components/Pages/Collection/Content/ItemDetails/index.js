@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import typy from 'typy'
 import { Box } from 'theme-ui'
@@ -9,7 +9,6 @@ import sx from './sx'
 
 const ItemDetails = ({ depth, updateItemFunction }) => {
   const { collection } = useCollectionContext()
-  const [filteredCollection, setFilteredCollection] = useState(collection)
   const searchFields = ['title', 'defaultImage', 'id', 'collectionId']
 
   const itemFilterRecursive = (item, searchTerms) => {
@@ -23,14 +22,14 @@ const ItemDetails = ({ depth, updateItemFunction }) => {
     const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
     const outData = Object.assign({}, collection)
     outData.items = collection.items.items.filter((item) => itemFilterRecursive(item, inputTerms))
-    setFilteredCollection(outData)
+    return outData
   }
 
   return (
     <Box mt={3}>
       <Search onFilter={filter} sx={sx.search} />
       <Box sx={sx.itemsList}>
-        <Item item={filteredCollection} depth={depth} updateItemFunction={updateItemFunction} />
+        <Item item={filter(collection)} depth={depth} updateItemFunction={updateItemFunction} />
       </Box>
     </Box>
   )
@@ -38,6 +37,7 @@ const ItemDetails = ({ depth, updateItemFunction }) => {
 
 ItemDetails.propTypes = {
   depth: PropTypes.number,
+  updateItemFunction: PropTypes.func.isRequired,
 }
 
 ItemDetails.defaultProps = {

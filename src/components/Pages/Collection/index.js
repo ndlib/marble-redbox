@@ -27,11 +27,10 @@ const Collection = ({ id, location }) => {
 
   // Collection fetch
   useEffect(() => {
-    console.log('reload')
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
-        console.log(result)
+        // console.log(result, Object.is(result, collection))
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -42,7 +41,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, setCollection, collectionNeedsReloaded])
+  }, [id, location, collectionNeedsReloaded, setCollection])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
@@ -88,19 +87,32 @@ const Collection = ({ id, location }) => {
 
   const updateItemFunction = ({ itemId, generalDefaultImageId, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
-
-    const query = `mutation {
-        updateMetadataAugmentation(input: {
-          collectionId: "${id}",
-          id: "${itemId}"
-          ${(typeof generalDefaultImageId !== 'undefined') ? `generalDefaultFilePath: "${generalDefaultImageId}",` : ''}
-          ${(typeof generalObjectFileGroupId !== 'undefined') ? `generalObjectFileGroupId: "${generalObjectFileGroupId}",` : ''}
-          ${(typeof generalPartiallyDigitized !== 'undefined') ? `generalPartiallyDigitized: ${generalPartiallyDigitized},` : ''}
-        }) {
-          id
+    let query = ''
+    console.log(generalPartiallyDigitized, itemId)
+    if (typeof generalPartiallyDigitized !== 'undefined') {
+      query = `mutation {
+          replacePartiallyDigitized(input: {
+            collectionId: "${id}",
+            id: "${itemId}",
+            generalPartiallyDigitized: ${generalPartiallyDigitized},
+          }) {
+            id
+          }
         }
-      }
-      `
+        `
+    } else {
+      query = `mutation {
+          replaceDefaultImage(input: {
+            collectionId: "${id}",
+            id: "${itemId}",
+            generalDefaultFilePath: "${generalDefaultImageId}",
+            generalObjectFileGroupId: "${generalObjectFileGroupId}",
+          }) {
+            id
+          }
+        }
+        `
+    }
     console.log(query)
     // setCollectionStatus(fetchStatus.FETCHING)
 
@@ -118,12 +130,16 @@ const Collection = ({ id, location }) => {
 
       })
       .then(result => {
+        console.log('result', result)
         return result.json()
       })
-      .then(() => {
+      .then((json) => {
+        console.log('result', json)
+
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
+        console.log('error!! ')
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
