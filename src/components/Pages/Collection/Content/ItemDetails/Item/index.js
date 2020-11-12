@@ -10,6 +10,7 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
+  console.log(item)
   return (
     <Box>
       <ItemHeading
@@ -22,7 +23,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
           <Box ml={`${depth + 2}rem`} mb='1rem'>
-            {item.defaultImage && (
+            {item.defaultFilePath && (
               <PartiallyDigitized
                 itemId={item.id}
                 defaultChecked={item.partiallyDigitized}
@@ -30,9 +31,8 @@ const Item = ({ item, depth, updateItemFunction }) => {
                 updateItemFunction={updateItemFunction}
               />
             )}
+            <DefaultImage updateItemFunction={updateItemFunction} imageUrl={item.defaultFilePath} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
             <p>{item.objectFileGroupId}</p>
-
-            <DefaultImage updateItemFunction={updateItemFunction} imageUrl={item.defaultImage} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
           </Box>
         )}
         {typy(item, 'items.items').safeArray.map((item, idx) => (
@@ -48,9 +48,9 @@ Item.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
-    objectFileGroupId: PropTypes.string.isRequired,
+    objectFileGroupId: PropTypes.string,
     collectionId: PropTypes.string.isRequired,
-    defaultImage: PropTypes.string,
+    defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
     items: PropTypes.array,
   }).isRequired,

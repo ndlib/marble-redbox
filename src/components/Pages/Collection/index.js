@@ -52,6 +52,7 @@ const Collection = ({ id, location }) => {
           objectFileGroupId
           id
           label
+          path
           iiifImageUri
         }
       }
@@ -85,10 +86,9 @@ const Collection = ({ id, location }) => {
     }
   }, [graphqlApiKey, graphqlApiUrl, setDirectories])
 
-  const updateItemFunction = ({ itemId, generalDefaultImageId, generalObjectFileGroupId, generalPartiallyDigitized }) => {
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
     let query = ''
-    console.log(generalPartiallyDigitized, itemId)
     if (typeof generalPartiallyDigitized !== 'undefined') {
       query = `mutation {
           replacePartiallyDigitized(input: {
@@ -105,7 +105,7 @@ const Collection = ({ id, location }) => {
           replaceDefaultImage(input: {
             collectionId: "${id}",
             id: "${itemId}",
-            generalDefaultFilePath: "${generalDefaultImageId}",
+            generalDefaultFilePath: "${generalDefaultFilePath}",
             generalObjectFileGroupId: "${generalObjectFileGroupId}",
           }) {
             id
@@ -114,8 +114,6 @@ const Collection = ({ id, location }) => {
         `
     }
     console.log(query)
-    // setCollectionStatus(fetchStatus.FETCHING)
-
     fetch(
       graphqlApiUrl,
       {
@@ -130,16 +128,14 @@ const Collection = ({ id, location }) => {
 
       })
       .then(result => {
-        console.log('result', result)
+        console.log(result)
         return result.json()
       })
-      .then((json) => {
-        console.log('result', json)
-
+      .then((result) => {
+        console.log(result)
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
-        console.log('error!! ')
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })

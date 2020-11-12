@@ -22,7 +22,7 @@ const Image = ({
   // derive image from image src OR service OR use the default noImage
   const iifSize = (width || height) ? `${width || ''},${height || ''}` : 'max'
   const imageSrc = src || serviceURL(service, region, iifSize) || noImage
-
+  console.log(imageSrc)
   return (
     <picture sx={sx.picture(frame)}>
       <img
@@ -61,7 +61,7 @@ export default Image
 export const serviceURL = (service, region, size) => {
   let url
   if (service && service !== '') {
-    url = `${service}/${region}/${size}/0/default.jpg`
+    url = `https://image-iiif.library.nd.edu/iiif/2/${service}/${region}/${size}/0/default.jpg`
   }
   return url
 }
