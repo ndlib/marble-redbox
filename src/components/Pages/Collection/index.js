@@ -27,11 +27,10 @@ const Collection = ({ id, location }) => {
 
   // Collection fetch
   useEffect(() => {
-    console.log('reload')
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
-        console.log(result)
+        // console.log(result, Object.is(result, collection))
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -42,7 +41,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, setCollection, collectionNeedsReloaded])
+  }, [id, location, collectionNeedsReloaded, setCollection])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
