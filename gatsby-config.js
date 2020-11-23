@@ -7,6 +7,7 @@ require('dotenv').config({
   path: `.env.${activeEnv}`,
 })
 
+const s3BucketName = process.env.S3_DEST_BUCKET || ''
 const graphqlApiKey = process.env.GRAPHQL_API_KEY || ''
 const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
 const authClientURL = process.env.AUTH_CLIENT_URL || ''
@@ -70,6 +71,12 @@ module.exports = {
         theme_color: theme.colors.primary,
         display: 'minimal-ui',
         icon: 'src/assets/images/manifestLogo.png', // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: `gatsby-plugin-s3`,
+      options: {
+        bucketName: s3BucketName,
       },
     },
   ],

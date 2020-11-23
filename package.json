@@ -11,6 +11,7 @@
     "gatsby-plugin-manifest": "^2.4.5",
     "gatsby-plugin-offline": "^3.2.3",
     "gatsby-plugin-react-helmet": "^3.3.1",
+    "gatsby-plugin-s3": "^0.3.8",
     "gatsby-plugin-sharp": "^2.6.4",
     "gatsby-plugin-theme-ui": "^0.3.0",
     "gatsby-source-filesystem": "^2.3.4",
@@ -58,6 +59,7 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
+    "deploy": "gatsby-plugin-s3 deploy --yes",
     "build": "gatsby build",
     "develop": "gatsby develop -S -p 8010",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
