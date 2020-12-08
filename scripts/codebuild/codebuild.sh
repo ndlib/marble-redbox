@@ -1,8 +1,19 @@
 #!/bin/bash
 magenta=`tput setaf 5`
 reset=`tput sgr0`
-PARAM_CONFIG_PATH='/all/atacks/AppSyncPlayground'
+
 ENV_FILE='.env.production'
+
+# AWS parameter store key path(ex: /all/static-host/<stackname>/)
+# must contain search_url and search_index key/values
+# pass in 'local' for dev settings
+export PARAM_CONFIG_PATH=${PARAM_CONFIG_PATH:=$1}
+if [[ -z "$PARAM_CONFIG_PATH" ]]; then
+    echo "FATAL: Elasticsearch configuration required"
+    echo "export PARAM_CONFIG_PATH=/all/static-host/<stackname>/"
+    exit 2
+fi
+
 
 echo "${magenta}----- INSTALLATIONS -------${reset}"
 # install yarn
