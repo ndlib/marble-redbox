@@ -12,14 +12,17 @@ const Login = ({ location }) => {
   const [content, setContent] = useState(<Loading />)
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
-  const authClient = new OktaAuth({
-    ...authSettings,
-    redirectUri: `${location.origin}/user`,
-  })
+
+  if (authSettings.url) {
+    const authClient = new OktaAuth({
+      ...authSettings,
+      redirectUri: `${location.origin}/user`,
+    })
+  }
   useEffect(() => {
     if (user) {
       navigate(redirectPath)
-    } else if (authSettings) {
+    } else if (authClient) {
       authClient.tokenManager.get('idToken')
         .then(idToken => {
           if (idToken) {
@@ -41,7 +44,7 @@ const Login = ({ location }) => {
           }
         })
     }
-  }, [location, user, authSettings, setAuth, authClient])
+  }, [location, user, authSettings, setAuth])
 
   return <React.Fragment>{content}</React.Fragment>
 }
