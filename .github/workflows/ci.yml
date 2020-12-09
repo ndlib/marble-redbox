@@ -34,5 +34,4 @@ jobs:
 
     - name: "Build"
       run: |
-        yarn workspace site build
-      
+        yarn build
