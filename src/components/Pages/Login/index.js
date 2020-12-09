@@ -12,7 +12,8 @@ const Login = ({ location }) => {
   const [content, setContent] = useState(<Loading />)
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
-  if (authSettings) {
+
+  if (authSettings.url) {
     const authClient = new OktaAuth({
       ...authSettings,
       redirectUri: `${location.origin}/user`,
@@ -21,7 +22,7 @@ const Login = ({ location }) => {
   useEffect(() => {
     if (user) {
       navigate(redirectPath)
-    } else if (authSettings) {
+    } else if (authClient) {
       authClient.tokenManager.get('idToken')
         .then(idToken => {
           if (idToken) {
