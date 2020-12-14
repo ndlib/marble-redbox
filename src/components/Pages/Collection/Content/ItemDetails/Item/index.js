@@ -10,7 +10,7 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
-  console.log(item)
+
   return (
     <Box>
       <ItemHeading
@@ -22,7 +22,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
       </ItemHeading>
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
-          <Box ml={`${depth + 2}rem`} mb='1rem'>
+          <Box ml={`${depth + 4}rem`} mb='1rem'>
             {item.defaultFilePath && (
               <PartiallyDigitized
                 itemId={item.id}
@@ -35,7 +35,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
             <p>{item.objectFileGroupId}</p>
           </Box>
         )}
-        {typy(item, 'items.items').safeArray.map((item, idx) => (
+        {typy(item, 'items').safeArray.map((item, idx) => (
           <Item updateItemFunction={updateItemFunction} key={item.id} item={item} depth={depth + 1} index={idx} />
         ))}
       </Box>

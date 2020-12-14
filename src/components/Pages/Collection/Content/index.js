@@ -15,6 +15,7 @@ import sx from './sx'
 
 const Content = ({ updateItemFunction }) => {
   const { collection } = useCollectionContext()
+  console.log('hi collection here')
   return (
     <div>
       <Flex sx={sx.headingRow}>
