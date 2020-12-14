@@ -23,7 +23,7 @@ const Header = ({ siteTitle }) => (
       }}
       >
         <Link
-          to='/'
+          to='/collection'
           sx={{
             color: 'background',
             textDecoration: 'none',

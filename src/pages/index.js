@@ -6,8 +6,8 @@ import Layout from 'components/Layout'
 
 const IndexPage = () => (
   <Layout>
-    <p>Welcome to MARBLE RedBox a site that does stuff with stuff to make stuff for things that need stuff.</p>
-    <Link to='/collection'>Do stuff</Link>
+    <p>Red Box is an interim place to manage and connect the library’s digital assets to corresponding descriptive metadata in Aleph and ArchivesSpace to accomplish the goals of the Marble project.</p>
+    <Link to='/collection'>Manage Collections</Link>
   </Layout>
 )
 
