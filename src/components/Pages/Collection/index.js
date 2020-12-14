@@ -113,7 +113,6 @@ const Collection = ({ id, location }) => {
         }
         `
     }
-    console.log(query)
     fetch(
       graphqlApiUrl,
       {
@@ -128,11 +127,9 @@ const Collection = ({ id, location }) => {
 
       })
       .then(result => {
-        console.log(result)
         return result.json()
       })
       .then((result) => {
-        console.log(result)
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {

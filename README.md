@@ -22,7 +22,7 @@ Useful commands:
 - `yarn test` - Runs unit tests once.
 - `yarn watch` - Runs unit tests and watches for changes and reruns tests as changes are detected. It also prints out coverage information.
 - `yarn lint` - Run eslint on project to find formatting and syntax issues.
-- `yarn deplouy` - Copies the build to the s3 bucket in .env.*
+- `yarn deploy` - Copies the build to the s3 bucket in .env.*
 
 # Local Setup.
 
