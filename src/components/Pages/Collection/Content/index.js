@@ -35,7 +35,7 @@ const Content = ({ updateItemFunction }) => {
           />
           <Label sx={sx.label}>
             Images Restricted:
-            <Box sx={{ ...sx.values, verticalAlign: 'bottom', cursor: (false ? 'not-allowed' : 'default') }}>
+            <Box sx={{ ...sx.values, verticalAlign: 'bottom', cursor: 'default' }}>
               <Checkbox />
             </Box>
           </Label>
