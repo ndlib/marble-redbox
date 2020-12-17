@@ -11,13 +11,14 @@ import Image from 'components/Shared/Image'
 import UpdateButton from './UpdateButton'
 import sx from './sx'
 
-const DefaultImage = ({ collectionId, itemId, imageUrl, itemTitle, inModal, updateItemFunction }) => {
+const DefaultImage = ({ collectionId, itemId, objectFileGroupId, imageUrl, itemTitle, inModal, updateItemFunction }) => {
   const decoded = decodeURIComponent(imageUrl)
   const imageName = decoded.substring(decoded.lastIndexOf('/') + 1)
 
   const updateButton = !inModal ? (
     <UpdateButton
       selectedImageUrl={imageUrl}
+      objectFileGroupId={objectFileGroupId}
       itemTitle={itemTitle}
       collectionId={collectionId}
       itemId={itemId}

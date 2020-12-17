@@ -52,6 +52,8 @@ const Collection = ({ id, location }) => {
           objectFileGroupId
           id
           label
+          source
+          sourceType
           path
           iiifImageUri
         }
@@ -155,13 +157,26 @@ const Collection = ({ id, location }) => {
 const getDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
-    if (!directories[d.objectFileGroupId]) {
-      directories[d.objectFileGroupId] = {
-        id: d.objectFileGroupId,
-        files: [],
+    if (d.sourceType === 'S3') {
+      const split = d.objectFileGroupId.split('-')
+      let baseDirectoryGroup = 'none'
+      if (split.length > 1) {
+        baseDirectoryGroup = split[0]
       }
+
+      if (!directories[baseDirectoryGroup]) {
+        directories[baseDirectoryGroup] = {}
+      }
+
+      if (!directories[baseDirectoryGroup][d.objectFileGroupId]) {
+        directories[baseDirectoryGroup][d.objectFileGroupId] = {
+          id: d.objectFileGroupId,
+          files: [],
+        }
+      }
+      d.sortId = d.id.replace(d.objectFileGroupId, '')
+      directories[baseDirectoryGroup][d.objectFileGroupId].files.push(d)
     }
-    directories[d.objectFileGroupId].files.push(d)
   })
   return directories
 }

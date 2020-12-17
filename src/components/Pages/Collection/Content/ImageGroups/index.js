@@ -18,6 +18,7 @@ import SearchFilter from 'components/Shared/SearchFilter'
 import sx from './sx'
 
 const ImageGroups = () => {
+  return (null)
 
   const { directories } = useDirectoriesContext()
 

@@ -31,7 +31,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
                 updateItemFunction={updateItemFunction}
               />
             )}
-            <DefaultImage updateItemFunction={updateItemFunction} imageUrl={item.defaultFilePath} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
+            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={item.defaultFilePath} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
             <p>{item.objectFileGroupId}</p>
           </Box>
         )}

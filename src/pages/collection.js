@@ -67,9 +67,17 @@ const CollectionPages = ({ location }) => {
       directories: directories,
     })
   }
+  const setLastAccessedDirectory = (lastAccessedDirectory) => {
+    console.log('setset', lastAccessedDirectory, directoriesContext)
+    setDirectoriesContext({
+      ...directoriesContext,
+      lastAccessedDirectory: lastAccessedDirectory,
+    })
+  }
   const [directoriesContext, setDirectoriesContext] = useState({
     ...initialDirectoriesContext,
     setDirectories: setDirectories,
+    setLastAccessedDirectory: setLastAccessedDirectory,
   })
 
   return (
