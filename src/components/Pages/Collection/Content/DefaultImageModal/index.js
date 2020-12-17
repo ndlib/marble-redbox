@@ -22,6 +22,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
   const { directories } = useDirectoriesContext()
   const { imageGroup, setImageGroup } = useImageGroupContext()
 
+  // search and sort all the options for the top select box.
   const baseSearchOptions = []
   Object.keys(directories).forEach((directory) => {
     baseSearchOptions.push({ value: directory, label: directory })
@@ -38,8 +39,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
     return 0
   })
 
-  const [filteredOptions, setFilteredOptions] = useState([])
-
+  // if we are editing an existing objectFileGroupId parse it and preset values
   let defaultBaseSearch = 'none'
   if (objectFileGroupId) {
     const split = objectFileGroupId.split('-')
@@ -47,24 +47,32 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
       defaultBaseSearch = split[0]
     }
   } else if (imageGroup) {
+    // recall the value from the last usage of the form. if there is one.
     defaultBaseSearch = imageGroup
   }
 
+  // filtered options are the individual files in the page
+  const [filteredOptions, setFilteredOptions] = useState([])
+  // search base is the values for the top search box
   const [selectedBaseSearch, setSelectedBaseSearch] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
+  // second search are the values for the second search box
   const [selectedSecondSearch, setSecondBaseSearch] = useState({ key: objectFileGroupId, value: objectFileGroupId })
+  // the option selected from the radio of the files
   const [selected, setSelected] = useState(null)
   const searchFields = ['Label', 'Key', 'Description']
 
+  // the optionse for the second search box useeffect because they change
   const secondSearchOptions = []
   useEffect(() => {
     if (!directories) {
       return
     }
-
+    // get all the options from the directory and sort
     for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
       secondSearchOptions.push({ value: key, label: key })
     }
     secondSearchOptions.sort((a, b) => {
+      // sort by removeing the first part of the string then trying to sort as an integer
       a = parseInt(a.label.replace(selectedBaseSearch.value, '').replace('-', ''))
       b = parseInt(b.label.replace(selectedBaseSearch.value, '').replace('-', ''))
       return a - b
@@ -153,6 +161,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
 DefaultImageModal.propTypes = {
   defaultSelected: PropTypes.string,
   headerText: PropTypes.string,
+  objectFileGroupId: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 }

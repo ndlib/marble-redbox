@@ -46,6 +46,7 @@ UpdateButton.propTypes = {
   itemId: PropTypes.string.isRequired,
   selectedImageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
+  objectFileGroupId: PropTypes.string,
   updateItemFunction: PropTypes.func.isRequired,
 }
 
