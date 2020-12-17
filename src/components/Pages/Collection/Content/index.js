@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button,
   Divider,
   Flex,
   Heading,
@@ -14,7 +13,6 @@ import { useCollectionContext } from 'context/CollectionContext'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
 import ItemDetails from './ItemDetails'
-import ImageGroups from './ImageGroups'
 import sx from './sx'
 
 const Content = ({ updateItemFunction }) => {
@@ -50,7 +48,6 @@ const Content = ({ updateItemFunction }) => {
       <Divider />
       <Flex sx={sx.itemSection}>
         <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
-        <ImageGroups groups={[]} />
       </Flex>
     </div>
   )
