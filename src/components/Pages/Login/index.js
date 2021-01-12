@@ -13,38 +13,42 @@ const Login = ({ location }) => {
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
 
-  if (authSettings.url) {
-    const authClient = new OktaAuth({
+  let authClient = ''
+  if (authSettings && authSettings.AUTH_CLIENT_ID) {
+    authClient = new OktaAuth({
       ...authSettings,
       redirectUri: `${location.origin}/user`,
     })
   }
+
   useEffect(() => {
     if (user) {
       navigate(redirectPath)
-    } else if (authClient) {
-      authClient.tokenManager.get('idToken')
-        .then(idToken => {
-          if (idToken) {
-            setAuth(idToken.claims)
-            navigate(redirectPath)
-            // If ID Token isn't found, try to parse it from the current URL
-          } else if (location.hash) {
-            authClient.token.parseFromUrl()
-              .then(res => {
-                const { idToken } = res.tokens
-                authClient.tokenManager.add('idToken', idToken)
-                setAuth(idToken.claims)
-                navigate(redirectPath)
-              })
-          } else {
-            // You're not logged in, you need a sessionToken
-            // Redirect to Okta login page
-            setContent(<LoginButton authClient={authClient} />)
-          }
-        })
+    } else if (authSettings) {
+      if (authClient) {
+        authClient.tokenManager.get('idToken')
+          .then(idToken => {
+            if (idToken) {
+              setAuth(idToken.claims)
+              navigate(redirectPath)
+              // If ID Token isn't found, try to parse it from the current URL
+            } else if (location.hash) {
+              authClient.token.parseFromUrl()
+                .then(res => {
+                  const { idToken } = res.tokens
+                  authClient.tokenManager.add('idToken', idToken)
+                  setAuth(idToken.claims)
+                  navigate(redirectPath)
+                })
+            } else {
+              // You're not logged in, you need a sessionToken
+              // Redirect to Okta login page
+              setContent(<LoginButton authClient={authClient} />)
+            }
+          })
+      }
     }
-  }, [location, user, authSettings, setAuth])
+  }, [location, user, authSettings, setAuth, authClient])
 
   return <React.Fragment>{content}</React.Fragment>
 }

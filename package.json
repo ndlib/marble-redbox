@@ -23,6 +23,7 @@
     "react-helmet": "^6.0.0",
     "react-icons": "^3.10.0",
     "react-modal": "^3.11.2",
+    "react-select": "^3.1.1",
     "theme-ui": "^0.3.1",
     "typy": "^3.3.0"
   },
@@ -61,7 +62,7 @@
   "scripts": {
     "deploy": "gatsby-plugin-s3 deploy --yes",
     "build": "gatsby build",
-    "develop": "gatsby develop -S -p 8010",
+    "develop": "gatsby develop -S -p 3000",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",

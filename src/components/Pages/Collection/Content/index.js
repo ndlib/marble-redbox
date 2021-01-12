@@ -1,26 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button,
   Divider,
   Flex,
   Heading,
+  Label,
+  Checkbox,
+  Textarea,
+  Box,
 } from 'theme-ui'
 import { useCollectionContext } from 'context/CollectionContext'
 import SourceId from './SourceId'
 import PartiallyDigitized from './PartiallyDigitized'
 import ItemDetails from './ItemDetails'
-import ImageGroups from './ImageGroups'
 import sx from './sx'
 
 const Content = ({ updateItemFunction }) => {
   const { collection } = useCollectionContext()
-  console.log('hi collection here')
   return (
     <div>
       <Flex sx={sx.headingRow}>
-        <Heading as='h1' sx={sx.heading}>Edit {collection.title}</Heading>
-        <Button sx={sx.viewerButton}>Open in Mirador</Button>
+        <Heading as='h1' sx={sx.heading}>{collection.title}</Heading>
       </Flex>
       <Flex sx={sx.topControls}>
         <Flex sx={sx.collectionInfo}>
@@ -33,16 +33,21 @@ const Content = ({ updateItemFunction }) => {
             itemId={collection.id}
             updateItemFunction={updateItemFunction}
           />
-        </Flex>
-        <Flex sx={sx.buttons}>
-          <Button>Re-Sync Metadata</Button>
-          <Button>Build Manifest</Button>
+          <Label sx={sx.label}>
+            Images Restricted:
+            <Box sx={{ ...sx.values, verticalAlign: 'bottom', cursor: 'default' }}>
+              <Checkbox />
+            </Box>
+          </Label>
+          <Label sx={sx.label}>
+            Copyright Details
+            <Textarea />
+          </Label>
         </Flex>
       </Flex>
       <Divider />
       <Flex sx={sx.itemSection}>
         <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
-        <ImageGroups groups={[]} />
       </Flex>
     </div>
   )
