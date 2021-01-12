@@ -13,13 +13,17 @@ const Login = ({ location }) => {
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
 
-  let authClient = ''
-  if (authSettings && authSettings.AUTH_CLIENT_ID) {
-    authClient = new OktaAuth({
-      ...authSettings,
-      redirectUri: `${location.origin}/user`,
-    })
+  // let authClient = ''
+  console.log(authSettings)
+  if (!authSettings || !authSettings.clientId) {
+    return ('No Login For YOU!')
   }
+
+  const authClient = new OktaAuth({
+    ...authSettings,
+    redirectUri: `${location.origin}/user`,
+  })
+  // }
 
   useEffect(() => {
     if (user) {
