@@ -14,12 +14,14 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
       setShouldRender(true)
     }
     setShouldRender(true)
-    /*
     if (!user && location.pathname !== '/user') {
+      console.log(`${location.origin}/user`)
+
       const authClient = new OktaAuth({
         ...authSettings,
         redirectUri: `${location.origin}/user`,
       })
+
       authClient.tokenManager.get('idToken')
         .then(idToken => {
           if (idToken) {
@@ -31,7 +33,6 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
           }
         })
     }
-    */
   }, [location, user, authSettings, setAuth, setShouldRender])
   return shouldRender ? <Component location={location} {...props} /> : <Loading />
 }
