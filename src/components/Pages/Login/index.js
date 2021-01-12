@@ -14,8 +14,7 @@ const Login = ({ location }) => {
   const redirectPath = '/collection'
 
   let authClient = ''
-  if (authSettings) {
-    console.log(authSettings)
+  if (authSettings && authSettings.AUTH_CLIENT_ID) {
     authClient = new OktaAuth({
       ...authSettings,
       redirectUri: `${location.origin}/user`,
