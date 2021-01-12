@@ -28,10 +28,9 @@ cp ./scripts/codebuild/config.json ~/.config/gatsby/
 
 yarn install || { echo "yarn install failed" ;exit 1; }
 
-# node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
+node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
 print $PARAM_CONFIG_PATH
-
-curl https://presentation-iiif.library.nd.edu/save > ${ENV_FILE}
+cat ${ENV_FILE}
 
 
 # trap all errors as failure counts
