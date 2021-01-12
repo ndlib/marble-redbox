@@ -28,7 +28,7 @@ cp ./scripts/codebuild/config.json ~/.config/gatsby/
 
 yarn install || { echo "yarn install failed" ;exit 1; }
 
-node setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
+node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
 print $PARAM_CONFIG_PATH
 cat ${ENV_FILE}
 
