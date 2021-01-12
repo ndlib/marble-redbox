@@ -62,7 +62,7 @@
   "scripts": {
     "deploy": "gatsby-plugin-s3 deploy --yes",
     "build": "gatsby build",
-    "develop": "gatsby develop -S -p 8000",
+    "develop": "gatsby develop -S -p 3000",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
