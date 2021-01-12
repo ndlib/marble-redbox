@@ -13,7 +13,6 @@ const Login = ({ location }) => {
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
 
-  // let authClient = ''
   console.log(authSettings)
   if (!authSettings || !authSettings.clientId) {
     return ('No Login For YOU!')
@@ -23,7 +22,6 @@ const Login = ({ location }) => {
     ...authSettings,
     redirectUri: `${location.origin}/user`,
   })
-  // }
 
   useEffect(() => {
     if (user) {
