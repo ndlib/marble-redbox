@@ -15,8 +15,6 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
     }
     setShouldRender(true)
     if (!user && location.pathname !== '/user') {
-      console.log(`${location.origin}/user`)
-
       const authClient = new OktaAuth({
         ...authSettings,
         redirectUri: `${location.origin}/user`,
