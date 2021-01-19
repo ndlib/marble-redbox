@@ -68,9 +68,12 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
       return
     }
     // get all the options from the directory and sort
-    for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
-      secondSearchOptions.push({ value: key, label: key })
+    if (selectedBaseSearch) {
+      for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
+        secondSearchOptions.push({ value: key, label: key })
+      }
     }
+
     secondSearchOptions.sort((a, b) => {
       // sort by removeing the first part of the string then trying to sort as an integer
       a = parseInt(a.label.replace(selectedBaseSearch.value, '').replace('-', ''))
