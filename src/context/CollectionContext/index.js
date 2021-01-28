@@ -10,19 +10,15 @@ export default CollectionContext
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
-    getMergedMetadata(id: "${id}") {
+    getItem(id: "${id}") {
       id
       title
       level
       objectFileGroupId
       collectionId
       defaultFilePath
-      metadataAugmentation {
-        generalDefaultFilePath
-        generalObjectFileGroupId
-        generalPartiallyDigitized
-      }
-      items (limit: 1000){
+      partiallyDigitized
+      children {
         items {
           id
           title
@@ -30,11 +26,7 @@ const collectionGrapgqlQuery = (id) => {
           objectFileGroupId
           collectionId
           defaultFilePath
-          metadataAugmentation {
-            generalDefaultFilePath
-            generalObjectFileGroupId
-            generalPartiallyDigitized
-          }
+          partiallyDigitized
           files {
             items {
               id
@@ -78,6 +70,7 @@ const updateOverwrittenItemData = (data) => {
 
 export const fetchAndParseCollection = (id, abortController) => {
   const query = collectionGrapgqlQuery(id)
+  console.log(query)
   return fetch(
     process.env.GRAPHQL_API_URL,
     {
@@ -94,7 +87,7 @@ export const fetchAndParseCollection = (id, abortController) => {
       return result.json()
     })
     .then((data) => {
-      const result = data.data.getMergedMetadata
-      return updateOverwrittenItemData(result)
+      const result = data.data.getItem
+      return result
     })
 }

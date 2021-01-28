@@ -30,7 +30,6 @@ const Collection = ({ id, location }) => {
     const abortController = new AbortController()
     fetchAndParseCollection(id, abortController)
       .then((result) => {
-        // console.log(result, Object.is(result, collection))
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -47,15 +46,20 @@ const Collection = ({ id, location }) => {
   useEffect(() => {
     const abortController = new AbortController()
     const query = ` {
-      listFiles(limit: 10000) {
+      listFileGroupsForS3(limit: 10000) {
         items {
           objectFileGroupId
-          id
-          label
-          source
-          sourceType
-          path
-          iiifImageUri
+          files {
+            items {
+              objectFileGroupId
+              id
+              label
+              source
+              sourceType
+              path
+              iiifImageUri
+            }
+          }
         }
       }
     }
@@ -76,7 +80,7 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
-        setDirectories(getDirectories(data.data.listFiles.items))
+        setDirectories(getDirectories(data.data.listFileGroupsForS3.items))
         setDirectoriesStatus(fetchStatus.SUCCESS)
       })
       .catch((error) => {
@@ -94,7 +98,6 @@ const Collection = ({ id, location }) => {
     if (typeof generalPartiallyDigitized !== 'undefined') {
       query = `mutation {
           replacePartiallyDigitized(input: {
-            collectionId: "${id}",
             id: "${itemId}",
             generalPartiallyDigitized: ${generalPartiallyDigitized},
           }) {
@@ -105,7 +108,6 @@ const Collection = ({ id, location }) => {
     } else {
       query = `mutation {
           replaceDefaultImage(input: {
-            collectionId: "${id}",
             id: "${itemId}",
             generalDefaultFilePath: "${generalDefaultFilePath}",
             generalObjectFileGroupId: "${generalObjectFileGroupId}",
@@ -132,9 +134,11 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((result) => {
+        console.log(result)
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
+        console.log('reror', error)
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
@@ -157,26 +161,21 @@ const Collection = ({ id, location }) => {
 const getDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
-    if (d.sourceType === 'S3') {
-      const split = d.objectFileGroupId.split('-')
-      let baseDirectoryGroup = 'none'
-      if (split.length > 1) {
-        baseDirectoryGroup = split[0]
-      }
-
-      if (!directories[baseDirectoryGroup]) {
-        directories[baseDirectoryGroup] = {}
-      }
-
-      if (!directories[baseDirectoryGroup][d.objectFileGroupId]) {
-        directories[baseDirectoryGroup][d.objectFileGroupId] = {
-          id: d.objectFileGroupId,
-          files: [],
-        }
-      }
-      d.sortId = d.id.replace(d.objectFileGroupId, '')
-      directories[baseDirectoryGroup][d.objectFileGroupId].files.push(d)
+    const split = d.objectFileGroupId.split('-')
+    let baseDirectoryGroup = 'none'
+    if (split.length > 1) {
+      baseDirectoryGroup = split[0]
     }
+
+    if (!directories[baseDirectoryGroup]) {
+      directories[baseDirectoryGroup] = {}
+    }
+    directories[baseDirectoryGroup][d.objectFileGroupId] = {
+      id: d.objectFileGroupId,
+      files: d.files.items,
+    }
+    // d.sortId = d.id.replace(d.objectFileGroupId, '')
+    // directories[baseDirectoryGroup][d.objectFileGroupId].files.push(d)
   })
   return directories
 }

@@ -11,7 +11,7 @@ const AllCollections = ({ location }) => {
   useEffect(() => {
     const abortController = new AbortController()
     const query = `query {
-        listMergedMetadata(filter: {parentId: {eq: "root"}, sourceSystem: {ne: "EmbARK"}}, limit: 1000) {
+        listItemsBySourceSystem(id: "ARCHIVESSPACE", limit: 1000) {
           items {
             id
             title
@@ -35,7 +35,7 @@ const AllCollections = ({ location }) => {
         return result.json()
       })
       .then((result) => {
-        setContent(<Content collections={result.data.listMergedMetadata.items} />)
+        setContent(<Content collections={result.data.listItemsBySourceSystem.items} />)
       })
       .catch((result) => {
         setContent(<ErrorMessage error={result.error} />)
