@@ -48,29 +48,8 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-const updateOverwrittenItemData = (data) => {
-  if (data.metadataAugmentation) {
-    if (data.metadataAugmentation.generalDefaultFilePath) {
-      data.defaultFilePath = data.metadataAugmentation.generalDefaultFilePath
-    }
-    if (data.metadataAugmentation.generalObjectFileGroupId) {
-      data.objectFileGroupId = data.metadataAugmentation.generalObjectFileGroupId
-    }
-    if (data.metadataAugmentation.generalPartiallyDigitized) {
-      data.partiallyDigitized = data.metadataAugmentation.generalPartiallyDigitized
-    }
-  }
-
-  if (data.items && data.items.items) {
-    data.items.items.forEach(item => updateOverwrittenItemData(item))
-  }
-
-  return data
-}
-
 export const fetchAndParseCollection = (id, abortController) => {
   const query = collectionGrapgqlQuery(id)
-  console.log(query)
   return fetch(
     process.env.GRAPHQL_API_URL,
     {
