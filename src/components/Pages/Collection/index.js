@@ -134,11 +134,9 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((result) => {
-        console.log(result)
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
-        console.log('reror', error)
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
