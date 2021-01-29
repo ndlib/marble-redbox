@@ -10,19 +10,15 @@ export default CollectionContext
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
-    getMergedMetadata(id: "${id}") {
+    getItem(id: "${id}") {
       id
       title
       level
       objectFileGroupId
       collectionId
       defaultFilePath
-      metadataAugmentation {
-        generalDefaultFilePath
-        generalObjectFileGroupId
-        generalPartiallyDigitized
-      }
-      items (limit: 1000){
+      partiallyDigitized
+      children {
         items {
           id
           title
@@ -30,11 +26,7 @@ const collectionGrapgqlQuery = (id) => {
           objectFileGroupId
           collectionId
           defaultFilePath
-          metadataAugmentation {
-            generalDefaultFilePath
-            generalObjectFileGroupId
-            generalPartiallyDigitized
-          }
+          partiallyDigitized
           files {
             items {
               id
@@ -56,26 +48,6 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-const updateOverwrittenItemData = (data) => {
-  if (data.metadataAugmentation) {
-    if (data.metadataAugmentation.generalDefaultFilePath) {
-      data.defaultFilePath = data.metadataAugmentation.generalDefaultFilePath
-    }
-    if (data.metadataAugmentation.generalObjectFileGroupId) {
-      data.objectFileGroupId = data.metadataAugmentation.generalObjectFileGroupId
-    }
-    if (data.metadataAugmentation.generalPartiallyDigitized) {
-      data.partiallyDigitized = data.metadataAugmentation.generalPartiallyDigitized
-    }
-  }
-
-  if (data.items && data.items.items) {
-    data.items.items.forEach(item => updateOverwrittenItemData(item))
-  }
-
-  return data
-}
-
 export const fetchAndParseCollection = (id, abortController) => {
   const query = collectionGrapgqlQuery(id)
   return fetch(
@@ -94,7 +66,7 @@ export const fetchAndParseCollection = (id, abortController) => {
       return result.json()
     })
     .then((data) => {
-      const result = data.data.getMergedMetadata
-      return updateOverwrittenItemData(result)
+      const result = data.data.getItem
+      return result
     })
 }
