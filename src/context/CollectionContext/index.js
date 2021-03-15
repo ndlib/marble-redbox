@@ -18,6 +18,7 @@ const collectionGrapgqlQuery = (id) => {
       collectionId
       defaultFilePath
       partiallyDigitized
+      websiteId
       children {
         items {
           id
