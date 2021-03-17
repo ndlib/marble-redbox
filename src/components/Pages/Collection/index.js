@@ -98,8 +98,8 @@ const Collection = ({ id, location }) => {
     if (typeof generalPartiallyDigitized !== 'undefined') {
       query = `mutation {
           savePartiallyDigitizedForWebsite(input: {
-            id: "${itemId}",
-            generalPartiallyDigitized: ${generalPartiallyDigitized},
+            itemId: "${itemId}",
+            partiallyDigitized: ${generalPartiallyDigitized},
           }) {
             id
           }
@@ -108,9 +108,9 @@ const Collection = ({ id, location }) => {
     } else {
       query = `mutation {
           saveDefaultImageForWebsite(input: {
-            id: "${itemId}",
-            generalDefaultFilePath: "${generalDefaultFilePath}",
-            generalObjectFileGroupId: "${generalObjectFileGroupId}",
+            itemId: "${itemId}",
+            defaultFilePath: "${generalDefaultFilePath}",
+            objectFileGroupId: "${generalObjectFileGroupId}",
           }) {
             id
           }
