@@ -22,7 +22,7 @@ const Image = ({
   // derive image from image src OR service OR use the default noImage
   const iifSize = (width || height) ? `${width || ''},${height || ''}` : 'max'
   const imageSrc = src || serviceURL(service, region, iifSize) || noImage
-  console.log(imageSrc)
+  console.log('service', imageSrc)
   return (
     <picture sx={sx.picture(frame)}>
       <img

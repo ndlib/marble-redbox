@@ -28,4 +28,5 @@ module.exports = {
   search: {
     mb: 3,
   },
+
 }

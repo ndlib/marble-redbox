@@ -30,6 +30,7 @@ module.exports = {
     display: 'inline-block',
     verticalAlign: 'top',
     width: 'auto',
+    py: '5px',
   },
   values: {
     display: 'inline-block',
@@ -51,5 +52,8 @@ module.exports = {
     flexDirection: 'row',
     flexWrap: ['wrap', 'wrap', 'nowrap'],
     justifyContent: 'space-between',
+  },
+  showEditButton: {
+    cursor: 'pointer',
   },
 }

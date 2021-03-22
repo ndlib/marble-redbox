@@ -16,7 +16,13 @@ const collectionGrapgqlQuery = (id) => {
       level
       objectFileGroupId
       collectionId
-      defaultFilePath
+      defaultFile {
+        iiifImageUri
+        filePath
+      }
+      copyrightStatement
+      copyrightStatus
+      copyrightUrl
       partiallyDigitized
       children {
         items {
@@ -25,22 +31,14 @@ const collectionGrapgqlQuery = (id) => {
           level
           objectFileGroupId
           collectionId
-          defaultFilePath
-          partiallyDigitized
-          files {
-            items {
-              id
-              label
-              objectFileGroupId
-            }
+          defaultFile {
+            iiifImageUri
+            filePath
           }
-        }
-      }
-      files {
-        items {
-          id
-          label
-          objectFileGroupId
+          copyrightStatement
+          copyrightStatus
+          copyrightUrl
+          partiallyDigitized
         }
       }
     }

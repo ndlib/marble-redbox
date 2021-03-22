@@ -53,10 +53,10 @@ const Collection = ({ id, location }) => {
             items {
               objectFileGroupId
               id
-              label
+              title
               source
               sourceType
-              path
+              filePath
               iiifImageUri
             }
           }
