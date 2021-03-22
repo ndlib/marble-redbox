@@ -17,7 +17,7 @@ const collectionGrapgqlQuery = (id) => {
       objectFileGroupId
       collectionId
       defaultFile {
-        iiifImageUri
+        iiifImageServiceUri
         filePath
       }
       copyrightStatement
@@ -32,7 +32,7 @@ const collectionGrapgqlQuery = (id) => {
           objectFileGroupId
           collectionId
           defaultFile {
-            iiifImageUri
+            iiifImageServiceUri
             filePath
           }
           copyrightStatement
