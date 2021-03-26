@@ -10,7 +10,12 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
-
+  let thumbnail = typy(item, 'defaultFile.filePath').safeString
+  if (thumbnail) {
+    thumbnail = thumbnail.replace(/[/]/g, '%2F')
+    thumbnail = thumbnail.replace('.tif', '').replace('.jpg', '')
+    thumbnail = item.defaultFile.iiifImageServiceUri + '/' + thumbnail + '/full/250,/0/default.jpg'
+  }
   return (
     <Box>
       <ItemHeading
@@ -23,7 +28,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
           <Box ml={`${depth + 4}rem`} mb='1rem'>
-            {item.defaultFilePath && (
+            {thumbnail && (
               <PartiallyDigitized
                 itemId={item.id}
                 defaultChecked={item.partiallyDigitized}
@@ -31,7 +36,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
                 updateItemFunction={updateItemFunction}
               />
             )}
-            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={item.defaultFilePath} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
+            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={thumbnail} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
             <p>{item.objectFileGroupId}</p>
           </Box>
         )}
