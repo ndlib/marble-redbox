@@ -58,6 +58,8 @@ const Collection = ({ id, location }) => {
               sourceType
               filePath
               iiifImageUri
+              mediaServer
+              mediaResourceId
             }
           }
         }
