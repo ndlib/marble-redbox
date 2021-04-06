@@ -24,7 +24,7 @@ const AuthWrapper = ({ children }) => {
       user: user,
     })
   }
-
+  console.log(data, data.SiteAuthQuery)
   const [context, setContext] = useState({
     ...initialContext,
     authSettings: {
