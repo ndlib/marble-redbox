@@ -27,7 +27,7 @@ const retrieveStageParameters = async () => {
     const paramName = node['Name']
     const envName = paramName.substring(paramName.lastIndexOf('/') + 1, paramName.length).toUpperCase().replace(/[-]/g, '_')
     if (possibleKeys.includes(envName)) {
-      console.log(`export ${envName}='${node['Value']}'`)
+      console.log(`${envName}='${node['Value']}'`)
     }
   })
 }
