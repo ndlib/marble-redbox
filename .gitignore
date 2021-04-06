@@ -67,3 +67,4 @@ yarn-error.log
 .yarn-integrity
 
 ssm-params.txt
+.env.development
