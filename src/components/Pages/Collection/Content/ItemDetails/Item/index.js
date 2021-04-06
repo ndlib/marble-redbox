@@ -10,11 +10,9 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
-  let thumbnail = typy(item, 'defaultFile.filePath').safeString
+  let thumbnail = typy(item, 'defaultFile.mediaResourceId').safeString
   if (thumbnail) {
-    thumbnail = thumbnail.replace(/[/]/g, '%2F')
-    thumbnail = thumbnail.replace('.tif', '').replace('.jpg', '')
-    thumbnail = item.defaultFile.iiifImageServiceUri + '/' + thumbnail + '/full/250,/0/default.jpg'
+    thumbnail = item.defaultFile.mediaServer + '/' + thumbnail + '/full/250,/0/default.jpg'
   }
   return (
     <Box>
