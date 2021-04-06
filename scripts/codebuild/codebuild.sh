@@ -29,13 +29,19 @@ cp ./scripts/codebuild/config.json ~/.config/gatsby/
 yarn install || { echo "yarn install failed" ;exit 1; }
 
 # add the keys at /all/static/hostname to the env
-echo "Loading ${PARAM_CONFIG_PATH}"
-node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > ./ssm-params.txt --unhandled-rejections=strict
+# echo "Loading ${PARAM_CONFIG_PATH}"
+# node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > ./ssm-params.txt --unhandled-rejections=strict
 
 # add the app sync keys to the env
 echo "Loading ${GRAPHQL_KEY_BASE}"
 node ./scripts/codebuild/setupEnv.js ${GRAPHQL_KEY_BASE} >> ./ssm-params.txt --unhandled-rejections=strict
 source ./ssm-params.txt
+
+# put the env sourced vars in the environment file.
+echo "S3_DEST_BUCKET='${S3_DEST_BUCKET}'" >> $ENV_FILE
+echo "GRAPHQL_KEY_BASE='${GRAPHQL_KEY_BASE}'" >> $ENV_FILE
+echo "GRAPHQL_API_KEY='${GRAPHQL_API_KEY}'" >> $ENV_FILE
+echo "GRAPHQL_API_URL='${GRAPHQL_API_URL}'" >> $ENV_FILE
 
 # trap all errors as failure counts
 failures=0
