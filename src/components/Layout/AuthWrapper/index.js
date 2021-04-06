@@ -24,13 +24,13 @@ const AuthWrapper = ({ children }) => {
       user: user,
     })
   }
-  console.log(data.site.siteMetadata, data.site.siteMetadata.auth)
+
   const [context, setContext] = useState({
     ...initialContext,
     authSettings: {
-      url: data.site.siteMetadata.auth.authClientURL,
-      clientId: data.site.siteMetadata.auth.authClientClientId,
-      issuer: data.site.siteMetadata.auth.authClientIssuer,
+      url: data.site.siteMetadata.auth.url,
+      clientId: data.site.siteMetadata.auth.clientId,
+      issuer: data.site.siteMetadata.auth.issuer,
       ignoreSignature: true,
       responseType: 'id_token',
       responseMode: 'fragment',
