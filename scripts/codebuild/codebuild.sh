@@ -28,10 +28,13 @@ cp ./scripts/codebuild/config.json ~/.config/gatsby/
 
 yarn install || { echo "yarn install failed" ;exit 1; }
 
-node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > ${ENV_FILE}
-print $PARAM_CONFIG_PATH
-cat ${ENV_FILE}
+# add the keys at /all/static/hostname to the env
+node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > './ssm-params.txt' --unhandled-rejections=strict
+source ./ssm-params.txt
 
+# add the app sync keys to the env
+node ./scripts/codebuild/setupEnv.js ${GRAPHQL_API_KEY_BASE_PATH} > './ssm-params.txt' --unhandled-rejections=strict
+source ./ssm-params.txt
 
 # trap all errors as failure counts
 failures=0

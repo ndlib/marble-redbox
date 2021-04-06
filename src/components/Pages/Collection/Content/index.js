@@ -20,7 +20,6 @@ import sx from './sx'
 const Content = ({ updateItemFunction }) => {
   const { collection } = useCollectionContext()
   const [expanded, setExpanded] = useState(false)
-  console.log(collection)
   return (
     <div>
       <Flex sx={sx.headingRow}>
@@ -49,14 +48,6 @@ const Content = ({ updateItemFunction }) => {
               </Box>
             </Label>
             <Label sx={sx.label}>
-            Copyright Status
-              <Textarea value={collection.copyrightStatus} />
-            </Label>
-            <Label sx={sx.label}>
-            Copyright Statement
-              <Textarea value={collection.copyrightStatement} />
-            </Label>
-            <Label sx={sx.label}>
             RightsStatement.org Statement:
               <div>
                 <select>
@@ -66,6 +57,14 @@ const Content = ({ updateItemFunction }) => {
                   <option>IN COPYRIGHT - EDUCATIONAL USE PERMITTED</option>
                 </select>
               </div>
+            </Label>
+            <Label sx={sx.label}>
+            Copyright Status
+              <Textarea value={collection.copyrightStatus} />
+            </Label>
+            <Label sx={sx.label}>
+            Copyright Statement
+              <Textarea value={collection.copyrightStatement} />
             </Label>
             <Label sx={sx.label}>
               Additional Details
