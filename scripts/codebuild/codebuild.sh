@@ -35,7 +35,6 @@ node ./scripts/codebuild/setupEnv.js ${PARAM_CONFIG_PATH} > ./ssm-params.txt --u
 # add the app sync keys to the env
 echo "Loading ${GRAPHQL_KEY_BASE}"
 node ./scripts/codebuild/setupEnv.js ${GRAPHQL_KEY_BASE} >> ./ssm-params.txt --unhandled-rejections=strict
-cat ./ssm-params.txt
 source ./ssm-params.txt
 
 # trap all errors as failure counts
