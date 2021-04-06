@@ -1,13 +1,23 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useStaticQuery, graphql } from 'gatsby'
 import AuthContext, { initialContext } from 'context/AuthContext'
-const authClientURL = process.env.AUTH_CLIENT_URL
-const authClientClientId = process.env.AUTH_CLIENT_ID
-const authClientIssuer = process.env.AUTH_CLIENT_ISSUER
-
-console.log(process.env)
 
 const AuthWrapper = ({ children }) => {
+  const data = useStaticQuery(graphql`
+    query SiteAuthQuery {
+      site {
+        siteMetadata {
+          auth {
+            url
+            clientId
+            issuer
+          }
+        }
+      }
+    }
+  `)
+
   const setAuth = (user) => {
     setContext({
       ...context,
@@ -18,9 +28,9 @@ const AuthWrapper = ({ children }) => {
   const [context, setContext] = useState({
     ...initialContext,
     authSettings: {
-      url: authClientURL,
-      clientId: authClientClientId,
-      issuer: authClientIssuer,
+      url: data.SiteAuthQuery.site.siteMetadata.auth.authClientURL,
+      clientId: data.SiteAuthQuery.site.siteMetadata.auth.authClientClientId,
+      issuer: data.SiteAuthQuery.site.siteMetadata.auth.authClientIssuer,
       ignoreSignature: true,
       responseType: 'id_token',
       responseMode: 'fragment',
