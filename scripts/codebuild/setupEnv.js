@@ -3,7 +3,7 @@
 const AWS = require('aws-sdk')
 
 const appConfig = process.argv.slice(2)[0]
-console.log('loading for --------------->', appConfig)
+
 const possibleKeys = [
   'GRAPHQL_API_KEY',
   'GRAPHQL_API_URL',
