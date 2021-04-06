@@ -32,7 +32,7 @@ Useful commands:
 From then on until the keys expire you can just call
 yarn develop
 
-# if the graphql keys expire.
+## If the graphql keys expire.
 1. Call ./scripts/setup-development.sh
 
 This will reset all the keys to the ones in .env.development-example
