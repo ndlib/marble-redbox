@@ -5,6 +5,8 @@ const authClientURL = process.env.AUTH_CLIENT_URL
 const authClientClientId = process.env.AUTH_CLIENT_ID
 const authClientIssuer = process.env.AUTH_CLIENT_ISSUER
 
+console.log(process.env)
+
 const AuthWrapper = ({ children }) => {
   const setAuth = (user) => {
     setContext({

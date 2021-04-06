@@ -7,7 +7,6 @@ require('dotenv').config({
   path: `.env.${activeEnv}`,
 })
 
-const s3BucketName = process.env.S3_DEST_BUCKET || ''
 const graphqlApiKey = process.env.GRAPHQL_API_KEY || ''
 const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
 const authClientURL = process.env.AUTH_CLIENT_URL || ''
