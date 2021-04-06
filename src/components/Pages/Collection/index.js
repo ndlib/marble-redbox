@@ -28,8 +28,10 @@ const Collection = ({ id, location }) => {
   // Collection fetch
   useEffect(() => {
     const abortController = new AbortController()
-    fetchAndParseCollection(id, abortController)
+    console.log(id)
+    fetchAndParseCollection(id, graphqlApiUrl, graphqlApiKey, abortController)
       .then((result) => {
+        console.log(result)
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -40,7 +42,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, collectionNeedsReloaded, setCollection])
+  }, [id, location, collectionNeedsReloaded, setCollection, graphqlApiUrl, graphqlApiKey])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {

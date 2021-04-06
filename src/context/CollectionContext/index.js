@@ -46,13 +46,13 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-export const fetchAndParseCollection = (id, abortController) => {
+export const fetchAndParseCollection = (id, graphqlApiUrl, graphqlApiKey, abortController) => {
   const query = collectionGrapgqlQuery(id)
   return fetch(
-    process.env.GRAPHQL_API_URL,
+    graphqlApiUrl,
     {
       headers: {
-        'x-api-key': process.env.GRAPHQL_API_KEY,
+        'x-api-key': graphqlApiKey,
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -64,6 +64,7 @@ export const fetchAndParseCollection = (id, abortController) => {
       return result.json()
     })
     .then((data) => {
+      console.log('getitem', data)
       const result = data.data.getItem
       return result
     })
