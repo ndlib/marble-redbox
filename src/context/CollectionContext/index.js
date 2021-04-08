@@ -24,6 +24,13 @@ const collectionGrapgqlQuery = (id) => {
       copyrightStatus
       copyrightUrl
       partiallyDigitized
+      files {
+        items {
+          id
+          mediaServer
+          mediaResourceId
+        }
+      }
       children {
         items {
           id
@@ -35,6 +42,13 @@ const collectionGrapgqlQuery = (id) => {
             mediaServer
             mediaResourceId
           }
+          files {
+            items {
+              id
+              mediaServer
+              mediaResourceId
+            }
+          }          
           copyrightStatement
           copyrightStatus
           copyrightUrl

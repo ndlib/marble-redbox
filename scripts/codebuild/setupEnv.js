@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const AWS = require('aws-sdk')
 
 const appConfig = process.argv.slice(2)[0]
@@ -13,7 +12,6 @@ const possibleKeys = [
 ]
 
 const retrieveStageParameters = async () => {
-  const env = {}
   const ssm = new AWS.SSM({ region: 'us-east-1' })
   const params = await ssm.getParametersByPath({
     Path: appConfig,

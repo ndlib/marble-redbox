@@ -10,9 +10,11 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
-  let thumbnail = typy(item, 'defaultFile.mediaResourceId').safeString
-  if (thumbnail) {
-    thumbnail = item.defaultFile.mediaServer + '/' + thumbnail + '/full/250,/0/default.jpg'
+  const defaultFile = determineDefaultFile(item)
+  console.log(defaultFile)
+  let thumbnail = ''
+  if (defaultFile) {
+    thumbnail = defaultFile.mediaServer + '/' + defaultFile.mediaResourceId + '/full/250,/0/default.jpg'
   }
   return (
     <Box>
@@ -44,6 +46,17 @@ const Item = ({ item, depth, updateItemFunction }) => {
       </Box>
     </Box>
   )
+}
+
+const determineDefaultFile = (item) => {
+  if (item.defaultFile) {
+    return item.defaultFile
+  }
+  if (item.files && item.files.items) {
+    return item.files.items[0]
+  }
+
+  return false
 }
 
 Item.propTypes = {
