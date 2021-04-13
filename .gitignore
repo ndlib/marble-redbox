@@ -51,10 +51,6 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# dotenv environment variable files
-.env.development
-.env.production
-
 
 # gatsby files
 .cache/
@@ -69,3 +65,6 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+ssm-params.txt
+.env.development

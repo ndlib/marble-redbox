@@ -25,7 +25,14 @@ Useful commands:
 - `yarn deploy` - Copies the build to the s3 bucket in .env.*
 
 # Local Setup.
-
-1. Call ./scripts/setup-development.sh
-2. Correct the keys in .env.development
+1. Assume an aws role that can access the keys at the path set in ./scripts/setup-development.sh
+2. Call ./scripts/setup-development.sh
 3. yarn develop
+
+From then on until the keys expire you can just call
+yarn develop
+
+## If the graphql keys expire.
+1. Call ./scripts/setup-development.sh
+
+This will reset all the keys to the ones in .env.development-example

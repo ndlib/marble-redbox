@@ -10,7 +10,12 @@ import typy from 'typy'
 
 const Item = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
-
+  const defaultFile = determineDefaultFile(item)
+  console.log(defaultFile)
+  let thumbnail = ''
+  if (defaultFile) {
+    thumbnail = defaultFile.mediaServer + '/' + defaultFile.mediaResourceId + '/full/250,/0/default.jpg'
+  }
   return (
     <Box>
       <ItemHeading
@@ -23,7 +28,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
           <Box ml={`${depth + 4}rem`} mb='1rem'>
-            {item.defaultFilePath && (
+            {thumbnail && (
               <PartiallyDigitized
                 itemId={item.id}
                 defaultChecked={item.partiallyDigitized}
@@ -31,7 +36,7 @@ const Item = ({ item, depth, updateItemFunction }) => {
                 updateItemFunction={updateItemFunction}
               />
             )}
-            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={item.defaultFilePath} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
+            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={thumbnail} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
             <p>{item.objectFileGroupId}</p>
           </Box>
         )}
@@ -41,6 +46,17 @@ const Item = ({ item, depth, updateItemFunction }) => {
       </Box>
     </Box>
   )
+}
+
+const determineDefaultFile = (item) => {
+  if (item.defaultFile) {
+    return item.defaultFile
+  }
+  if (item.files && item.files.items) {
+    return item.files.items[0]
+  }
+
+  return false
 }
 
 Item.propTypes = {

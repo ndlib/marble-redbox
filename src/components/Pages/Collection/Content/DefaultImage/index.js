@@ -14,7 +14,6 @@ import sx from './sx'
 const DefaultImage = ({ collectionId, itemId, objectFileGroupId, imageUrl, itemTitle, inModal, updateItemFunction }) => {
   const decoded = decodeURIComponent(imageUrl)
   const imageName = decoded.substring(decoded.lastIndexOf('/') + 1)
-
   const updateButton = !inModal ? (
     <UpdateButton
       selectedImageUrl={imageUrl}
@@ -26,15 +25,10 @@ const DefaultImage = ({ collectionId, itemId, objectFileGroupId, imageUrl, itemT
     />
   ) : null
 
-  if (imageUrl) {
-    imageUrl = imageUrl.replace(/[/]/g, '%2F')
-    imageUrl = imageUrl.replace('.tif', '').replace('.jpg', '')
-    // imageUrl = 'https://image-iiif.library.nd.edu/iiif/2/' + imageUrl + '/full/250,/0/default.jpg'
-  }
   return imageUrl ? (
     <Box>
       <Image
-        service={imageUrl}
+        src={imageUrl}
         height={200}
         alt=''
         frame

@@ -16,9 +16,22 @@ const collectionGrapgqlQuery = (id) => {
       level
       objectFileGroupId
       collectionId
-      defaultFilePath
+      defaultFile {
+        mediaServer
+        mediaResourceId
+      }
+      copyrightStatement
+      copyrightStatus
+      copyrightUrl
       partiallyDigitized
       websiteId
+      files {
+        items {
+          id
+          mediaServer
+          mediaResourceId
+        }
+      }
       children {
         items {
           id
@@ -26,22 +39,21 @@ const collectionGrapgqlQuery = (id) => {
           level
           objectFileGroupId
           collectionId
-          defaultFilePath
-          partiallyDigitized
+          defaultFile {
+            mediaServer
+            mediaResourceId
+          }
           files {
             items {
               id
-              label
-              objectFileGroupId
+              mediaServer
+              mediaResourceId
             }
           }
-        }
-      }
-      files {
-        items {
-          id
-          label
-          objectFileGroupId
+          copyrightStatement
+          copyrightStatus
+          copyrightUrl
+          partiallyDigitized
         }
       }
     }
@@ -49,13 +61,13 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-export const fetchAndParseCollection = (id, abortController) => {
+export const fetchAndParseCollection = (id, graphqlApiUrl, graphqlApiKey, abortController) => {
   const query = collectionGrapgqlQuery(id)
   return fetch(
-    process.env.GRAPHQL_API_URL,
+    graphqlApiUrl,
     {
       headers: {
-        'x-api-key': process.env.GRAPHQL_API_KEY,
+        'x-api-key': graphqlApiKey,
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -67,6 +79,7 @@ export const fetchAndParseCollection = (id, abortController) => {
       return result.json()
     })
     .then((data) => {
+      console.log('getitem', data)
       const result = data.data.getItem
       return result
     })

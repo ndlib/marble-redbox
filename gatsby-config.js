@@ -13,7 +13,6 @@ const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
 const authClientURL = process.env.AUTH_CLIENT_URL || ''
 const authClientClientId = process.env.AUTH_CLIENT_ID || ''
 const authClientIssuer = process.env.AUTH_CLIENT_ISSUER || ''
-const s3DestBucket = process.env.S3_DEST_BUCKET || ''
 
 console.table([
   { variable: 'GRAPHQL_API_KEY:', value: graphqlApiKey },
@@ -21,7 +20,7 @@ console.table([
   { variable: 'AUTH_CLIENT_URL:', value: authClientURL },
   { variable: 'AUTH_CLIENT_ID:', value: authClientClientId },
   { variable: 'AUTH_CLIENT_ISSUER:', value: authClientIssuer },
-  { variable: 'S3_DEST_BUCKET:', value: s3DestBucket },
+  { variable: 'S3_DEST_BUCKET:', value: s3BucketName },
 ])
 
 module.exports = {
