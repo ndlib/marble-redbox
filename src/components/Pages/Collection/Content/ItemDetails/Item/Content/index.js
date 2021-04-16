@@ -4,7 +4,7 @@ import {
   Box,
 } from 'theme-ui'
 import EditMetadataForm from '../../../EditMetadataForm'
-import DefaultImage from '../../DefaultImage'
+import DefaultImage from '../../../DefaultImage'
 import ItemHeading from '../ItemHeading'
 import typy from 'typy'
 
