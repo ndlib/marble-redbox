@@ -28,10 +28,8 @@ const Collection = ({ id, location }) => {
   // Collection fetch
   useEffect(() => {
     const abortController = new AbortController()
-    console.log(id)
     fetchAndParseCollection(id, graphqlApiUrl, graphqlApiKey, abortController)
       .then((result) => {
-        console.log(result)
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
       })
@@ -101,21 +99,21 @@ const Collection = ({ id, location }) => {
     let query = ''
     if (typeof generalPartiallyDigitized !== 'undefined') {
       query = `mutation {
-          savePartiallyDigitizedForWebsite(input: {
+          savePartiallyDigitizedForWebsite(
             itemId: "${itemId}",
             partiallyDigitized: ${generalPartiallyDigitized},
-          }) {
+          ) {
             id
           }
         }
         `
     } else {
       query = `mutation {
-          saveDefaultImageForWebsite(input: {
+          saveDefaultImageForWebsite(
             itemId: "${itemId}",
             defaultFilePath: "${generalDefaultFilePath}",
             objectFileGroupId: "${generalObjectFileGroupId}",
-          }) {
+          ) {
             id
           }
         }
@@ -138,7 +136,8 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((result) => {
-        setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
+
+        // setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
         setErrorMsg(error)

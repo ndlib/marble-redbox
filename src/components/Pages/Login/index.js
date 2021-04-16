@@ -13,7 +13,6 @@ const Login = ({ location }) => {
   const { authSettings, user, setAuth } = useAuthContext()
   const redirectPath = '/collection'
 
-  console.log(authSettings)
   if (!authSettings || !authSettings.clientId) {
     return ('No Login For YOU!')
   }

@@ -24,7 +24,6 @@ const collectionGrapgqlQuery = (id) => {
       copyrightStatus
       copyrightUrl
       partiallyDigitized
-      websiteId
       files {
         items {
           id
@@ -35,25 +34,6 @@ const collectionGrapgqlQuery = (id) => {
       children {
         items {
           id
-          title
-          level
-          objectFileGroupId
-          collectionId
-          defaultFile {
-            mediaServer
-            mediaResourceId
-          }
-          files {
-            items {
-              id
-              mediaServer
-              mediaResourceId
-            }
-          }
-          copyrightStatement
-          copyrightStatus
-          copyrightUrl
-          partiallyDigitized
         }
       }
     }
@@ -79,8 +59,50 @@ export const fetchAndParseCollection = (id, graphqlApiUrl, graphqlApiKey, abortC
       return result.json()
     })
     .then((data) => {
-      console.log('getitem', data)
       const result = data.data.getItem
       return result
+    })
+}
+
+export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController }) => {
+  console.log(itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController)
+  let query = ''
+  if (typeof generalPartiallyDigitized !== 'undefined') {
+    query = `mutation {
+          savePartiallyDigitizedForWebsite(
+            itemId: "${itemId}",
+            partiallyDigitized: ${generalPartiallyDigitized},
+          ) {
+            id
+          }
+        }
+        `
+  } else {
+    query = `mutation {
+          saveDefaultImageForWebsite(
+            itemId: "${itemId}",
+            defaultFilePath: "${generalDefaultFilePath}",
+            objectFileGroupId: "${generalObjectFileGroupId}",
+          ) {
+            id
+          }
+        }
+        `
+  }
+  return fetch(
+    graphqlApiUrl,
+    {
+      headers: {
+        'x-api-key': graphqlApiKey,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      signal: abortController.signal,
+      mode: 'cors',
+      body: JSON.stringify({ query: query }),
+
+    })
+    .then(result => {
+      return result.json()
     })
 }
