@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import {
   Box,
   Flex,
-  IconButton,
   Text,
 } from 'theme-ui'
-import { MdClear } from 'react-icons/md'
 import Image from 'components/Shared/Image'
 import UpdateButton from './UpdateButton'
 import sx from './sx'
