@@ -67,7 +67,6 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
     if (!directories) {
       return
     }
-    console.log('yoyo', directories)
     // get all the options from the directory and sort
     if (selectedBaseSearch) {
       for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {

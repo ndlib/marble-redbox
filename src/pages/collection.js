@@ -68,7 +68,6 @@ const CollectionPages = ({ location }) => {
     })
   }
   const setLastAccessedDirectory = (lastAccessedDirectory) => {
-    console.log('setset', lastAccessedDirectory, directoriesContext)
     setDirectoriesContext({
       ...directoriesContext,
       lastAccessedDirectory: lastAccessedDirectory,

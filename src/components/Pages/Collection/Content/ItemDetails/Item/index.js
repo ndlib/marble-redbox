@@ -1,62 +1,67 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Box,
-} from 'theme-ui'
-import PartiallyDigitized from '../../PartiallyDigitized'
-import DefaultImage from '../../DefaultImage'
-import ItemHeading from './ItemHeading'
-import typy from 'typy'
+  fetchAndParseCollection,
+  updateItemFunctionBase,
+} from 'context/CollectionContext'
 
-const Item = ({ item, depth, updateItemFunction }) => {
-  const [expanded, setExpanded] = useState(true)
-  const defaultFile = determineDefaultFile(item)
-  console.log(defaultFile)
-  let thumbnail = ''
-  if (defaultFile) {
-    thumbnail = defaultFile.mediaServer + '/' + defaultFile.mediaResourceId + '/full/250,/0/default.jpg'
-  }
-  return (
-    <Box>
-      <ItemHeading
-        depth={depth}
-        expanded={expanded}
-        onCollapseToggle={() => setExpanded(!expanded)}
-      >
-        {item.title}
-      </ItemHeading>
-      <Box sx={{ display: expanded ? 'block' : 'none' }}>
-        {item.level !== 'collection' && (
-          <Box ml={`${depth + 4}rem`} mb='1rem'>
-            {thumbnail && (
-              <PartiallyDigitized
-                itemId={item.id}
-                defaultChecked={item.partiallyDigitized}
-                labelSx={{ mb: 2 }}
-                updateItemFunction={updateItemFunction}
-              />
-            )}
-            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={thumbnail} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
-            <p>{item.objectFileGroupId}</p>
-          </Box>
-        )}
-        {typy(item, 'items').safeArray.map((item, idx) => (
-          <Item updateItemFunction={updateItemFunction} key={item.id} item={item} depth={depth + 1} index={idx} />
-        ))}
-      </Box>
-    </Box>
-  )
+import Loading from 'components/Layout/Loading'
+import { useAPIContext } from 'context/APIContext'
+import Content from './Content'
+
+export const fetchStatus = {
+  FETCHING: 'FETCHING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
 }
 
-const determineDefaultFile = (item) => {
-  if (item.defaultFile) {
-    return item.defaultFile
-  }
-  if (item.files && item.files.items) {
-    return item.files.items[0]
+const Item = ({ item, depth }) => {
+  const [itemStatus, setItemStatus] = useState(fetchStatus.FETCHING)
+  const [itemNeedsReloaded, setItemNeedsReloaded] = useState(1)
+  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
+  const [editableData, setEditableData] = useState(false)
+
+  const id = item.id
+  useEffect(() => {
+    const abortController = new AbortController()
+    fetchAndParseCollection(id, graphqlApiUrl, graphqlApiKey, abortController)
+      .then((result) => {
+        setEditableData(result)
+        setItemStatus(fetchStatus.SUCCESS)
+      })
+      .catch((error) => {
+        console.error(error)
+        // setErrorMsg(error)
+        // setCollectionStatus(fetchStatus.ERROR)
+      })
+  }, [graphqlApiKey, graphqlApiUrl, id, itemNeedsReloaded])
+
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized }) => {
+    const abortController = new AbortController()
+    console.log(itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController)
+
+    updateItemFunctionBase({
+      itemId: itemId,
+      generalDefaultFilePath: generalDefaultFilePath,
+      generalObjectFileGroupId: generalObjectFileGroupId,
+      generalPartiallyDigitized: generalPartiallyDigitized,
+      graphqlApiKey: graphqlApiKey,
+      graphqlApiUrl: graphqlApiUrl,
+      abortController: abortController })
+      .then(() => {
+        setItemNeedsReloaded(itemNeedsReloaded + 1)
+      }).catch((error) => {
+        console.error(error)
+        // setErrorMsg(error)
+        // setCollectionStatus(fetchStatus.ERROR)
+      })
   }
 
-  return false
+  if (itemStatus === fetchStatus.FETCHING) {
+    return (<Loading />)
+  } else {
+    return (<Content item={editableData} updateItemFunction={updateItemFunction} depth={depth} />)
+  }
 }
 
 Item.propTypes = {

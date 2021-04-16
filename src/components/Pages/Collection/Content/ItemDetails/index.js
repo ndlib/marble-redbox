@@ -27,9 +27,8 @@ const ItemDetails = ({ depth, updateItemFunction }) => {
 
   return (
     <Box mt={3}>
-      <Search onFilter={filter} sx={sx.search} />
       <Box sx={sx.itemsList}>
-        <Item item={filter(collection)} depth={depth} updateItemFunction={updateItemFunction} />
+        <Item item={collection} depth={depth} updateItemFunction={updateItemFunction} />
       </Box>
     </Box>
   )
