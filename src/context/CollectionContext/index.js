@@ -10,7 +10,7 @@ export default CollectionContext
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
-    getItem(id: "${id}", websiteId: "all") {
+    getItem(id: "${id}") {
       id
       title
       level
