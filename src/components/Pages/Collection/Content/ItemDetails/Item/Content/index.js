@@ -25,7 +25,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
   }
 
   return (
-    <Box>
+    <Box id={item.id}>
       <ItemHeading
         depth={depth}
         expanded={expanded}

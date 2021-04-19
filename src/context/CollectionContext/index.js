@@ -10,7 +10,7 @@ export default CollectionContext
 
 const collectionGrapgqlQuery = (id) => {
   return `query {
-    getItem(id: "${id}") {
+    getItem(id: "${id}", websiteId: "all") {
       id
       title
       level
@@ -72,6 +72,7 @@ export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, general
           savePartiallyDigitizedForWebsite(
             itemId: "${itemId}",
             partiallyDigitized: ${generalPartiallyDigitized},
+            websiteId: "all",
           ) {
             id
           }
@@ -83,6 +84,7 @@ export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, general
             itemId: "${itemId}",
             defaultFilePath: "${generalDefaultFilePath}",
             objectFileGroupId: "${generalObjectFileGroupId}",
+            websiteId: "all",
           ) {
             id
           }
