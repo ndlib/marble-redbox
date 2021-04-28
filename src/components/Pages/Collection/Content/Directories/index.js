@@ -10,7 +10,7 @@ import { MdClear } from 'react-icons/md'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 
 const Content = ({ labelSx, valueSx }) => {
-  //const { directories } = useDirectoriesContext()
+  // const { directories } = useDirectoriesContext()
   const directories = []
   return (
     <div>

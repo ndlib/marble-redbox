@@ -156,7 +156,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
             <Button onClick={() => onSave(selected)}>Save</Button>
           </ActionButtons>
         </div>
-      ) : (null) }
+      ) : (null)}
     </ActionModal>
   )
 }

@@ -31,13 +31,13 @@ const EditMetadataForm = ({ updateItemFunction, item, startExpanded = false }) =
               updateItemFunction={updateItemFunction}
             />
             <Label sx={sx.label}>
-           Restricted:
+              Restricted:
               <Box sx={{ ...sx.values, verticalAlign: 'bottom', cursor: 'default' }}>
                 <Checkbox />
               </Box>
             </Label>
             <Label sx={sx.label}>
-          RightsStatement.org Statement:
+              RightsStatement.org Statement:
               <div>
                 <select>
                   <option>Select...</option>
@@ -48,15 +48,15 @@ const EditMetadataForm = ({ updateItemFunction, item, startExpanded = false }) =
               </div>
             </Label>
             <Label sx={sx.label}>
-          Copyright Status
+              Copyright Status
               <Textarea value={item.copyrightStatus} />
             </Label>
             <Label sx={sx.label}>
-          Copyright Statement
+              Use Permissions
               <Textarea value={item.copyrightStatement} />
             </Label>
             <Label sx={sx.label}>
-            Additional Details
+              Additional Details
               <Textarea />
             </Label>
           </Flex>

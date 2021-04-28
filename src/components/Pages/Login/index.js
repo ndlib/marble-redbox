@@ -17,15 +17,15 @@ const Login = ({ location }) => {
     return ('No Login For YOU!')
   }
 
-  const authClient = new OktaAuth({
-    ...authSettings,
-    redirectUri: `${location.origin}/user`,
-  })
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (user) {
       navigate(redirectPath)
     } else if (authSettings) {
+      const authClient = new OktaAuth({
+        ...authSettings,
+        redirectUri: `${location.origin}/user`,
+      })
       if (authClient) {
         authClient.tokenManager.get('idToken')
           .then(idToken => {
@@ -49,7 +49,7 @@ const Login = ({ location }) => {
           })
       }
     }
-  }, [location, user, authSettings, setAuth, authClient])
+  }, [location, user, authSettings, setAuth])
 
   return <React.Fragment>{content}</React.Fragment>
 }
