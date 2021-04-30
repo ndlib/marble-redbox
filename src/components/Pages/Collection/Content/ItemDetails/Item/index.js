@@ -47,7 +47,8 @@ const Item = ({ item, depth }) => {
       generalPartiallyDigitized: generalPartiallyDigitized,
       graphqlApiKey: graphqlApiKey,
       graphqlApiUrl: graphqlApiUrl,
-      abortController: abortController })
+      abortController: abortController,
+    })
       .then(() => {
         setItemNeedsReloaded(itemNeedsReloaded + 1)
       }).catch((error) => {

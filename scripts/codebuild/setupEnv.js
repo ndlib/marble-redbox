@@ -21,16 +21,16 @@ const retrieveStageParameters = async () => {
     console.error('Failed getting parameter: ' + appConfig)
     console.error(err)
   })
-  params['Parameters'].forEach(node => {
-    const paramName = node['Name']
+  params.Parameters.forEach(node => {
+    const paramName = node.Name
     const envName = paramName.substring(paramName.lastIndexOf('/') + 1, paramName.length).toUpperCase().replace(/[-]/g, '_')
     if (possibleKeys.includes(envName)) {
-      console.log(`${envName}='${node['Value']}'`)
+      console.log(`${envName}='${node.Value}'`)
     }
   })
 }
 
-new Promise(async (resolve, reject) => {
+return Promise(async (resolve) => {
   retrieveStageParameters()
   resolve()
 })
