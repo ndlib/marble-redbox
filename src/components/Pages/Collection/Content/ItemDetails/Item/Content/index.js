@@ -27,6 +27,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
   return (
     <Box id={item.id}>
       <ItemHeading
+        itemId={item.id}
         depth={depth}
         expanded={expanded}
         onCollapseToggle={() => setExpanded(!expanded)}
