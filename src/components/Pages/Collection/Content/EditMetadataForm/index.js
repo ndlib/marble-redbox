@@ -44,6 +44,16 @@ const EditMetadataForm = ({ updateItemFunction, item, startExpanded = false }) =
                   <option>IN COPYRIGHT</option>
                   <option>IN COPYRIGHT - EU ORPHAN WORK</option>
                   <option>IN COPYRIGHT - EDUCATIONAL USE PERMITTED</option>
+                  <option>IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED</option>
+                  <option>IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE</option>
+                  <option>NO COPYRIGHT - CONTRACTUAL RESTRICTIONS</option>
+                  <option>NO COPYRIGHT - NON-COMMERCIAL USE ONLY</option>
+                  <option>NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS</option>
+                  <option>NO COPYRIGHT - UNITED STATES</option>
+                  <option>NO COPYRIGHT - PUBLIC DOMAIN</option>
+                  <option>COPYRIGHT NOT EVALUATED</option>
+                  <option>COPYRIGHT UNDETERMINED</option>
+                  <option>NO KNOWN COPYRIGHT</option>
                 </select>
               </div>
             </Label>
