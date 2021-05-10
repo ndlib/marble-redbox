@@ -6,6 +6,7 @@ import Content from './Content'
 import { useAPIContext } from 'context/APIContext'
 
 export const fetchStatus = {
+  NOT_FETCHED: 'NOT_FETCHED',
   FETCHING: 'FETCHING',
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',
@@ -16,6 +17,7 @@ const AllCollections = ({ location }) => {
   const [alephContent, setAlephContent] = useState([])
   const [archiveSpaceStatus, setArchiveSpaceStatus] = useState(fetchStatus.FETCHING)
   const [alephStatus, setAlephStatus] = useState(fetchStatus.FETCHING)
+  const [importCollectionStatus, setImportCollectionStatus] = useState(fetchStatus.NOT_FETCHED)
   const [errorMsg, setErrorMsg] = useState()
 
   const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
@@ -97,11 +99,59 @@ const AllCollections = ({ location }) => {
     }
   }, [location, graphqlApiUrl, graphqlApiKey])
 
+  const importCollectionFunction = ({ itemUrl, sourceSystem }) => {
+    const abortController = new AbortController()
+    const query = `mutation {
+      addItemToHarvest(
+        harvestItemId: "${itemUrl}",
+        sourceSystem: "${sourceSystem}",
+      ) {
+        PK
+        SK
+      }
+    }
+    `
+    setImportCollectionStatus(fetchStatus.FETCHING)
+    fetch(
+      graphqlApiUrl,
+      {
+        headers: {
+          'x-api-key': graphqlApiKey,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        signal: abortController.signal,
+        mode: 'cors',
+        body: JSON.stringify({ query: query }),
+
+      })
+      .then(result => {
+        return result.json()
+      })
+      .then((result) => {
+        setImportCollectionStatus((result.errors && result.errors.length) ? fetchStatus.ERROR : fetchStatus.SUCCESS)
+      })
+      .catch((error) => {
+        setErrorMsg(error)
+        setImportCollectionStatus(fetchStatus.ERROR)
+      })
+
+    return () => {
+      abortController.abort()
+    }
+  }
+
   const allStatuses = [archiveSpaceStatus, alephStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR)) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
-    return <Content collections={archiveSpaceContent.concat(alephContent)} />
+    return (
+      <Content
+        collections={archiveSpaceContent.concat(alephContent)}
+        importCollectionFunction={importCollectionFunction}
+        importCollectionStatus={importCollectionStatus}
+      />
+    )
   } else {
     return <Loading />
   }
