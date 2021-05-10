@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -25,6 +25,12 @@ const errorStyle = {
   wordBreak: 'break-all',
 }
 
+const successStyle = {
+  color: '#006a00',
+  marginTop: 2,
+  wordBreak: 'break-all',
+}
+
 const defaultSource = 'ArchivesSpace'
 
 const ImportCollection = ({ onSubmit, status }) => {
@@ -32,11 +38,21 @@ const ImportCollection = ({ onSubmit, status }) => {
   const [sourceSystem, setSourceSystem] = useState(defaultSource)
   const [itemUrl, setItemUrl] = useState()
   const [validationMessage, setValidationMessage] = useState(null)
+  const urlInputRef = useRef()
 
   useEffect(() => {
     if (status === fetchStatus.SUCCESS) {
-      // Update complete! Reset form and close it
-      onClose()
+      setValidationMessage((
+        <Box sx={successStyle}>
+          <div>Successfully added item to ingest queue.</div>
+          <div>Collection should be available within 24 hours.</div>
+        </Box>
+      ))
+      setItemUrl(null)
+      if (urlInputRef.current) {
+        urlInputRef.current.value = ''
+        urlInputRef.current.focus()
+      }
     }
   }, [status])
 
@@ -93,7 +109,7 @@ const ImportCollection = ({ onSubmit, status }) => {
     return !errorComponent
   }
 
-  const errorMessage = validationMessage ||
+  const statusMessage = validationMessage ||
     (status === fetchStatus.ERROR ? <ErrorMessage error='An error occurred while attempting to import item.' /> : null)
   return (
     <span>
@@ -107,7 +123,7 @@ const ImportCollection = ({ onSubmit, status }) => {
       >
         <form onSubmit={onFormSubmit}>
           <Label htmlFor='itemUrl' mt={1}>Enter Item ID/URL</Label>
-          <Input name='itemUrl' id='itemUrl' mt={3} autoComplete='off' onChange={handleUrlChange} />
+          <Input name='itemUrl' id='itemUrl' mt={3} autoComplete='off' onChange={handleUrlChange} ref={urlInputRef} />
           {
           /*
           <Label htmlFor='sourceSystem' mt={4}>Source System</Label>
@@ -127,7 +143,7 @@ const ImportCollection = ({ onSubmit, status }) => {
           </Select>
           */
           }
-          {errorMessage}
+          {statusMessage}
           <div sx={rightAlign}>
             {status === fetchStatus.FETCHING ? (
               <Loading />
