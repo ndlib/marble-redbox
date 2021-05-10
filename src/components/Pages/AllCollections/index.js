@@ -129,7 +129,6 @@ const AllCollections = ({ location }) => {
         return result.json()
       })
       .then((result) => {
-        console.log('json result', result)
         setImportCollectionStatus((result.errors && result.errors.length) ? fetchStatus.ERROR : fetchStatus.SUCCESS)
       })
       .catch((error) => {
