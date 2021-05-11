@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
 export const initialContext = {
   authSettings: {},
+  token: null,
   user: null,
   setAuth: () => {},
 }

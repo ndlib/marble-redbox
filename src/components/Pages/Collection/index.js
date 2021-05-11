@@ -9,6 +9,7 @@ import ErrorMessage from 'components/Layout/ErrorMessage'
 import Loading from 'components/Layout/Loading'
 import Content from './Content'
 import { useAPIContext } from 'context/APIContext'
+import { useAuthContext } from 'context/AuthContext'
 
 export const fetchStatus = {
   FETCHING: 'FETCHING',
@@ -23,12 +24,17 @@ const Collection = ({ id, location }) => {
   const [errorMsg, setErrorMsg] = useState()
   const { setCollection } = useCollectionContext()
   const { setDirectories } = useDirectoriesContext()
-  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
+  const { graphqlApiUrl } = useAPIContext()
+  const { token } = useAuthContext()
 
   // Collection fetch
   useEffect(() => {
+    if (!token) {
+      return
+    }
+
     const abortController = new AbortController()
-    fetchAndParseCollection(id, graphqlApiUrl, graphqlApiKey, abortController)
+    fetchAndParseCollection(id, graphqlApiUrl, token, abortController)
       .then((result) => {
         setCollection(result)
         setCollectionStatus(fetchStatus.SUCCESS)
@@ -40,10 +46,14 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [id, location, collectionNeedsReloaded, setCollection, graphqlApiUrl, graphqlApiKey])
+  }, [id, location, collectionNeedsReloaded, setCollection, graphqlApiUrl, token])
 
   // Directories fetch - these are only the ones added to the collection, NOT the full list
   useEffect(() => {
+    if (!token) {
+      return
+    }
+
     const abortController = new AbortController()
     const query = ` {
       listFileGroupsForS3(limit: 10000) {
@@ -70,7 +80,7 @@ const Collection = ({ id, location }) => {
       graphqlApiUrl,
       {
         headers: {
-          'x-api-key': graphqlApiKey,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         method: 'POST', // Just a default. Can be overridden
@@ -92,7 +102,7 @@ const Collection = ({ id, location }) => {
     return () => {
       abortController.abort()
     }
-  }, [graphqlApiKey, graphqlApiUrl, setDirectories])
+  }, [token, graphqlApiUrl, setDirectories])
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
@@ -123,7 +133,7 @@ const Collection = ({ id, location }) => {
       graphqlApiUrl,
       {
         headers: {
-          'x-api-key': graphqlApiKey,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         method: 'POST',

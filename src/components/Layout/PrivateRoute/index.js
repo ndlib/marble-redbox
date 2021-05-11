@@ -22,7 +22,7 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
       authClient.tokenManager.get('idToken')
         .then(idToken => {
           if (idToken) {
-            setAuth(idToken.claims)
+            setAuth(idToken.value, idToken.claims)
             setShouldRender(true)
           } else {
             // You're not logged in, you need a sessionToken

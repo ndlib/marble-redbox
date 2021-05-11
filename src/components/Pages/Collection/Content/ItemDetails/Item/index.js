@@ -7,6 +7,7 @@ import {
 
 import Loading from 'components/Layout/Loading'
 import { useAPIContext } from 'context/APIContext'
+import { useAuthContext } from 'context/AuthContext'
 import Content from './Content'
 
 export const fetchStatus = {
@@ -18,13 +19,18 @@ export const fetchStatus = {
 const Item = ({ item, depth }) => {
   const [itemStatus, setItemStatus] = useState(fetchStatus.FETCHING)
   const [itemNeedsReloaded, setItemNeedsReloaded] = useState(1)
-  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
+  const { graphqlApiUrl } = useAPIContext()
+  const { token } = useAuthContext()
   const [editableData, setEditableData] = useState(false)
 
   const id = item.id
   useEffect(() => {
+    if (!token) {
+      return
+    }
+
     const abortController = new AbortController()
-    fetchAndParseCollection(id, graphqlApiUrl, graphqlApiKey, abortController)
+    fetchAndParseCollection(id, graphqlApiUrl, token, abortController)
       .then((result) => {
         setEditableData(result)
         setItemStatus(fetchStatus.SUCCESS)
@@ -34,18 +40,17 @@ const Item = ({ item, depth }) => {
         // setErrorMsg(error)
         // setCollectionStatus(fetchStatus.ERROR)
       })
-  }, [graphqlApiKey, graphqlApiUrl, id, itemNeedsReloaded])
+  }, [token, graphqlApiUrl, id, itemNeedsReloaded])
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
-    console.log(itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController)
 
     updateItemFunctionBase({
       itemId: itemId,
       generalDefaultFilePath: generalDefaultFilePath,
       generalObjectFileGroupId: generalObjectFileGroupId,
       generalPartiallyDigitized: generalPartiallyDigitized,
-      graphqlApiKey: graphqlApiKey,
+      token: token,
       graphqlApiUrl: graphqlApiUrl,
       abortController: abortController,
     })

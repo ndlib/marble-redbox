@@ -4,7 +4,6 @@ const AWS = require('aws-sdk')
 const appConfig = process.argv.slice(2)[0]
 
 const possibleKeys = [
-  'GRAPHQL_API_KEY',
   'GRAPHQL_API_URL',
   'AUTH_CLIENT_ID',
   'AUTH_CLIENT_URL',

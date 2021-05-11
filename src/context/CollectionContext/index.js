@@ -41,13 +41,13 @@ const collectionGrapgqlQuery = (id) => {
   `
 }
 
-export const fetchAndParseCollection = (id, graphqlApiUrl, graphqlApiKey, abortController) => {
+export const fetchAndParseCollection = (id, graphqlApiUrl, token, abortController) => {
   const query = collectionGrapgqlQuery(id)
   return fetch(
     graphqlApiUrl,
     {
       headers: {
-        'x-api-key': graphqlApiKey,
+        Authorization: token,
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -64,8 +64,7 @@ export const fetchAndParseCollection = (id, graphqlApiUrl, graphqlApiKey, abortC
     })
 }
 
-export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController }) => {
-  console.log(itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, graphqlApiKey, graphqlApiUrl, abortController)
+export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized, token, graphqlApiUrl, abortController }) => {
   let query = ''
   if (typeof generalPartiallyDigitized !== 'undefined') {
     query = `mutation {
@@ -95,7 +94,7 @@ export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, general
     graphqlApiUrl,
     {
       headers: {
-        'x-api-key': graphqlApiKey,
+        Authorization: token,
         'Content-Type': 'application/json',
       },
       method: 'POST',

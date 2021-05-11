@@ -30,7 +30,7 @@ const Login = ({ location }) => {
         authClient.tokenManager.get('idToken')
           .then(idToken => {
             if (idToken) {
-              setAuth(idToken.claims)
+              setAuth(idToken.value, idToken.claims)
               navigate(redirectPath)
               // If ID Token isn't found, try to parse it from the current URL
             } else if (location.hash) {
@@ -38,7 +38,7 @@ const Login = ({ location }) => {
                 .then(res => {
                   const { idToken } = res.tokens
                   authClient.tokenManager.add('idToken', idToken)
-                  setAuth(idToken.claims)
+                  setAuth(idToken.value, idToken.claims)
                   navigate(redirectPath)
                 })
             } else {

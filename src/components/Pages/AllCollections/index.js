@@ -4,6 +4,7 @@ import Loading from 'components/Layout/Loading'
 import ErrorMessage from 'components/Layout/ErrorMessage'
 import Content from './Content'
 import { useAPIContext } from 'context/APIContext'
+import { useAuthContext } from 'context/AuthContext'
 
 export const fetchStatus = {
   NOT_FETCHED: 'NOT_FETCHED',
@@ -20,8 +21,13 @@ const AllCollections = ({ location }) => {
   const [importCollectionStatus, setImportCollectionStatus] = useState(fetchStatus.NOT_FETCHED)
   const [errorMsg, setErrorMsg] = useState()
 
-  const { graphqlApiKey, graphqlApiUrl } = useAPIContext()
+  const { token } = useAuthContext()
+  const { graphqlApiUrl } = useAPIContext()
   useEffect(() => {
+    if (!token) {
+      return
+    }
+
     const abortController = new AbortController()
     const query = `query {
         listItemsBySourceSystem(id: "ARCHIVESSPACE", limit: 1000) {
@@ -36,7 +42,7 @@ const AllCollections = ({ location }) => {
       graphqlApiUrl,
       {
         headers: {
-          'x-api-key': graphqlApiKey,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         method: 'POST',
@@ -58,9 +64,13 @@ const AllCollections = ({ location }) => {
     return () => {
       abortController.abort()
     }
-  }, [location, graphqlApiUrl, graphqlApiKey])
+  }, [location, graphqlApiUrl, token])
 
   useEffect(() => {
+    if (!token) {
+      return
+    }
+
     const abortController = new AbortController()
     const query = `query {
         listItemsBySourceSystem(id: "ALEPH", limit: 1000) {
@@ -75,7 +85,7 @@ const AllCollections = ({ location }) => {
       graphqlApiUrl,
       {
         headers: {
-          'x-api-key': graphqlApiKey,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         method: 'POST',
@@ -97,7 +107,7 @@ const AllCollections = ({ location }) => {
     return () => {
       abortController.abort()
     }
-  }, [location, graphqlApiUrl, graphqlApiKey])
+  }, [location, graphqlApiUrl, token])
 
   const importCollectionFunction = ({ itemUrl, sourceSystem }) => {
     const abortController = new AbortController()
@@ -116,7 +126,7 @@ const AllCollections = ({ location }) => {
       graphqlApiUrl,
       {
         headers: {
-          'x-api-key': graphqlApiKey,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         method: 'POST',
