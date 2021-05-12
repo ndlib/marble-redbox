@@ -8,7 +8,6 @@ require('dotenv').config({
 })
 
 const s3BucketName = process.env.S3_DEST_BUCKET || ''
-const graphqlApiKey = process.env.GRAPHQL_API_KEY || ''
 const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
 const authClientURL = process.env.AUTH_CLIENT_URL || ''
 const authClientClientId = process.env.AUTH_CLIENT_ID || ''
@@ -16,7 +15,6 @@ const authClientIssuer = process.env.AUTH_CLIENT_ISSUER || ''
 const marbleUrl = process.env.MARBLE_URL || ''
 
 console.table([
-  { variable: 'GRAPHQL_API_KEY:', value: graphqlApiKey },
   { variable: 'GRAPHQL_API_URL:', value: graphqlApiUrl },
   { variable: 'AUTH_CLIENT_URL:', value: authClientURL },
   { variable: 'AUTH_CLIENT_ID:', value: authClientClientId },
@@ -32,7 +30,6 @@ module.exports = {
     author: 'WSE',
     marbleUrl: marbleUrl,
     apis: {
-      graphqlApiKey: graphqlApiKey,
       graphqlApiUrl: graphqlApiUrl,
     },
     auth: {

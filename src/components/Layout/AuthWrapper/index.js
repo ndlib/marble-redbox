@@ -18,9 +18,10 @@ const AuthWrapper = ({ children }) => {
     }
   `)
 
-  const setAuth = (user) => {
+  const setAuth = (token, user) => {
     setContext({
       ...context,
+      token: token,
       user: user,
     })
   }
