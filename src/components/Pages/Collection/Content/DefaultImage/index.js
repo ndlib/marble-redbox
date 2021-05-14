@@ -6,22 +6,13 @@ import {
   Text,
 } from 'theme-ui'
 import Image from 'components/Shared/Image'
-import UpdateButton from './UpdateButton'
 import sx from './sx'
 
-const DefaultImage = ({ collectionId, itemId, objectFileGroupId, imageId, imageUrl, itemTitle, inModal, updateItemFunction }) => {
-  const decoded = decodeURIComponent(imageUrl)
-  const imageName = decoded.substring(decoded.lastIndexOf('/') + 1)
-  const updateButton = !inModal ? (
-    <UpdateButton
-      selectedImageUrl={imageUrl}
-      objectFileGroupId={objectFileGroupId}
-      itemTitle={itemTitle}
-      collectionId={collectionId}
-      itemId={itemId}
-      updateItemFunction={updateItemFunction}
-    />
-  ) : null
+const DefaultImage = ({ objectFileGroupId, imageUrl, filePath, children }) => {
+  const sanitizedFileName = (() => {
+    const split = decodeURIComponent(filePath).split('/')
+    return split[split.length - 1]
+  })()
 
   return imageUrl ? (
     <Box>
@@ -32,19 +23,25 @@ const DefaultImage = ({ collectionId, itemId, objectFileGroupId, imageId, imageU
         frame
       />
       <Box sx={sx.imageInfo}>
-        <Flex>
+        <Flex sx={sx.imageInfoFlex}>
           <Text>{objectFileGroupId}</Text>
+          <Text>{sanitizedFileName}</Text>
+          {children}
         </Flex>
-        {updateButton}
       </Box>
     </Box>
-  ) : updateButton
+  ) : (
+    <Flex sx={sx.imageInfoFlex}>
+      {children}
+    </Flex>
+  )
 }
 
 DefaultImage.propTypes = {
   imageUrl: PropTypes.string,
-  itemTitle: PropTypes.string,
-  inModal: PropTypes.bool,
+  objectFileGroupId: PropTypes.string,
+  filePath: PropTypes.string,
+  children: PropTypes.node,
 }
 
 export default DefaultImage
