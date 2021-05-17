@@ -55,5 +55,6 @@ module.exports = {
   },
   showEditButton: {
     cursor: 'pointer',
+    marginBottom: '0.5rem',
   },
 }

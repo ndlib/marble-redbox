@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import typy from 'typy'
 import {
   Box,
   Button,
   Label,
   Radio,
-  Text,
 } from 'theme-ui'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 import { useImageGroupContext } from 'context/ImageGroupContext'
 import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
 import SearchFilter from 'components/Shared/SearchFilter'
-import DefaultImage from '../DefaultImage'
+import DefaultImage from '../../DefaultImage'
 import Select from 'react-select'
 
 import sx from './sx'
 
+// eslint-disable-next-line complexity
 const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
   const { imageGroup, setImageGroup } = useImageGroupContext()
@@ -51,36 +50,52 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
     defaultBaseSearch = imageGroup
   }
 
-  // filtered options are the individual files in the page
-  const [filteredOptions, setFilteredOptions] = useState([])
   // search base is the values for the top search box
   const [selectedBaseSearch, setSelectedBaseSearch] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
   // second search are the values for the second search box
-  const [selectedSecondSearch, setSecondBaseSearch] = useState({ key: objectFileGroupId, value: objectFileGroupId })
+  const [selectedSecondSearch, setSecondBaseSearch] = useState(objectFileGroupId ? { value: objectFileGroupId, label: objectFileGroupId } : null)
+  // all options within the selected image group BEFORE applying search filter
+  const [imageOptions, setImageOptions] = useState([])
+  // filtered options are the individual files to display AFTER applying search filter
+  const [filteredOptions, setFilteredOptions] = useState()
   // the option selected from the radio of the files
   const [selected, setSelected] = useState(null)
-  const searchFields = ['Label', 'Key', 'Description']
+  const searchFields = ['id', 'filePath', 'objectFileGroupId']
 
   // the optionse for the second search box useeffect because they change
   const secondSearchOptions = []
   useEffect(() => {
-    if (!directories) {
+    if (!directories || !selectedBaseSearch) {
       return
     }
     // get all the options from the directory and sort
-    if (selectedBaseSearch) {
-      for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
-        secondSearchOptions.push({ value: key, label: key })
-      }
+    for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
+      secondSearchOptions.push({ value: key, label: key })
     }
 
-    secondSearchOptions.sort((a, b) => {
-      // sort by removeing the first part of the string then trying to sort as an integer
-      a = parseInt(a.label.replace(selectedBaseSearch.value, '').replace('-', ''))
-      b = parseInt(b.label.replace(selectedBaseSearch.value, '').replace('-', ''))
-      return a - b
-    })
-  }, [directories, secondSearchOptions, selectedBaseSearch, setSelectedBaseSearch])
+    if (selectedSecondSearch) {
+      directories[selectedBaseSearch.value][selectedSecondSearch.value].files.sort((a, b) => {
+        if (a.sortId < b.sortId) {
+          return -1
+        }
+        if (a.sortId > b.sortId) {
+          return 1
+        }
+        return 0
+      })
+
+      setImageOptions(directories[selectedBaseSearch.value][selectedSecondSearch.value].files)
+    }
+  }, [directories, secondSearchOptions, selectedBaseSearch, setSelectedBaseSearch, selectedSecondSearch])
+
+  useEffect(() => {
+    setFilteredOptions(imageOptions)
+    // If the newly selected image group doesn't contain the selected option, deselect
+    const hasSelected = selected && imageOptions.some(opt => opt.id === selected.id)
+    if (!hasSelected) {
+      setSelected(null)
+    }
+  }, [imageOptions, selected])
 
   return (
     <ActionModal
@@ -101,7 +116,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
         isSearchable
         onChange={selectedOptions => {
           setSelectedBaseSearch(selectedOptions)
-          setImageGroup(selectedOptions.value)
+          setImageGroup(selectedOptions?.value)
           setSecondBaseSearch(null)
         }}
         name='baseSearchOptions'
@@ -118,42 +133,41 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
         isClearable
         isRtl={false}
         isSearchable
-        onChange={selectedOptions => {
-          setSecondBaseSearch(selectedOptions)
-          directories[selectedBaseSearch.value][selectedOptions.value].files.sort((a, b) => {
-            if (a.sortId < b.sortId) {
-              return -1
-            }
-            if (a.sortId > b.sortId) {
-              return 1
-            }
-            return 0
-          })
-          setFilteredOptions(directories[selectedBaseSearch.value][selectedOptions.value].files)
-        }}
+        onChange={setSecondBaseSearch}
         name='secondSearchOption'
         options={secondSearchOptions}
       />
       {(filteredOptions) ? (
         <div>
           <h3><Label htmlFor='imageModalSelect'>Select Default Image</Label></h3>
-          <SearchFilter id='searchFiels' data={filteredOptions} fields={searchFields} onChange={setFilteredOptions} />
+          <SearchFilter id='imageSearch' data={imageOptions} fields={searchFields} onChange={setFilteredOptions} />
           <Box sx={sx.optionsContainer}>
-            {filteredOptions.map((opt) => (
-              <Label key={opt.id} sx={sx.option}>
-                <Radio
-                  name='imageModalSelect'
-                  id='imageModalSelect'
-                  value={opt.iiifImageUri}
-                  defaultChecked={defaultSelected === opt.iiifImageUri}
-                  onChange={() => setSelected(opt)}
-                />
-                <DefaultImage imageUrl={opt.id} inModal />
-              </Label>
-            ))}
+            {filteredOptions.map((opt) => {
+              const imagePath = `${opt.mediaServer}/${opt.mediaResourceId}`
+              const optionThumbnailPath = `${imagePath}/full/250,/0/default.jpg`
+              const selectedThumbnailPath = selected
+                ? `${selected.mediaServer}/${selected.mediaResourceId}/full/250,/0/default.jpg`
+                : defaultSelected
+              return (
+                <Label key={opt.id} sx={sx.option}>
+                  <Radio
+                    name='imageModalSelect'
+                    id='imageModalSelect'
+                    value={opt.iiifImageUri}
+                    defaultChecked={selectedThumbnailPath === optionThumbnailPath}
+                    onChange={() => setSelected(opt)}
+                  />
+                  <DefaultImage
+                    imageUrl={optionThumbnailPath}
+                    objectFileGroupId={opt.objectFileGroupId}
+                    filePath={opt.mediaResourceId}
+                  />
+                </Label>
+              )
+            })}
           </Box>
           <ActionButtons>
-            <Button onClick={() => onSave(selected)}>Save</Button>
+            <Button onClick={() => onSave(selected)} disabled={!selected}>Save</Button>
           </ActionButtons>
         </div>
       ) : (null)}

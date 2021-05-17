@@ -5,15 +5,10 @@ import {
 } from 'theme-ui'
 import EditMetadataForm from '../../../EditMetadataForm'
 import DefaultImage from '../../../DefaultImage'
+import DefaultImageButton from '../../../DefaultImageButton'
 import ItemHeading from '../ItemHeading'
 import typy from 'typy'
 import Item from '../'
-
-export const fetchStatus = {
-  FETCHING: 'FETCHING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-}
 
 const Content = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
@@ -38,8 +33,20 @@ const Content = ({ item, depth, updateItemFunction }) => {
         {item.level !== 'collection' && (
           <Box ml={`${depth + 4}rem`} mb='1rem'>
             {thumbnail && (<EditMetadataForm updateItemFunction={updateItemFunction} item={item} />)}
-            <DefaultImage updateItemFunction={updateItemFunction} objectFileGroupId={item.objectFileGroupId} imageUrl={thumbnail} itemTitle={item.title} collectionId={item.collectionId} itemId={item.id} />
-            <p>{item.objectFileGroupId}</p>
+            <DefaultImage
+              imageUrl={thumbnail}
+              objectFileGroupId={item.objectFileGroupId}
+              filePath={defaultFile?.mediaResourceId}
+            >
+              <DefaultImageButton
+                selectedImageUrl={thumbnail}
+                objectFileGroupId={item.objectFileGroupId}
+                itemTitle={item.title}
+                collectionId={item.collectionId}
+                itemId={item.id}
+                updateItemFunction={updateItemFunction}
+              />
+            </DefaultImage>
           </Box>
         )}
         {typy(item, 'children.items').safeArray.map((child, idx) => (
@@ -58,7 +65,7 @@ const determineDefaultFile = (item) => {
     return item.files.items[0]
   }
 
-  return false
+  return null
 }
 
 Content.propTypes = {
