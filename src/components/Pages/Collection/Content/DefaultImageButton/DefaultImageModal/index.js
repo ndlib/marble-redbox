@@ -12,6 +12,7 @@ import ActionModal from 'components/Layout/ActionModal'
 import ActionButtons from 'components/Layout/ActionModal/ActionButtons'
 import SearchFilter from 'components/Shared/SearchFilter'
 import DefaultImage from '../../DefaultImage'
+import { compareStrings } from 'utils/general'
 import Select from 'react-select'
 
 import sx from './sx'
@@ -26,17 +27,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, imageGroupId, onSave, 
   Object.keys(directories).forEach((directory) => {
     baseSearchOptions.push({ value: directory, label: directory })
   })
-  baseSearchOptions.sort((a, b) => {
-    a = a.value.toUpperCase()
-    b = b.value.toUpperCase()
-    if (a < b) {
-      return -1
-    }
-    if (a > b) {
-      return 1
-    }
-    return 0
-  })
+  baseSearchOptions.sort((a, b) => compareStrings(a.value, b.value))
 
   // if we are editing an existing imageGroupId parse it and preset values
   let defaultBaseSearch = 'none'

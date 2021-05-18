@@ -35,7 +35,7 @@ module.exports = {
     verticalAlign: 'middle',
   },
   content: {
-    maxHeight: 'calc(100vh - 80px - 3rem)',
+    height: 'calc(100vh - 80px - 3rem)',
     padding: '1rem',
     overflowX: 'hidden',
     overflowY: 'auto',

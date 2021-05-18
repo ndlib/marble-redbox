@@ -1,3 +1,4 @@
+/* eslint complexity: ["warn", 20] */
 import PropTypes from 'prop-types'
 import typy from 'typy'
 
@@ -58,4 +59,18 @@ export const pluralize = (listOrCount, singularForm, pluralForm) => {
   singularForm = singularForm || '' // If omitted, will return empty string in singular form
   pluralForm = pluralForm || (singularForm + 's') // If omitted, will append s to singular form
   return (typy(listOrCount).isNumber ? listOrCount : listOrCount.length) === 1 ? singularForm : pluralForm
+}
+
+export const compareStrings = (a, b) => {
+  // Null, undefined, and empty string get sorted to the end of the list.
+  // Otherwise, sort alphabetically ignoring case
+  if (!a && !b) {
+    return 0
+  } else if (a && !b) {
+    return -1
+  } else if (b && !a) {
+    return 1
+  }
+
+  return a.toString().localeCompare(b, undefined, { sensitivity: 'accent', ignorePunctuation: true })
 }

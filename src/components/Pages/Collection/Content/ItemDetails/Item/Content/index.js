@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
+  Checkbox,
 } from 'theme-ui'
 import EditMetadataForm from '../../../EditMetadataForm'
 import DefaultImage from '../../../DefaultImage'
 import DefaultImageButton from '../../../DefaultImageButton'
+import AddMediaButton from '../../../AddMediaButton'
 import ItemHeading from '../ItemHeading'
 import typy from 'typy'
 import Item from '../'
@@ -54,6 +56,14 @@ const Content = ({ item, depth, updateItemFunction }) => {
                 collectionId={item.collectionId}
                 itemId={item.id}
                 updateItemFunction={updateItemFunction}
+              />
+              <AddMediaButton
+                updateItemFunction={updateItemFunction}
+                objectFileGroupId={item.objectFileGroupId}
+                imageUrl={thumbnail}
+                itemTitle={item.title}
+                collectionId={item.collectionId}
+                itemId={item.id}
               />
             </DefaultImage>
           </Box>
