@@ -21,8 +21,8 @@ const CollectionList = ({ collections }) => {
               <li key={collection.id}>
                 <Link to={`/collection/${collection.id}`}>
                   {collection.title} - {collection.id}
-                  {collection.sourceSystemUri && (
-                    <Text sx={sx.sourceUrl}>&nbsp;({collection.sourceSystemUri})</Text>
+                  {collection.linkToSource && (
+                    <Text sx={sx.sourceUrl}>&nbsp;({collection.linkToSource})</Text>
                   )}
                   {collection.partiallyDigitized && (
                     <Text sx={sx.tag}>Partially Digitized</Text>
@@ -42,6 +42,8 @@ CollectionList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
+      linkToSource: PropTypes.string,
+      partiallyDigitized: PropTypes.string,
     }),
   ).isRequired,
 }

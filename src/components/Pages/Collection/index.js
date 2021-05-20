@@ -145,9 +145,8 @@ const Collection = ({ id, location }) => {
       .then(result => {
         return result.json()
       })
-      .then((result) => {
-
-        // setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
+      .then(() => {
+        setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
       .catch((error) => {
         setErrorMsg(error)

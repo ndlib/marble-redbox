@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui'
+import { jsx, Themed } from 'theme-ui'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
@@ -17,7 +17,8 @@ const Header = ({ siteTitle }) => (
         padding: '1.45rem 1.0875rem',
       }}
     >
-      <Styled.h1 sx={{
+      { /* eslint-disable-next-line react/jsx-pascal-case */ }
+      <Themed.h1 sx={{
         color: 'background',
         margin: 0,
       }}
@@ -31,7 +32,7 @@ const Header = ({ siteTitle }) => (
         >
           {siteTitle}
         </Link>
-      </Styled.h1>
+      </Themed.h1>
     </div>
   </header>
 )

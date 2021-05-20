@@ -4,7 +4,7 @@ import ReactModal from 'react-modal'
 import { IconContext } from 'react-icons'
 import { MdClose } from 'react-icons/md'
 import typy from 'typy'
-import { BaseStyles, useThemeUI, Styled, jsx } from 'theme-ui'
+import { BaseStyles, useThemeUI, Themed, jsx } from 'theme-ui'
 import sx from './sx'
 
 const ActionModal = ({
@@ -28,7 +28,7 @@ const ActionModal = ({
       shouldCloseOnOverlayClick
     >
       <div sx={sx.wrapper}>
-        <Styled.h1 sx={sx.heading}>{contentLabel}</Styled.h1>
+        <Themed.h1 sx={sx.heading}>{contentLabel}</Themed.h1> { /* eslint-disable-line react/jsx-pascal-case */ }
         <button
           onClick={closeFunc}
           sx={sx.button}

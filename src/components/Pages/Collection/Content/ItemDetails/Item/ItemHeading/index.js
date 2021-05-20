@@ -47,7 +47,7 @@ const ItemHeading = ({ itemId, depth, expanded, onCollapseToggle, children }) =>
 }
 
 ItemHeading.propTypes = {
-  itemId: PropTypes.number,
+  itemId: PropTypes.string,
   depth: PropTypes.number,
   expanded: PropTypes.bool,
   onCollapseToggle: PropTypes.func,

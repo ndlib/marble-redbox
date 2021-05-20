@@ -59,11 +59,11 @@ const EditMetadataForm = ({ updateItemFunction, item, startExpanded = false }) =
             </Label>
             <Label sx={sx.label}>
               Copyright Status
-              <Textarea value={item.copyrightStatus} />
+              <Textarea defaultValue={item.copyrightStatus} />
             </Label>
             <Label sx={sx.label}>
               Use Permissions
-              <Textarea value={item.copyrightStatement} />
+              <Textarea defaultValue={item.copyrightStatement} />
             </Label>
             <Label sx={sx.label}>
               Additional Details

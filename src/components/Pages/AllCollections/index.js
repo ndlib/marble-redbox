@@ -34,6 +34,8 @@ const AllCollections = ({ location }) => {
           items {
             id
             title
+            linkToSource
+            partiallyDigitized
           }
         }
       }
@@ -77,6 +79,8 @@ const AllCollections = ({ location }) => {
           items {
             id
             title
+            linkToSource
+            partiallyDigitized
           }
         }
       }

@@ -1,0 +1,4 @@
+__mocks__/**
+.cache/**
+node_modules/**
+public/**

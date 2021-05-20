@@ -149,7 +149,7 @@ const ImportCollection = ({ onSubmit, status }) => {
               <Loading />
             ) : (
               <Button mt={3} onClick={onFormSubmit} disabled={!itemUrl || !sourceSystem}>
-                Save
+              Save
               </Button>
             )}
           </div>

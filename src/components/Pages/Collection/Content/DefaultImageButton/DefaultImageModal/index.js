@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -62,15 +62,19 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
   const [selected, setSelected] = useState(null)
   const searchFields = ['id', 'filePath', 'objectFileGroupId']
 
-  // the optionse for the second search box useeffect because they change
-  const secondSearchOptions = []
+  const secondSearchOptions = useMemo(() => {
+    const result = []
+    if (directories && selectedBaseSearch) {
+      for (const [key] of Object.entries(directories[selectedBaseSearch.value])) {
+        result.push({ value: key, label: key })
+      }
+    }
+    return result
+  }, [directories, selectedBaseSearch])
+
   useEffect(() => {
     if (!directories || !selectedBaseSearch) {
       return
-    }
-    // get all the options from the directory and sort
-    for (const [key, directory] of Object.entries(directories[selectedBaseSearch.value])) {
-      secondSearchOptions.push({ value: key, label: key })
     }
 
     if (selectedSecondSearch) {
@@ -153,7 +157,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
                   <Radio
                     name='imageModalSelect'
                     id='imageModalSelect'
-                    value={opt.iiifImageUri}
+                    value={opt}
                     defaultChecked={selectedThumbnailPath === optionThumbnailPath}
                     onChange={() => setSelected(opt)}
                   />
