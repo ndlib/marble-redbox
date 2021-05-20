@@ -41,7 +41,7 @@ const Content = ({ updateItemFunction }) => {
       <Divider />
 
       <Flex sx={sx.itemSection}>
-        <ItemDetails collection={collection} updateItemFunction={updateItemFunction} />
+        <ItemDetails collection={collection} />
       </Flex>
     </div>
   )

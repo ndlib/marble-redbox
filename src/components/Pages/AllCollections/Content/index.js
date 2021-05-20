@@ -7,7 +7,7 @@ import ImportCollection from './ImportCollection'
 
 const Content = ({ collections, importCollectionFunction, importCollectionStatus }) => {
   const [filtered, setFiltered] = useState(collections)
-  const searchFields = ['id', 'title'] // 'url', , 'sourceSystemUri'
+  const searchFields = ['id', 'title', 'linkToSource']
   return (
     <div>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -23,7 +23,6 @@ Content.propTypes = {
   collections: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
     }),
   ).isRequired,

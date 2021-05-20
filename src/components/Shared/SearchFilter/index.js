@@ -34,6 +34,7 @@ const SearchFilter = ({ id, data, fields, onChange }) => {
 }
 
 SearchFilter.propTypes = {
+  id: PropTypes.string,
   data: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,

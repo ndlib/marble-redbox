@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 import { OktaAuth } from '@okta/okta-auth-js'

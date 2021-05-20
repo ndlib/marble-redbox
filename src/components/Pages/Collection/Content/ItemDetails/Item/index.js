@@ -73,16 +73,8 @@ const Item = ({ item, depth }) => {
 Item.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    level: PropTypes.string.isRequired,
-    objectFileGroupId: PropTypes.string,
-    collectionId: PropTypes.string.isRequired,
-    defaultFilePath: PropTypes.string,
-    partiallyDigitized: PropTypes.bool,
-    items: PropTypes.array,
   }).isRequired,
   depth: PropTypes.number,
-  updateItemFunction: PropTypes.func.isRequired,
 }
 
 Item.defaultProps = {
