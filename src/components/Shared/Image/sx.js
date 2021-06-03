@@ -4,8 +4,10 @@ module.exports = {
       boxSizing: 'content-box',
       display: 'inline-block',
       border: '12px solid black',
+      position: 'relative',
     } : {
       display: 'inline-block',
+      position: 'relative',
     }
   ),
   image: (frame, width, height) => ({

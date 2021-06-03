@@ -19,6 +19,14 @@ const Content = ({ item, depth, updateItemFunction }) => {
     thumbnail = defaultFile.mediaServer + '/' + defaultFile.mediaResourceId + '/full/250,/0/default.jpg'
   }
 
+  const removeImageFunction = () => {
+    return updateItemFunction({
+      itemId: item.id,
+      generalDefaultFilePath: null,
+      generalObjectFileGroupId: '',
+    })
+  }
+
   return (
     <Box id={item.id}>
       <ItemHeading
@@ -37,6 +45,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
               imageUrl={thumbnail}
               objectFileGroupId={item.objectFileGroupId}
               filePath={defaultFile?.mediaResourceId}
+              removeImageFunction={removeImageFunction}
             >
               <DefaultImageButton
                 selectedImageUrl={thumbnail}

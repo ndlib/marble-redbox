@@ -18,6 +18,7 @@ const Image = ({
   alt, // alt text for the image
   title, // title attribute on image
   frame, // Put a frame around the image
+  children, // Additional components to place inside the <picture> tag
 }) => {
   // derive image from image src OR service OR use the default noImage
   const iifSize = (width || height) ? `${width || ''},${height || ''}` : 'max'
@@ -30,6 +31,7 @@ const Image = ({
         title={title || alt}
         sx={sx.image(frame, width, height)}
       />
+      {children}
     </picture>
   )
 }
@@ -48,6 +50,7 @@ Image.propTypes = {
   alt: PropTypes.string,
   title: PropTypes.string,
   frame: PropTypes.bool,
+  children: PropTypes.node,
 }
 
 Image.defaultProps = {

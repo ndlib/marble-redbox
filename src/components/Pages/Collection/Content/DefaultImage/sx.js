@@ -11,4 +11,14 @@ module.exports = {
       marginTop: '1rem',
     },
   },
+  imageContainer: {
+    display: 'block',
+    position: 'relative',
+  },
+  removeIcon: {
+    fontSize: '30px',
+    position: 'absolute',
+    right: '4px',
+    top: '4px',
+  },
 }
