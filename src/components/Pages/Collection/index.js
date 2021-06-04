@@ -63,11 +63,7 @@ const Collection = ({ id, location }) => {
             items {
               objectFileGroupId
               id
-              title
-              source
-              sourceType
               filePath
-              iiifImageUri
               mediaServer
               mediaResourceId
             }
