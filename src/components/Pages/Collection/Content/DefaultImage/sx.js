@@ -20,5 +20,8 @@ module.exports = {
     position: 'absolute',
     right: '4px',
     top: '4px',
+    padding: '0',
+    borderRadius: '100px', // Full circular border
+    backgroundColor: 'white',
   },
 }
