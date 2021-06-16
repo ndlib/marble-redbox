@@ -14,16 +14,16 @@ const Content = ({ item, depth, updateItemFunction }) => {
   const [expanded, setExpanded] = useState(true)
 
   let thumbnail = ''
-  const defaultFile = determineDefaultFile(item)
-  if (defaultFile) {
-    thumbnail = defaultFile.mediaServer + '/' + defaultFile.mediaResourceId + '/full/250,/0/default.jpg'
+  const defaultImage = determineDefaultImage(item)
+  if (defaultImage) {
+    thumbnail = defaultImage.mediaServer + '/' + defaultImage.mediaResourceId + '/full/250,/0/default.jpg'
   }
 
   const removeImageFunction = () => {
     return updateItemFunction({
       itemId: item.id,
       generalDefaultFilePath: null,
-      generalObjectFileGroupId: '',
+      generalImageGroupId: '',
     })
   }
 
@@ -43,13 +43,13 @@ const Content = ({ item, depth, updateItemFunction }) => {
             {thumbnail && (<EditMetadataForm updateItemFunction={updateItemFunction} item={item} />)}
             <DefaultImage
               imageUrl={thumbnail}
-              objectFileGroupId={item.objectFileGroupId}
-              filePath={defaultFile?.mediaResourceId}
+              imageGroupId={item.imageGroupId}
+              filePath={defaultImage?.mediaResourceId}
               removeImageFunction={removeImageFunction}
             >
               <DefaultImageButton
                 selectedImageUrl={thumbnail}
-                objectFileGroupId={item.objectFileGroupId}
+                imageGroupId={item.imageGroupId}
                 itemTitle={item.title}
                 collectionId={item.collectionId}
                 itemId={item.id}
@@ -66,12 +66,12 @@ const Content = ({ item, depth, updateItemFunction }) => {
   )
 }
 
-const determineDefaultFile = (item) => {
-  if (item.defaultFile) {
-    return item.defaultFile
+const determineDefaultImage = (item) => {
+  if (item.defaultImage) {
+    return item.defaultImage
   }
-  if (item.files && item.files.items) {
-    return item.files.items[0]
+  if (item.images && item.images.items) {
+    return item.images.items[0]
   }
 
   return null
@@ -82,7 +82,7 @@ Content.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
-    objectFileGroupId: PropTypes.string,
+    imageGroupId: PropTypes.string,
     collectionId: PropTypes.string.isRequired,
     defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,

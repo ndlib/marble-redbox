@@ -56,12 +56,12 @@ const Collection = ({ id, location }) => {
 
     const abortController = new AbortController()
     const query = ` {
-      listFileGroupsForS3(limit: 10000) {
+      listImageGroupsForS3(limit: 10000) {
         items {
-          objectFileGroupId
-          files {
+          imageGroupId
+          images {
             items {
-              objectFileGroupId
+              imageGroupId
               id
               filePath
               mediaServer
@@ -88,7 +88,7 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
-        setDirectories(getDirectories(data.data.listFileGroupsForS3.items))
+        setDirectories(getDirectories(data.data.listImageGroupsForS3.items))
         setDirectoriesStatus(fetchStatus.SUCCESS)
       })
       .catch((error) => {
@@ -100,7 +100,7 @@ const Collection = ({ id, location }) => {
     }
   }, [token, graphqlApiUrl, setDirectories])
 
-  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalObjectFileGroupId, generalPartiallyDigitized }) => {
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
     let query = ''
     if (typeof generalPartiallyDigitized !== 'undefined') {
@@ -118,7 +118,7 @@ const Collection = ({ id, location }) => {
           saveDefaultImageForWebsite(
             itemId: "${itemId}",
             defaultFilePath: "${generalDefaultFilePath}",
-            objectFileGroupId: "${generalObjectFileGroupId}",
+            imageGroupId: "${generalImageGroupId}",
           ) {
             id
           }
@@ -155,7 +155,7 @@ const Collection = ({ id, location }) => {
   }
 
   const allStatuses = [collectionStatus, directoriesStatus]
-  if (allStatuses.some(status => status === fetchStatus.ERROR)) {
+  if (allStatuses.some(status => status === fetchStatus.ERROR) || errorMsg) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
     return <Content updateItemFunction={updateItemFunction} />
@@ -167,7 +167,7 @@ const Collection = ({ id, location }) => {
 const getDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
-    const split = d.objectFileGroupId.split('-')
+    const split = d.imageGroupId.split('-')
     let baseDirectoryGroup = 'none'
     if (split.length > 1) {
       baseDirectoryGroup = split[0]
@@ -176,12 +176,12 @@ const getDirectories = (data) => {
     if (!directories[baseDirectoryGroup]) {
       directories[baseDirectoryGroup] = {}
     }
-    directories[baseDirectoryGroup][d.objectFileGroupId] = {
-      id: d.objectFileGroupId,
-      files: d.files.items,
+    directories[baseDirectoryGroup][d.imageGroupId] = {
+      id: d.imageGroupId,
+      images: d.images.items,
     }
-    // d.sortId = d.id.replace(d.objectFileGroupId, '')
-    // directories[baseDirectoryGroup][d.objectFileGroupId].files.push(d)
+    // d.sortId = d.id.replace(d.imageGroupId, '')
+    // directories[baseDirectoryGroup][d.imageGroupId].images.push(d)
   })
   return directories
 }
