@@ -10,11 +10,9 @@ const PrivateRoute = ({ component: Component, location, ...props }) => {
   const { authSettings, user, setAuth } = useAuthContext()
 
   useEffect(() => {
-    if (user) {
+    if (user || location.pathname === '/user') {
       setShouldRender(true)
-    }
-    setShouldRender(true)
-    if (!user && location.pathname !== '/user' && authSettings) {
+    } else if (authSettings) {
       const authClient = new OktaAuth({
         ...authSettings,
         redirectUri: `${location.origin}/user`,
