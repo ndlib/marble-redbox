@@ -17,7 +17,7 @@ import Select from 'react-select'
 import sx from './sx'
 
 // eslint-disable-next-line complexity
-const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onSave, onClose }) => {
+const DefaultImageModal = ({ defaultSelected, headerText, imageGroupId, onSave, onClose }) => {
   const { directories } = useDirectoriesContext()
   const { imageGroup, setImageGroup } = useImageGroupContext()
 
@@ -38,10 +38,10 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
     return 0
   })
 
-  // if we are editing an existing objectFileGroupId parse it and preset values
+  // if we are editing an existing imageGroupId parse it and preset values
   let defaultBaseSearch = 'none'
-  if (objectFileGroupId) {
-    const split = objectFileGroupId.split('-')
+  if (imageGroupId) {
+    const split = imageGroupId.split('-')
     if (split[0]) {
       defaultBaseSearch = split[0]
     }
@@ -53,14 +53,14 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
   // search base is the values for the top search box
   const [selectedBaseSearch, setSelectedBaseSearch] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
   // second search are the values for the second search box
-  const [selectedSecondSearch, setSecondBaseSearch] = useState(objectFileGroupId ? { value: objectFileGroupId, label: objectFileGroupId } : null)
+  const [selectedSecondSearch, setSecondBaseSearch] = useState(imageGroupId ? { value: imageGroupId, label: imageGroupId } : null)
   // all options within the selected image group BEFORE applying search filter
   const [imageOptions, setImageOptions] = useState([])
   // filtered options are the individual files to display AFTER applying search filter
   const [filteredOptions, setFilteredOptions] = useState()
   // the option selected from the radio of the files
   const [selected, setSelected] = useState(null)
-  const searchFields = ['id', 'filePath', 'objectFileGroupId']
+  const searchFields = ['id', 'filePath', 'imageGroupId']
 
   const secondSearchOptions = useMemo(() => {
     const result = []
@@ -78,7 +78,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
     }
 
     if (selectedSecondSearch) {
-      directories[selectedBaseSearch.value][selectedSecondSearch.value].files.sort((a, b) => {
+      directories[selectedBaseSearch.value][selectedSecondSearch.value].images.sort((a, b) => {
         if (a.sortId < b.sortId) {
           return -1
         }
@@ -88,7 +88,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
         return 0
       })
 
-      setImageOptions(directories[selectedBaseSearch.value][selectedSecondSearch.value].files)
+      setImageOptions(directories[selectedBaseSearch.value][selectedSecondSearch.value].images)
     }
   }, [directories, secondSearchOptions, selectedBaseSearch, setSelectedBaseSearch, selectedSecondSearch])
 
@@ -163,7 +163,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
                   />
                   <DefaultImage
                     imageUrl={optionThumbnailPath}
-                    objectFileGroupId={opt.objectFileGroupId}
+                    imageGroupId={opt.imageGroupId}
                     filePath={opt.mediaResourceId}
                   />
                 </Label>
@@ -182,7 +182,7 @@ const DefaultImageModal = ({ defaultSelected, headerText, objectFileGroupId, onS
 DefaultImageModal.propTypes = {
   defaultSelected: PropTypes.string,
   headerText: PropTypes.string,
-  objectFileGroupId: PropTypes.string,
+  imageGroupId: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 }

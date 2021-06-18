@@ -35,6 +35,7 @@ module.exports = {
   values: {
     display: 'inline-block',
     marginLeft: 2,
+    py: '5px',
     width: 'auto',
     '& button': {
       verticalAlign: 'bottom',
