@@ -74,40 +74,54 @@ const AllCollections = ({ location }) => {
     }
 
     const abortController = new AbortController()
-    const query = `query {
-        listItemsBySourceSystem(id: "ALEPH", limit: 1000) {
-          items {
-            id
-            title
-            linkToSource
-            partiallyDigitized
+
+    const fetchPage = async (allItemsArr = [], nextToken) => {
+      const query = `query {
+          listItemsBySourceSystem(id: "ALEPH", limit: 1000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+            items {
+              id
+              title
+              linkToSource
+              partiallyDigitized
+            }
+            nextToken
           }
         }
-      }
-    `
-    fetch(
-      graphqlApiUrl,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query }),
-      })
-      .then(result => {
-        return result.json()
-      })
-      .then((result) => {
-        setAlephContent(result.data.listItemsBySourceSystem.items)
-        setAlephStatus(fetchStatus.SUCCESS)
-      })
-      .catch((result) => {
-        setErrorMsg(result.error)
-        setAlephStatus(fetchStatus.ERROR)
-      })
+      `
+      return fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          allItemsArr = allItemsArr.concat(result.data.listItemsBySourceSystem.items)
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listItemsBySourceSystem.nextToken
+          if (nextToken) {
+            allItemsArr = await fetchPage(allItemsArr, nextToken)
+          } else {
+            setAlephContent(allItemsArr)
+            setAlephStatus(fetchStatus.SUCCESS)
+          }
+          return allItemsArr
+        })
+        .catch((result) => {
+          setErrorMsg(result.error)
+          setAlephStatus(fetchStatus.ERROR)
+        })
+    }
+    fetchPage()
+
     return () => {
       abortController.abort()
     }
