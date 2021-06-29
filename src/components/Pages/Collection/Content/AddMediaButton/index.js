@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { Button } from 'theme-ui'
 import AddMediaModal from './AddMediaModal'
 
-const AddMediaButton = ({ itemId, selectedImageUrl, objectFileGroupId, itemTitle, updateItemFunction }) => {
+const AddMediaButton = ({ itemId, selectedImageUrl, mediaGroupId, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   const callBackOnClick = (selected) => {
     setModalOpen(false)
-    // updateItemFunction({ itemId: itemId, generalDefaultFilePath: selected.id, generalObjectFileGroupId: selected.objectFileGroupId })
+    // updateItemFunction({ itemId: itemId, generalDefaultFilePath: selected.id, generalMediaGroupId: selected.mediaGroupId })
   }
 
   return (
@@ -31,7 +31,7 @@ AddMediaButton.propTypes = {
   itemId: PropTypes.string.isRequired,
   selectedImageUrl: PropTypes.string,
   itemTitle: PropTypes.string,
-  objectFileGroupId: PropTypes.string,
+  mediaGroupId: PropTypes.string,
   updateItemFunction: PropTypes.func.isRequired,
 }
 

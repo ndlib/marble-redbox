@@ -11,67 +11,70 @@ import {
 
 import Select from 'react-select'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
-// import { useMediaGroupContext } from 'context/MediaGroupContext'
+import { useImageGroupContext } from 'context/ImageGroupContext'
+import { useMediaGroupContext } from 'context/MediaGroupContext'
 import ActionModal from 'components/Layout/ActionModal'
 import { compareStrings } from 'utils/general'
 
 import sx from './sx'
 
-const AddMediaModal = ({ headerText, onSave, onClose }) => {
-  const { directories } = useDirectoriesContext()
-  // const { mediaGroup, setMediaGroup } = useMediaGroupContext()
-  const [overrideEnabled, setOverrideEnabled] = useState(false)
+/* eslint-disable complexity */
+const AddMediaModal = ({ headerText, imageGroupId, mediaGroupId, onSave, onClose }) => {
+  const { imageDirectories, mediaDirectories } = useDirectoriesContext()
+  const { mediaGroup, setMediaGroup } = useMediaGroupContext()
+  const { imageGroup, setImageGroup } = useImageGroupContext()
 
-  const handleDirectorySelect = (selection) => {
+  const handleImageBaseSelect = (selection) => {
     // TODO: Do stuff
     console.log('selected value:', selection)
-    // setSelectedBaseSearch(selectedOptions)
-    // setImageGroup(selectedOptions?.value)
+    setSelectedImageBase(selection)
+    setImageGroup(selection?.value)
     // setSecondBaseSearch(null)
   }
 
-  const handleMediaGroupSelect = (selection) => {
-    // TODO: Do stuff
-    console.log('selected value:', selection)
-  }
+  const mediaGroupOptions = []
+  Object.keys(mediaDirectories).forEach((directory) => {
+    mediaGroupOptions.push({ value: directory, label: directory })
+  })
+  mediaGroupOptions.sort((a, b) => compareStrings(a.value, b.value))
 
   const baseSearchOptions = []
-  Object.keys(directories).forEach((directory) => {
+  Object.keys(imageDirectories).forEach((directory) => {
     baseSearchOptions.push({ value: directory, label: directory })
   })
   baseSearchOptions.sort((a, b) => compareStrings(a.value, b.value))
 
-  const mediaGroupOptions = [
-    { value: 'test', label: 'Test' },
-    { value: 'foo', label: 'Foo' },
-  ]
+  // if we are editing an existing imageGroupId parse it and preset values
+  let defaultBaseSearch = 'none'
+  if (imageGroupId) {
+    const split = imageGroupId.split('-')
+    if (split[0]) {
+      defaultBaseSearch = split[0]
+    }
+  } else if (imageGroup) {
+    // recall the value from the last usage of the form. if there is one.
+    defaultBaseSearch = imageGroup
+  }
+
+  const [selectedImageBase, setSelectedImageBase] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
+  const [overrideEnabled, setOverrideEnabled] = useState(false)
+  const [selectedImageGroup, setSelectedImageGroup] = useState(imageGroupId ? { value: imageGroupId, label: imageGroupId } : null)
+  const [imageGroupOptions, setImageGroupOptions] = useState([])
 
   return (
     <ActionModal contentLabel={headerText} closeFunc={onClose} fullscreen isOpen>
       <Box as='form' onSubmit={onSave}>
-        <Container sx={sx.formGroup}>
-          <Heading as='h3'>Hierarchical Group</Heading>
-          <Select
-            name='hierarchicalGroupOptions'
-            className='basic-single'
-            classNamePrefix='select'
-            // defaultValue={selectedBaseSearch}
-            isClearable
-            isSearchable
-            onChange={handleDirectorySelect}
-            options={baseSearchOptions}
-          />
-        </Container>
         <Container sx={sx.formGroup}>
           <Heading as='h3'>Media Group</Heading>
           <Select
             name='mediaGroupOptions'
             className='basic-single'
             classNamePrefix='select'
+            defaultValue={mediaGroup}
             isClearable
             isSearchable
             options={mediaGroupOptions}
-            onChange={handleMediaGroupSelect}
+            onChange={setMediaGroup}
           />
         </Container>
         <Container sx={sx.formGroup}>
@@ -93,11 +96,24 @@ const AddMediaModal = ({ headerText, onSave, onClose }) => {
                 name='imageHierarchicalOptions'
                 className='basic-single'
                 classNamePrefix='select'
-                // defaultValue={selectedBaseSearch}
+                defaultValue={selectedImageBase}
                 isClearable
                 isSearchable
-                onChange={handleDirectorySelect}
+                onChange={handleImageBaseSelect}
                 options={baseSearchOptions}
+              />
+            </Container>
+            <Container sx={sx.formGroup}>
+              <Heading as='h3'>Image Group</Heading>
+              <Select
+                name='imageGroupOptions'
+                className='basic-single'
+                classNamePrefix='select'
+                defaultValue={selectedImageGroup}
+                isClearable
+                isSearchable
+                options={imageGroupOptions}
+                onChange={setSelectedImageGroup}
               />
             </Container>
           </>
@@ -109,6 +125,8 @@ const AddMediaModal = ({ headerText, onSave, onClose }) => {
 
 AddMediaModal.propTypes = {
   headerText: PropTypes.string,
+  imageGroupId: PropTypes.string,
+  mediaGroupId: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 }

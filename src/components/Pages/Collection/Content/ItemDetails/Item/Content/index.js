@@ -50,7 +50,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
               removeImageFunction={removeImageFunction}
             >
               <DefaultImageButton
-                selectedImageUrl={thumbnail}
+                selectedImage={defaultImage}
                 imageGroupId={item.imageGroupId}
                 itemTitle={item.title}
                 collectionId={item.collectionId}
@@ -59,7 +59,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
               />
               <AddMediaButton
                 updateItemFunction={updateItemFunction}
-                objectFileGroupId={item.objectFileGroupId}
+                mediaGroupId={item.mediaGroupId}
                 imageUrl={thumbnail}
                 itemTitle={item.title}
                 collectionId={item.collectionId}
@@ -93,6 +93,7 @@ Content.propTypes = {
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
     imageGroupId: PropTypes.string,
+    mediaGroupId: PropTypes.string,
     collectionId: PropTypes.string.isRequired,
     defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,

@@ -15,6 +15,7 @@ const collectionGrapgqlQuery = (id) => {
       title
       level
       imageGroupId
+      mediaGroupId
       collectionId
       defaultImage {
         mediaServer
@@ -25,6 +26,13 @@ const collectionGrapgqlQuery = (id) => {
       copyrightUrl
       partiallyDigitized
       images {
+        items {
+          id
+          mediaServer
+          mediaResourceId
+        }
+      }
+      media {
         items {
           id
           mediaServer

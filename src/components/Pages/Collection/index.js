@@ -20,10 +20,11 @@ export const fetchStatus = {
 const Collection = ({ id, location }) => {
   const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
   const [collectionNeedsReloaded, setCollectionNeedsReloaded] = useState(1)
-  const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
+  const [imageDirectoriesStatus, setImageDirectoriesStatus] = useState(fetchStatus.FETCHING)
+  const [mediaDirectoriesStatus, setMediaDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
   const { setCollection } = useCollectionContext()
-  const { setDirectories } = useDirectoriesContext()
+  const { setImageDirectories, setMediaDirectories } = useDirectoriesContext()
   const { graphqlApiUrl } = useAPIContext()
   const { token } = useAuthContext()
 
@@ -48,7 +49,7 @@ const Collection = ({ id, location }) => {
     }
   }, [id, location, collectionNeedsReloaded, setCollection, graphqlApiUrl, token])
 
-  // Directories fetch - these are only the ones added to the collection, NOT the full list
+  // Fetch image groups
   useEffect(() => {
     if (!token) {
       return
@@ -88,17 +89,69 @@ const Collection = ({ id, location }) => {
         return result.json()
       })
       .then((data) => {
-        setDirectories(getDirectories(data.data.listImageGroupsForS3.items))
-        setDirectoriesStatus(fetchStatus.SUCCESS)
+        setImageDirectories(mapImageDirectories(data.data.listImageGroupsForS3.items))
+        setImageDirectoriesStatus(fetchStatus.SUCCESS)
       })
       .catch((error) => {
         setErrorMsg(error)
-        setDirectoriesStatus(fetchStatus.ERROR)
+        setImageDirectoriesStatus(fetchStatus.ERROR)
       })
     return () => {
       abortController.abort()
     }
-  }, [token, graphqlApiUrl, setDirectories])
+  }, [token, graphqlApiUrl, setImageDirectories])
+
+  // Fetch media groups
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+    const query = ` {
+      listMediaGroupsForS3(limit: 10000) {
+        items {
+          mediaGroupId
+          media {
+            items {
+              mediaGroupId
+              id
+              filePath
+              mediaServer
+              mediaResourceId
+            }
+          }
+        }
+      }
+    }
+    `
+    fetch(
+      graphqlApiUrl,
+      {
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        signal: abortController.signal,
+        mode: 'cors',
+        body: JSON.stringify({ query: query }),
+      })
+      .then(result => {
+        return result.json()
+      })
+      .then((data) => {
+        setMediaDirectories(mapMediaDirectories(data.data.listMediaGroupsForS3.items))
+        setMediaDirectoriesStatus(fetchStatus.SUCCESS)
+      })
+      .catch((error) => {
+        setErrorMsg(error)
+        setMediaDirectoriesStatus(fetchStatus.ERROR)
+      })
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setMediaDirectories])
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
@@ -154,7 +207,7 @@ const Collection = ({ id, location }) => {
     }
   }
 
-  const allStatuses = [collectionStatus, directoriesStatus]
+  const allStatuses = [collectionStatus, imageDirectoriesStatus, mediaDirectoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR) || errorMsg) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
@@ -164,7 +217,7 @@ const Collection = ({ id, location }) => {
   }
 }
 
-const getDirectories = (data) => {
+const mapImageDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
     const split = d.imageGroupId.split('-')
@@ -182,6 +235,17 @@ const getDirectories = (data) => {
     }
     // d.sortId = d.id.replace(d.imageGroupId, '')
     // directories[baseDirectoryGroup][d.imageGroupId].images.push(d)
+  })
+  return directories
+}
+
+const mapMediaDirectories = (data) => {
+  const directories = {}
+  data.forEach(d => {
+    directories[d.mediaGroupId] = {
+      id: d.mediaGroupId,
+      media: d.media.items,
+    }
   })
   return directories
 }

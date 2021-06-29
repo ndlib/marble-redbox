@@ -6,6 +6,7 @@ import APIContext, { initialContext as initialApiContext } from 'context/APICont
 import CollectionContext, { initialContext as initialCollectionContext } from 'context/CollectionContext'
 import DirectoriesContext, { initialContext as initialDirectoriesContext } from 'context/DirectoriesContext'
 import ImageGroupContext, { initialContext as initialImageGroupContext } from 'context/ImageGroupContext'
+import MediaGroupContext, { initialContext as initialMediaGroupContext } from 'context/MediaGroupContext'
 import PrivateRoute from 'components/Layout/PrivateRoute'
 import Layout from 'components/Layout'
 import AllCollections from 'components/Pages/AllCollections'
@@ -47,34 +48,29 @@ const CollectionPages = ({ location }) => {
     setCollection: setCollection,
   })
 
-  const setImageGroup = (imageGroup) => {
-    setImageGroupContext({
-      ...imageGroupContext,
-      imageGroup: imageGroup,
-    })
-  }
-  const [imageGroupContext, setImageGroupContext] = useState({
+  const [imageGroup, setImageGroup] = useState(initialImageGroupContext.imageGroup)
+  const imageGroupContext = {
     ...initialImageGroupContext,
+    imageGroup: imageGroup,
     setImageGroup: setImageGroup,
-  })
+  }
 
-  const setDirectories = (directories) => {
-    setDirectoriesContext({
-      ...directoriesContext,
-      directories: directories,
-    })
+  const [mediaGroup, setMediaGroup] = useState(initialMediaGroupContext.mediaGroup)
+  const mediaGroupContext = {
+    ...initialMediaGroupContext,
+    mediaGroup: mediaGroup,
+    setMediaGroup: setMediaGroup,
   }
-  const setLastAccessedDirectory = (lastAccessedDirectory) => {
-    setDirectoriesContext({
-      ...directoriesContext,
-      lastAccessedDirectory: lastAccessedDirectory,
-    })
-  }
-  const [directoriesContext, setDirectoriesContext] = useState({
+
+  const [imageDirectories, setImageDirectories] = useState(initialDirectoriesContext.imageDirectories)
+  const [mediaDirectories, setMediaDirectories] = useState(initialDirectoriesContext.mediaDirectories)
+  const directoriesContext = {
     ...initialDirectoriesContext,
-    setDirectories: setDirectories,
-    setLastAccessedDirectory: setLastAccessedDirectory,
-  })
+    imageDirectories: imageDirectories,
+    mediaDirectories: mediaDirectories,
+    setImageDirectories: setImageDirectories,
+    setMediaDirectories: setMediaDirectories,
+  }
 
   return (
     <Layout>
@@ -82,10 +78,12 @@ const CollectionPages = ({ location }) => {
         <CollectionContext.Provider value={collectionContext}>
           <DirectoriesContext.Provider value={directoriesContext}>
             <ImageGroupContext.Provider value={imageGroupContext}>
-              <Router basepath='/collection'>
-                <PrivateRoute path='/' component={AllCollections} location={location} />
-                <PrivateRoute path='/:id' component={Collection} location={location} />
-              </Router>
+              <MediaGroupContext.Provider value={mediaGroupContext}>
+                <Router basepath='/collection'>
+                  <PrivateRoute path='/' component={AllCollections} location={location} />
+                  <PrivateRoute path='/:id' component={Collection} location={location} />
+                </Router>
+              </MediaGroupContext.Provider>
             </ImageGroupContext.Provider>
           </DirectoriesContext.Provider>
         </CollectionContext.Provider>
