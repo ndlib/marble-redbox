@@ -9,7 +9,6 @@ import ImageSelection from '../../ImageSelection'
 
 const DefaultImageModal = ({ defaultSelected, headerText, imageGroupId, onSave, onClose }) => {
   const [selected, setSelected] = useState(defaultSelected)
-  console.log('selected', selected)
   return (
     <ActionModal
       isOpen

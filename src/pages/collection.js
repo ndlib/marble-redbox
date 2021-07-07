@@ -63,13 +63,19 @@ const CollectionPages = ({ location }) => {
   }
 
   const [imageDirectories, setImageDirectories] = useState(initialDirectoriesContext.imageDirectories)
+  const [imageDirectoriesReferenced, setImageDirectoriesReferenced] = useState([])
   const [mediaDirectories, setMediaDirectories] = useState(initialDirectoriesContext.mediaDirectories)
+  const [mediaDirectoriesReferenced, setMediaDirectoriesReferenced] = useState([])
   const directoriesContext = {
     ...initialDirectoriesContext,
-    imageDirectories: imageDirectories,
-    mediaDirectories: mediaDirectories,
-    setImageDirectories: setImageDirectories,
-    setMediaDirectories: setMediaDirectories,
+    imageDirectories,
+    imageDirectoriesReferenced,
+    mediaDirectories,
+    mediaDirectoriesReferenced,
+    setImageDirectories,
+    setImageDirectoriesReferenced,
+    setMediaDirectories,
+    setMediaDirectoriesReferenced,
   }
 
   return (

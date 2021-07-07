@@ -24,7 +24,12 @@ const Collection = ({ id, location }) => {
   const [mediaDirectoriesStatus, setMediaDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
   const { setCollection } = useCollectionContext()
-  const { setImageDirectories, setMediaDirectories } = useDirectoriesContext()
+  const {
+    setImageDirectories,
+    setImageDirectoriesReferenced,
+    setMediaDirectories,
+    setMediaDirectoriesReferenced,
+  } = useDirectoriesContext()
   const { graphqlApiUrl } = useAPIContext()
   const { token } = useAuthContext()
 
@@ -56,46 +61,60 @@ const Collection = ({ id, location }) => {
     }
 
     const abortController = new AbortController()
-    const query = ` {
-      listImageGroupsForS3(limit: 10000) {
-        items {
-          imageGroupId
-          images {
-            items {
-              imageGroupId
-              id
-              filePath
-              mediaServer
-              mediaResourceId
+
+    const fetchImageGroups = async (imageGroups = {}, nextToken) => {
+      const query = ` {
+        listImageGroupsForS3(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            imageGroupId
+            images {
+              items {
+                imageGroupId
+                id
+                filePath
+                mediaServer
+                mediaResourceId
+              }
             }
           }
+          nextToken
         }
       }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          Object.assign(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listImageGroupsForS3.nextToken
+          if (nextToken) {
+            imageGroups = await fetchImageGroups(imageGroups, nextToken)
+          } else {
+            setImageDirectories(imageGroups)
+            setImageDirectoriesStatus(fetchStatus.SUCCESS)
+          }
+          return imageGroups
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+          setImageDirectoriesStatus(fetchStatus.ERROR)
+        })
     }
-    `
-    fetch(
-      graphqlApiUrl,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST', // Just a default. Can be overridden
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query }),
-      })
-      .then(result => {
-        return result.json()
-      })
-      .then((data) => {
-        setImageDirectories(mapImageDirectories(data.data.listImageGroupsForS3.items))
-        setImageDirectoriesStatus(fetchStatus.SUCCESS)
-      })
-      .catch((error) => {
-        setErrorMsg(error)
-        setImageDirectoriesStatus(fetchStatus.ERROR)
-      })
+    fetchImageGroups()
+
     return () => {
       abortController.abort()
     }
@@ -152,6 +171,61 @@ const Collection = ({ id, location }) => {
       abortController.abort()
     }
   }, [token, graphqlApiUrl, setMediaDirectories])
+
+  // Fetch list of image groups that are already used
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+
+    const fetchReferencedImageGroups = async (imageGroupIds = [], nextToken) => {
+      const query = ` {
+        listImageGroupsReferenced(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            imageGroupId
+          }
+          nextToken
+        }
+      }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          imageGroupIds = imageGroupIds.concat(result.data.listImageGroupsReferenced.items.map(item => item.imageGroupId))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listImageGroupsReferenced.nextToken
+          if (nextToken) {
+            imageGroupIds = await fetchReferencedImageGroups(imageGroupIds, nextToken)
+          } else {
+            setImageDirectoriesReferenced(imageGroupIds)
+          }
+          return imageGroupIds
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+        })
+    }
+    fetchReferencedImageGroups()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setImageDirectoriesReferenced])
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()

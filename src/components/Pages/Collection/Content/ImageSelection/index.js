@@ -15,8 +15,8 @@ import Select from 'react-select'
 import sx from './sx'
 
 // eslint-disable-next-line complexity
-const ImageSelection = ({ selected, onSelect, imageGroupId }) => {
-  const { imageDirectories } = useDirectoriesContext()
+const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) => {
+  const { imageDirectories, imageDirectoriesReferenced } = useDirectoriesContext()
   const { imageGroup, setImageGroup } = useImageGroupContext()
 
   // search and sort all the options for the top select box.
@@ -41,22 +41,34 @@ const ImageSelection = ({ selected, onSelect, imageGroupId }) => {
   // search base is the values for the top search box
   const [selectedBaseSearch, setSelectedBaseSearch] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
   // second search are the values for the second search box
-  const [selectedSecondSearch, setSecondBaseSearch] = useState(imageGroupId ? { value: imageGroupId, label: imageGroupId } : null)
+  const [selectedSecondSearch, setSelectedSecondSearch] = useState(imageGroupId ? { value: imageGroupId, label: imageGroupId } : null)
   // all options within the selected image group BEFORE applying search filter
   const [imageOptions, setImageOptions] = useState([])
   // filtered options are the individual files to display AFTER applying search filter
   const [filteredOptions, setFilteredOptions] = useState()
   const searchFields = ['id', 'filePath', 'imageGroupId']
 
+  // eslint-disable-next-line complexity
   const secondSearchOptions = useMemo(() => {
     const result = []
     if (imageDirectories && selectedBaseSearch) {
       for (const [key] of Object.entries(imageDirectories[selectedBaseSearch.value])) {
-        result.push({ value: key, label: key })
+        // Don't include image groups that have already been used unless it is the one used by this item,
+        // or if the prop showUsedGroups is set to true
+        if (key === imageGroupId || showUsedGroups || !imageDirectoriesReferenced.includes(key)) {
+          result.push({ value: key, label: key })
+        }
       }
     }
     return result
-  }, [imageDirectories, selectedBaseSearch])
+  }, [imageDirectories, selectedBaseSearch, imageGroupId, imageDirectoriesReferenced])
+
+  const onImageSetSelected = (selectedOption) => {
+    setSelectedBaseSearch(selectedOption)
+    setImageGroup(selectedOption?.value)
+    setSelectedSecondSearch(null)
+    setImageOptions([])
+  }
 
   useEffect(() => {
     if (!imageDirectories || !selectedBaseSearch) {
@@ -96,11 +108,7 @@ const ImageSelection = ({ selected, onSelect, imageGroupId }) => {
         defaultValue={selectedBaseSearch}
         isClearable
         isSearchable
-        onChange={selectedOptions => {
-          setSelectedBaseSearch(selectedOptions)
-          setImageGroup(selectedOptions?.value)
-          setSecondBaseSearch(null)
-        }}
+        onChange={onImageSetSelected}
         name='baseSearchOptions'
         options={baseSearchOptions}
       />
@@ -109,10 +117,10 @@ const ImageSelection = ({ selected, onSelect, imageGroupId }) => {
       <Select
         className='basic-single'
         classNamePrefix='select'
-        defaultValue={selectedSecondSearch}
+        value={selectedSecondSearch}
         isClearable
         isSearchable
-        onChange={setSecondBaseSearch}
+        onChange={setSelectedSecondSearch}
         name='secondSearchOption'
         options={secondSearchOptions}
       />
@@ -154,6 +162,7 @@ ImageSelection.propTypes = {
   }),
   onSelect: PropTypes.func,
   imageGroupId: PropTypes.string,
+  showUsedGroups: PropTypes.bool,
 }
 
 export default ImageSelection
