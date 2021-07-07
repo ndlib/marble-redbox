@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
-  Checkbox,
 } from 'theme-ui'
 import EditMetadataForm from '../../../EditMetadataForm'
 import DefaultImage from '../../../DefaultImage'
@@ -60,7 +59,8 @@ const Content = ({ item, depth, updateItemFunction }) => {
               <AddMediaButton
                 updateItemFunction={updateItemFunction}
                 mediaGroupId={item.mediaGroupId}
-                imageUrl={thumbnail}
+                imageGroupId={item.imageGroupId}
+                selectedImage={defaultImage}
                 itemTitle={item.title}
                 collectionId={item.collectionId}
                 itemId={item.id}

@@ -61,7 +61,7 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
       }
     }
     return result
-  }, [imageDirectories, selectedBaseSearch, imageGroupId, imageDirectoriesReferenced])
+  }, [imageDirectories, selectedBaseSearch, imageGroupId, imageDirectoriesReferenced, showUsedGroups])
 
   const onImageSetSelected = (selectedOption) => {
     setSelectedBaseSearch(selectedOption)

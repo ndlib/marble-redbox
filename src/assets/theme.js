@@ -78,7 +78,7 @@ module.exports = {
       fontFamily: 'body',
       lineHeight: 'body',
       fontWeight: 'body',
-      '&.ReactModal__Body--open': {
+      '& .ReactModal__Body--open': {
         overflowY: 'hidden', // Prevents page body from scrolling while modal is open
       },
       '& .ReactModal__Overlay': {
