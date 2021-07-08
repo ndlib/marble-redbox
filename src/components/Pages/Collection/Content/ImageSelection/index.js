@@ -32,7 +32,7 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
   let defaultBaseSearch = 'none'
   if (imageGroupId) {
     const split = imageGroupId.split('-')
-    if (split[0]) {
+    if (split.length > 1) {
       defaultBaseSearch = split[0]
     }
   } else if (imageGroup) {

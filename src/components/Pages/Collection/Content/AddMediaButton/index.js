@@ -6,24 +6,24 @@ import AddMediaModal from './AddMediaModal'
 const AddMediaButton = ({ itemId, mediaGroupId, selectedImage, imageGroupId, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const callBackOnClick = (selectedMedia, selectedImage) => {
+  const callBackOnClick = (selectedMedia) => {
     setModalOpen(false)
-    // updateItemFunction({ itemId: itemId, generalDefaultFilePath: selected.id, generalMediaGroupId: selected.mediaGroupId })
+    updateItemFunction({ itemId: itemId, generalMediaGroupId: selectedMedia.id })
   }
 
   return (
     <>
       <Button onClick={() => setModalOpen(true)}>
-        Add Media
+        Set Media Group
       </Button>
       {modalOpen && (
         <AddMediaModal
-          headerText={`Add media to ${itemTitle}`}
+          headerText={`Set media group for ${itemTitle}`}
           mediaGroupId={mediaGroupId}
           imageGroupId={imageGroupId}
           defaultImage={selectedImage}
           onClose={() => setModalOpen(false)}
-          onSave={(newValue) => callBackOnClick(newValue)}
+          onSave={callBackOnClick}
         />
       )}
     </>

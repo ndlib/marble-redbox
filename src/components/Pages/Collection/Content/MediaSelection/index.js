@@ -1,22 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Box,
   Container,
   Heading,
-  Label,
-  Radio,
 } from 'theme-ui'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 import { useMediaGroupContext } from 'context/MediaGroupContext'
-import SearchFilter from 'components/Shared/SearchFilter'
 import { compareStrings } from 'utils/general'
 import Select from 'react-select'
 
 import sx from './sx'
 
 // eslint-disable-next-line complexity
-const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
+const MediaSelection = ({ onSelect, mediaGroupId }) => {
   const { mediaDirectories } = useDirectoriesContext()
   const { mediaGroup, setMediaGroup } = useMediaGroupContext()
 
@@ -31,7 +27,7 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
   let defaultBaseSearch = 'none'
   if (mediaGroupId) {
     const split = mediaGroupId.split('-')
-    if (split[0]) {
+    if (split.length > 1) {
       defaultBaseSearch = split[0]
     }
   } else if (mediaGroup) {
@@ -43,11 +39,8 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
   const [selectedBaseSearch, setSelectedBaseSearch] = useState(baseSearchOptions.find(directory => directory.value === defaultBaseSearch))
   // second search are the values for the second search box
   const [selectedSecondSearch, setSelectedSecondSearch] = useState(mediaGroupId ? { value: mediaGroupId, label: mediaGroupId } : null)
-  // all options within the selected media group BEFORE applying search filter
+  // all files within the selected media group
   const [mediaOptions, setMediaOptions] = useState([])
-  // filtered options are the individual files to display AFTER applying search filter
-  const [filteredOptions, setFilteredOptions] = useState([])
-  const searchFields = ['id', 'filePath', 'mediaGroupId']
 
   // eslint-disable-next-line complexity
   const secondSearchOptions = useMemo(() => {
@@ -60,11 +53,18 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
     return result
   }, [mediaDirectories, selectedBaseSearch])
 
-  const onMedaSetSelected = (selectedOption) => {
+  const onMediaSetSelected = (selectedOption) => {
     setSelectedBaseSearch(selectedOption)
     setMediaGroup(selectedOption?.value)
     setSelectedSecondSearch(null)
     setMediaOptions([])
+  }
+
+  const onMediaGroupSelected = (selection) => {
+    setSelectedSecondSearch(selection)
+    if (selectedBaseSearch && selection) {
+      onSelect(mediaDirectories[selectedBaseSearch.value][selection.value])
+    }
   }
 
   useEffect(() => {
@@ -94,14 +94,6 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
     }
   }, [selectedSecondSearch, mediaOptions, setMediaOptions])
 
-  useEffect(() => {
-    // If the newly selected media group doesn't contain the selected option, deselect
-    const hasSelected = selected && mediaOptions.some(opt => opt.id === selected.id)
-    if (!selectedSecondSearch || (!hasSelected && mediaOptions.length > 0)) {
-      onSelect(null)
-    }
-  }, [selectedSecondSearch, mediaOptions, selected, onSelect])
-
   return (
     <>
       <Container sx={sx.formGroup}>
@@ -112,7 +104,7 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
           defaultValue={selectedBaseSearch}
           isClearable
           isSearchable
-          onChange={onMedaSetSelected}
+          onChange={onMediaSetSelected}
           name='baseSearchOptions'
           options={baseSearchOptions}
         />
@@ -125,31 +117,19 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
           value={selectedSecondSearch}
           isClearable
           isSearchable
-          onChange={setSelectedSecondSearch}
+          onChange={onMediaGroupSelected}
           name='secondSearchOption'
           options={secondSearchOptions}
         />
       </Container>
       {mediaOptions.length > 0 && (
         <Container sx={sx.formGroup}>
-          <Heading as='h3'><Label htmlFor='mediaModalSelect'>Select Media</Label></Heading>
-          <SearchFilter id='mediaSearch' data={mediaOptions} fields={searchFields} onChange={setFilteredOptions} />
-          <Box>
-            {filteredOptions.map((opt) => {
-              return (
-                <Label key={opt.id} sx={sx.option}>
-                  <Radio
-                    name='mediaModalSelect'
-                    id='mediaModalSelect'
-                    value={opt}
-                    defaultChecked={opt.id === selected?.id}
-                    onChange={() => onSelect(opt)}
-                  />
-                  {opt.id}
-                </Label>
-              )
-            })}
-          </Box>
+          <Heading as='h3'>Media Files:</Heading>
+          <ul>
+            {mediaOptions.map(opt => (
+              <li key={opt.id}>{opt.filePath}</li>
+            ))}
+          </ul>
         </Container>
       )}
     </>
@@ -157,9 +137,6 @@ const MediaSelection = ({ selected, onSelect, mediaGroupId }) => {
 }
 
 MediaSelection.propTypes = {
-  selected: PropTypes.shape({
-    id: PropTypes.string,
-  }),
   onSelect: PropTypes.func,
   mediaGroupId: PropTypes.string,
 }

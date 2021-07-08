@@ -296,7 +296,7 @@ const Collection = ({ id, location }) => {
     }
   }, [token, graphqlApiUrl, setMediaDirectoriesReferenced])
 
-  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalMediaGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
     let query = ''
     if (typeof generalPartiallyDigitized !== 'undefined') {
@@ -304,6 +304,16 @@ const Collection = ({ id, location }) => {
           savePartiallyDigitizedForWebsite(
             itemId: "${itemId}",
             partiallyDigitized: ${generalPartiallyDigitized},
+          ) {
+            id
+          }
+        }
+        `
+    } else if (typeof generalMediaGroupId !== 'undefined') {
+      query = `mutation {
+          saveMediaGroupForWebsite(
+            itemId: "${itemId}",
+            mediaGroupId: "${generalMediaGroupId}",
           ) {
             id
           }

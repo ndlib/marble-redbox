@@ -8,6 +8,7 @@ import DefaultImage from '../../../DefaultImage'
 import DefaultImageButton from '../../../DefaultImageButton'
 import AddMediaButton from '../../../AddMediaButton'
 import ItemHeading from '../ItemHeading'
+import MediaList from '../MediaList'
 import typy from 'typy'
 import Item from '../'
 
@@ -25,6 +26,13 @@ const Content = ({ item, depth, updateItemFunction }) => {
       itemId: item.id,
       generalDefaultFilePath: null,
       generalImageGroupId: '',
+    })
+  }
+
+  const removeMediaFunction = () => {
+    return updateItemFunction({
+      itemId: item.id,
+      generalMediaGroupId: '',
     })
   }
 
@@ -66,6 +74,7 @@ const Content = ({ item, depth, updateItemFunction }) => {
                 itemId={item.id}
               />
             </DefaultImage>
+            <MediaList media={item.media?.items} removeMediaFunction={removeMediaFunction} />
           </Box>
         )}
         {typy(item, 'children.items').safeArray.map((child, idx) => (
@@ -98,6 +107,7 @@ Content.propTypes = {
     defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
     items: PropTypes.array,
+    media: PropTypes.array,
   }).isRequired,
   depth: PropTypes.number,
   updateItemFunction: PropTypes.func.isRequired,

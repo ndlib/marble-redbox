@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Heading,
-  Checkbox,
-  Container,
-  Label,
+  // Heading,
+  // Checkbox,
+  // Container,
+  // Label,
   Divider,
 } from 'theme-ui'
 
@@ -17,10 +17,11 @@ import MediaSelection from '../../MediaSelection'
 import sx from './sx'
 
 const AddMediaModal = ({ headerText, mediaGroupId, imageGroupId, defaultImage, onSave, onClose }) => {
-  const [selectedMedia, setSelectedMedia] = useState()
+  const [selectedMedia, setSelectedMedia] = useState(mediaGroupId)
   const [overrideEnabled, setOverrideEnabled] = useState(false)
   const [selectedImage, setSelectedImage] = useState(defaultImage)
 
+  /* Image override disabled because we don't have a way to save it
   const toggleImageOverride = () => {
     const willBeEnabled = !overrideEnabled
     setOverrideEnabled(willBeEnabled)
@@ -29,14 +30,15 @@ const AddMediaModal = ({ headerText, mediaGroupId, imageGroupId, defaultImage, o
       setSelectedImage(defaultImage)
     }
   }
+  */
 
   return (
     <ActionModal contentLabel={headerText} closeFunc={onClose} fullscreen isOpen>
       <MediaSelection
-        selected={selectedMedia}
         onSelect={setSelectedMedia}
         mediaGroupId={mediaGroupId}
       />
+      {/*
       <Container sx={sx.formGroup}>
         <Label>
           <Heading as='h3'>Override Default Image</Heading><br />
@@ -47,6 +49,7 @@ const AddMediaModal = ({ headerText, mediaGroupId, imageGroupId, defaultImage, o
           />
         </Label>
       </Container>
+      */}
       {overrideEnabled && (
         <>
           <Divider sx={sx.divider} />
@@ -60,7 +63,7 @@ const AddMediaModal = ({ headerText, mediaGroupId, imageGroupId, defaultImage, o
       )}
       <ActionButtons>
         <Button
-          onClick={() => onSave(selectedMedia, overrideEnabled ? selectedImage : null)}
+          onClick={() => onSave(selectedMedia)}
           disabled={!selectedMedia || (overrideEnabled && !selectedImage)}
         >
           Save
