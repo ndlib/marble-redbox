@@ -6,7 +6,7 @@ import AddMediaModal from './AddMediaModal'
 const AddMediaButton = ({ itemId, mediaGroupId, selectedImage, imageGroupId, itemTitle, updateItemFunction }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const callBackOnClick = (selected) => {
+  const callBackOnClick = (selectedMedia, selectedImage) => {
     setModalOpen(false)
     // updateItemFunction({ itemId: itemId, generalDefaultFilePath: selected.id, generalMediaGroupId: selected.mediaGroupId })
   }

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
+  Container,
+  Heading,
   Label,
   Radio,
 } from 'theme-ui'
@@ -45,7 +47,7 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
   // all options within the selected image group BEFORE applying search filter
   const [imageOptions, setImageOptions] = useState([])
   // filtered options are the individual files to display AFTER applying search filter
-  const [filteredOptions, setFilteredOptions] = useState()
+  const [filteredOptions, setFilteredOptions] = useState([])
   const searchFields = ['id', 'filePath', 'imageGroupId']
 
   // eslint-disable-next-line complexity
@@ -90,8 +92,14 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
     }
   }, [imageDirectories, secondSearchOptions, selectedBaseSearch, setSelectedBaseSearch, selectedSecondSearch])
 
+  // Clear image options if the image group has been cleared
   useEffect(() => {
-    setFilteredOptions(imageOptions)
+    if (!selectedSecondSearch && imageOptions.length) {
+      setImageOptions([])
+    }
+  }, [selectedSecondSearch, imageOptions, setImageOptions])
+
+  useEffect(() => {
     // If the newly selected image group doesn't contain the selected option, deselect
     const hasSelected = selected && imageOptions.some(opt => opt.id === selected.id)
     if (!selectedSecondSearch || (!hasSelected && imageOptions.length > 0)) {
@@ -100,33 +108,36 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
   }, [selectedSecondSearch, imageOptions, selected, onSelect])
 
   return (
-    <Box>
-      <h3>Hierarchical Image Set</h3>
-      <Select
-        className='basic-single'
-        classNamePrefix='select'
-        defaultValue={selectedBaseSearch}
-        isClearable
-        isSearchable
-        onChange={onImageSetSelected}
-        name='baseSearchOptions'
-        options={baseSearchOptions}
-      />
-
-      <h3>Image Group</h3>
-      <Select
-        className='basic-single'
-        classNamePrefix='select'
-        value={selectedSecondSearch}
-        isClearable
-        isSearchable
-        onChange={setSelectedSecondSearch}
-        name='secondSearchOption'
-        options={secondSearchOptions}
-      />
-      {(filteredOptions) ? (
-        <div>
-          <h3><Label htmlFor='imageModalSelect'>Select Default Image</Label></h3>
+    <>
+      <Container sx={sx.formGroup}>
+        <Heading as='h3'>Hierarchical Image Set</Heading>
+        <Select
+          className='basic-single'
+          classNamePrefix='select'
+          defaultValue={selectedBaseSearch}
+          isClearable
+          isSearchable
+          onChange={onImageSetSelected}
+          name='baseSearchOptions'
+          options={baseSearchOptions}
+        />
+      </Container>
+      <Container sx={sx.formGroup}>
+        <Heading as='h3'>Image Group</Heading>
+        <Select
+          className='basic-single'
+          classNamePrefix='select'
+          value={selectedSecondSearch}
+          isClearable
+          isSearchable
+          onChange={setSelectedSecondSearch}
+          name='secondSearchOption'
+          options={secondSearchOptions}
+        />
+      </Container>
+      {imageOptions.length > 0 && (
+        <Container sx={sx.formGroup}>
+          <Heading as='h3'><Label htmlFor='imageModalSelect'>Select Default Image</Label></Heading>
           <SearchFilter id='imageSearch' data={imageOptions} fields={searchFields} onChange={setFilteredOptions} />
           <Box>
             {filteredOptions.map((opt) => {
@@ -150,9 +161,9 @@ const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) =>
               )
             })}
           </Box>
-        </div>
-      ) : (null)}
-    </Box>
+        </Container>
+      )}
+    </>
   )
 }
 

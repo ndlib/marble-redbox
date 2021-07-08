@@ -127,46 +127,60 @@ const Collection = ({ id, location }) => {
     }
 
     const abortController = new AbortController()
-    const query = ` {
-      listMediaGroupsForS3(limit: 10000) {
-        items {
-          mediaGroupId
-          media {
-            items {
-              mediaGroupId
-              id
-              filePath
-              mediaServer
-              mediaResourceId
+
+    const fetchMediaGroups = async (mediaGroups = {}, nextToken) => {
+      const query = ` {
+        listMediaGroupsForS3(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            mediaGroupId
+            media {
+              items {
+                mediaGroupId
+                id
+                filePath
+                mediaServer
+                mediaResourceId
+              }
             }
           }
+          nextToken
         }
       }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          Object.assign(mediaGroups, mapMediaDirectories(result.data.listMediaGroupsForS3.items))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listMediaGroupsForS3.nextToken
+          if (nextToken) {
+            mediaGroups = await fetchMediaGroups(mediaGroups, nextToken)
+          } else {
+            setMediaDirectories(mapMediaDirectories(result.data.listMediaGroupsForS3.items))
+            setMediaDirectoriesStatus(fetchStatus.SUCCESS)
+          }
+          return mediaGroups
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+          setMediaDirectoriesStatus(fetchStatus.ERROR)
+        })
     }
-    `
-    fetch(
-      graphqlApiUrl,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query }),
-      })
-      .then(result => {
-        return result.json()
-      })
-      .then((data) => {
-        setMediaDirectories(mapMediaDirectories(data.data.listMediaGroupsForS3.items))
-        setMediaDirectoriesStatus(fetchStatus.SUCCESS)
-      })
-      .catch((error) => {
-        setErrorMsg(error)
-        setMediaDirectoriesStatus(fetchStatus.ERROR)
-      })
+    fetchMediaGroups()
+
     return () => {
       abortController.abort()
     }
@@ -226,6 +240,61 @@ const Collection = ({ id, location }) => {
       abortController.abort()
     }
   }, [token, graphqlApiUrl, setImageDirectoriesReferenced])
+
+  // Fetch list of media groups that are already used
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+
+    const fetchReferencedMediaGroups = async (mediaGroupIds = [], nextToken) => {
+      const query = ` {
+        listMediaGroupsReferenced(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            mediaGroupId
+          }
+          nextToken
+        }
+      }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          mediaGroupIds = mediaGroupIds.concat(result.data.listMediaGroupsReferenced.items.map(item => item.mediaGroupId))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listMediaGroupsReferenced.nextToken
+          if (nextToken) {
+            mediaGroupIds = await fetchReferencedMediaGroups(mediaGroupIds, nextToken)
+          } else {
+            setMediaDirectoriesReferenced(mediaGroupIds)
+          }
+          return mediaGroupIds
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+        })
+    }
+    fetchReferencedMediaGroups()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setMediaDirectoriesReferenced])
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
@@ -316,7 +385,16 @@ const mapImageDirectories = (data) => {
 const mapMediaDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
-    directories[d.mediaGroupId] = {
+    const split = d.mediaGroupId.split('-')
+    let baseDirectoryGroup = 'none'
+    if (split.length > 1) {
+      baseDirectoryGroup = split[0]
+    }
+
+    if (!directories[baseDirectoryGroup]) {
+      directories[baseDirectoryGroup] = {}
+    }
+    directories[baseDirectoryGroup][d.mediaGroupId] = {
       id: d.mediaGroupId,
       media: d.media.items,
     }

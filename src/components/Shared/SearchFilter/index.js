@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import typy from 'typy'
 import {
@@ -9,9 +9,12 @@ import {
 } from 'theme-ui'
 
 const SearchFilter = ({ id, data, fields, onChange }) => {
-  const filter = (event) => {
+  const [searchText, setSearchText] = useState('')
+
+  // Filter whenever underlying data or the search text is changed
+  useEffect(() => {
     // Split search terms on spaces for a quick-and-dirty multiterm search
-    const inputTerms = typy(event, 'target.value').safeString.toLowerCase().split(' ')
+    const inputTerms = searchText.toLowerCase().split(' ')
     const filteredList = data.filter((item) => {
       // EVERY term must be included in the search fields. They can be in different fields.
       return inputTerms.every(term => {
@@ -19,7 +22,13 @@ const SearchFilter = ({ id, data, fields, onChange }) => {
       })
     })
     onChange(filteredList)
+  }, [data, searchText]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleChangeEvent = (event) => {
+    const value = typy(event, 'target.value').safeString
+    setSearchText(value)
   }
+
   return (
     <React.Fragment>
       <Label htmlFor='search'>Search</Label>
@@ -27,7 +36,8 @@ const SearchFilter = ({ id, data, fields, onChange }) => {
         name='search'
         id={id}
         autoComplete='off'
-        onChange={filter}
+        value={searchText}
+        onChange={handleChangeEvent}
       />
     </React.Fragment>
   )
