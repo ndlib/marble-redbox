@@ -42,13 +42,14 @@ const Item = ({ item, depth }) => {
       })
   }, [token, graphqlApiUrl, id, itemNeedsReloaded])
 
-  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalMediaGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
 
     updateItemFunctionBase({
       itemId: itemId,
       generalDefaultFilePath: generalDefaultFilePath,
       generalImageGroupId: generalImageGroupId,
+      generalMediaGroupId: generalMediaGroupId,
       generalPartiallyDigitized: generalPartiallyDigitized,
       token: token,
       graphqlApiUrl: graphqlApiUrl,

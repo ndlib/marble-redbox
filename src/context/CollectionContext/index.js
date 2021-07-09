@@ -15,6 +15,7 @@ const collectionGrapgqlQuery = (id) => {
       title
       level
       imageGroupId
+      mediaGroupId
       collectionId
       defaultImage {
         mediaServer
@@ -25,6 +26,13 @@ const collectionGrapgqlQuery = (id) => {
       copyrightUrl
       partiallyDigitized
       images {
+        items {
+          id
+          mediaServer
+          mediaResourceId
+        }
+      }
+      media {
         items {
           id
           mediaServer
@@ -64,7 +72,7 @@ export const fetchAndParseCollection = (id, graphqlApiUrl, token, abortControlle
     })
 }
 
-export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized, token, graphqlApiUrl, abortController }) => {
+export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalMediaGroupId, generalPartiallyDigitized, token, graphqlApiUrl, abortController }) => {
   let query = ''
   if (typeof generalPartiallyDigitized !== 'undefined') {
     query = `mutation {
@@ -77,6 +85,16 @@ export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, general
           }
         }
         `
+  } else if (typeof generalMediaGroupId !== 'undefined') {
+    query = `mutation {
+        saveMediaGroupForWebsite(
+          itemId: "${itemId}",
+          mediaGroupId: "${generalMediaGroupId}",
+        ) {
+          id
+        }
+      }
+      `
   } else {
     query = `mutation {
           saveDefaultImageForWebsite(

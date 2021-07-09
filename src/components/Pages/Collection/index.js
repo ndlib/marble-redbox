@@ -20,10 +20,16 @@ export const fetchStatus = {
 const Collection = ({ id, location }) => {
   const [collectionStatus, setCollectionStatus] = useState(fetchStatus.FETCHING)
   const [collectionNeedsReloaded, setCollectionNeedsReloaded] = useState(1)
-  const [directoriesStatus, setDirectoriesStatus] = useState(fetchStatus.FETCHING)
+  const [imageDirectoriesStatus, setImageDirectoriesStatus] = useState(fetchStatus.FETCHING)
+  const [mediaDirectoriesStatus, setMediaDirectoriesStatus] = useState(fetchStatus.FETCHING)
   const [errorMsg, setErrorMsg] = useState()
   const { setCollection } = useCollectionContext()
-  const { setDirectories } = useDirectoriesContext()
+  const {
+    setImageDirectories,
+    setImageDirectoriesReferenced,
+    setMediaDirectories,
+    setMediaDirectoriesReferenced,
+  } = useDirectoriesContext()
   const { graphqlApiUrl } = useAPIContext()
   const { token } = useAuthContext()
 
@@ -48,59 +54,249 @@ const Collection = ({ id, location }) => {
     }
   }, [id, location, collectionNeedsReloaded, setCollection, graphqlApiUrl, token])
 
-  // Directories fetch - these are only the ones added to the collection, NOT the full list
+  // Fetch image groups
   useEffect(() => {
     if (!token) {
       return
     }
 
     const abortController = new AbortController()
-    const query = ` {
-      listImageGroupsForS3(limit: 10000) {
-        items {
-          imageGroupId
-          images {
-            items {
-              imageGroupId
-              id
-              filePath
-              mediaServer
-              mediaResourceId
+
+    const fetchImageGroups = async (imageGroups = {}, nextToken) => {
+      const query = ` {
+        listImageGroupsForS3(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            imageGroupId
+            images {
+              items {
+                imageGroupId
+                id
+                filePath
+                mediaServer
+                mediaResourceId
+              }
             }
           }
+          nextToken
         }
       }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          Object.assign(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listImageGroupsForS3.nextToken
+          if (nextToken) {
+            imageGroups = await fetchImageGroups(imageGroups, nextToken)
+          } else {
+            setImageDirectories(imageGroups)
+            setImageDirectoriesStatus(fetchStatus.SUCCESS)
+          }
+          return imageGroups
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+          setImageDirectoriesStatus(fetchStatus.ERROR)
+        })
     }
-    `
-    fetch(
-      graphqlApiUrl,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST', // Just a default. Can be overridden
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query }),
-      })
-      .then(result => {
-        return result.json()
-      })
-      .then((data) => {
-        setDirectories(getDirectories(data.data.listImageGroupsForS3.items))
-        setDirectoriesStatus(fetchStatus.SUCCESS)
-      })
-      .catch((error) => {
-        setErrorMsg(error)
-        setDirectoriesStatus(fetchStatus.ERROR)
-      })
+    fetchImageGroups()
+
     return () => {
       abortController.abort()
     }
-  }, [token, graphqlApiUrl, setDirectories])
+  }, [token, graphqlApiUrl, setImageDirectories])
 
-  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalPartiallyDigitized }) => {
+  // Fetch media groups
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+
+    const fetchMediaGroups = async (mediaGroups = {}, nextToken) => {
+      const query = ` {
+        listMediaGroupsForS3(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            mediaGroupId
+            media {
+              items {
+                mediaGroupId
+                id
+                filePath
+                mediaServer
+                mediaResourceId
+              }
+            }
+          }
+          nextToken
+        }
+      }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          Object.assign(mediaGroups, mapMediaDirectories(result.data.listMediaGroupsForS3.items))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listMediaGroupsForS3.nextToken
+          if (nextToken) {
+            mediaGroups = await fetchMediaGroups(mediaGroups, nextToken)
+          } else {
+            setMediaDirectories(mapMediaDirectories(result.data.listMediaGroupsForS3.items))
+            setMediaDirectoriesStatus(fetchStatus.SUCCESS)
+          }
+          return mediaGroups
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+          setMediaDirectoriesStatus(fetchStatus.ERROR)
+        })
+    }
+    fetchMediaGroups()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setMediaDirectories])
+
+  // Fetch list of image groups that are already used
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+
+    const fetchReferencedImageGroups = async (imageGroupIds = [], nextToken) => {
+      const query = ` {
+        listImageGroupsReferenced(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            imageGroupId
+          }
+          nextToken
+        }
+      }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          imageGroupIds = imageGroupIds.concat(result.data.listImageGroupsReferenced.items.map(item => item.imageGroupId))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listImageGroupsReferenced.nextToken
+          if (nextToken) {
+            imageGroupIds = await fetchReferencedImageGroups(imageGroupIds, nextToken)
+          } else {
+            setImageDirectoriesReferenced(imageGroupIds)
+          }
+          return imageGroupIds
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+        })
+    }
+    fetchReferencedImageGroups()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setImageDirectoriesReferenced])
+
+  // Fetch list of media groups that are already used
+  useEffect(() => {
+    if (!token) {
+      return
+    }
+
+    const abortController = new AbortController()
+
+    const fetchReferencedMediaGroups = async (mediaGroupIds = [], nextToken) => {
+      const query = ` {
+        listMediaGroupsReferenced(limit: 10000${nextToken ? `, nextToken: "${nextToken}"` : ''}) {
+          items {
+            mediaGroupId
+          }
+          nextToken
+        }
+      }
+      `
+      fetch(
+        graphqlApiUrl,
+        {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST', // Just a default. Can be overridden
+          signal: abortController.signal,
+          mode: 'cors',
+          body: JSON.stringify({ query: query }),
+        })
+        .then(result => {
+          return result.json()
+        })
+        .then(async (result) => {
+          mediaGroupIds = mediaGroupIds.concat(result.data.listMediaGroupsReferenced.items.map(item => item.mediaGroupId))
+          // If there's a nextToken, we have more results to fetch and append to the array
+          const nextToken = result.data.listMediaGroupsReferenced.nextToken
+          if (nextToken) {
+            mediaGroupIds = await fetchReferencedMediaGroups(mediaGroupIds, nextToken)
+          } else {
+            setMediaDirectoriesReferenced(mediaGroupIds)
+          }
+          return mediaGroupIds
+        })
+        .catch((error) => {
+          setErrorMsg(error)
+        })
+    }
+    fetchReferencedMediaGroups()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [token, graphqlApiUrl, setMediaDirectoriesReferenced])
+
+  const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalMediaGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
     let query = ''
     if (typeof generalPartiallyDigitized !== 'undefined') {
@@ -108,6 +304,16 @@ const Collection = ({ id, location }) => {
           savePartiallyDigitizedForWebsite(
             itemId: "${itemId}",
             partiallyDigitized: ${generalPartiallyDigitized},
+          ) {
+            id
+          }
+        }
+        `
+    } else if (typeof generalMediaGroupId !== 'undefined') {
+      query = `mutation {
+          saveMediaGroupForWebsite(
+            itemId: "${itemId}",
+            mediaGroupId: "${generalMediaGroupId}",
           ) {
             id
           }
@@ -154,7 +360,7 @@ const Collection = ({ id, location }) => {
     }
   }
 
-  const allStatuses = [collectionStatus, directoriesStatus]
+  const allStatuses = [collectionStatus, imageDirectoriesStatus, mediaDirectoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR) || errorMsg) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
@@ -164,7 +370,7 @@ const Collection = ({ id, location }) => {
   }
 }
 
-const getDirectories = (data) => {
+const mapImageDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
     const split = d.imageGroupId.split('-')
@@ -182,6 +388,26 @@ const getDirectories = (data) => {
     }
     // d.sortId = d.id.replace(d.imageGroupId, '')
     // directories[baseDirectoryGroup][d.imageGroupId].images.push(d)
+  })
+  return directories
+}
+
+const mapMediaDirectories = (data) => {
+  const directories = {}
+  data.forEach(d => {
+    const split = d.mediaGroupId.split('-')
+    let baseDirectoryGroup = 'none'
+    if (split.length > 1) {
+      baseDirectoryGroup = split[0]
+    }
+
+    if (!directories[baseDirectoryGroup]) {
+      directories[baseDirectoryGroup] = {}
+    }
+    directories[baseDirectoryGroup][d.mediaGroupId] = {
+      id: d.mediaGroupId,
+      media: d.media.items,
+    }
   })
   return directories
 }

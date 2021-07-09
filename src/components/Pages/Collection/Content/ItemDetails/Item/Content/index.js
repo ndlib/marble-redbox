@@ -6,7 +6,9 @@ import {
 import EditMetadataForm from '../../../EditMetadataForm'
 import DefaultImage from '../../../DefaultImage'
 import DefaultImageButton from '../../../DefaultImageButton'
+import AddMediaButton from '../../../AddMediaButton'
 import ItemHeading from '../ItemHeading'
+import MediaList from '../MediaList'
 import typy from 'typy'
 import Item from '../'
 
@@ -24,6 +26,13 @@ const Content = ({ item, depth, updateItemFunction }) => {
       itemId: item.id,
       generalDefaultFilePath: null,
       generalImageGroupId: '',
+    })
+  }
+
+  const removeMediaFunction = () => {
+    return updateItemFunction({
+      itemId: item.id,
+      generalMediaGroupId: '',
     })
   }
 
@@ -48,14 +57,24 @@ const Content = ({ item, depth, updateItemFunction }) => {
               removeImageFunction={removeImageFunction}
             >
               <DefaultImageButton
-                selectedImageUrl={thumbnail}
+                selectedImage={defaultImage}
                 imageGroupId={item.imageGroupId}
                 itemTitle={item.title}
                 collectionId={item.collectionId}
                 itemId={item.id}
                 updateItemFunction={updateItemFunction}
               />
+              <AddMediaButton
+                updateItemFunction={updateItemFunction}
+                mediaGroupId={item.mediaGroupId}
+                imageGroupId={item.imageGroupId}
+                selectedImage={defaultImage}
+                itemTitle={item.title}
+                collectionId={item.collectionId}
+                itemId={item.id}
+              />
             </DefaultImage>
+            <MediaList media={item.media?.items} removeMediaFunction={removeMediaFunction} />
           </Box>
         )}
         {typy(item, 'children.items').safeArray.map((child, idx) => (
@@ -83,10 +102,12 @@ Content.propTypes = {
     title: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
     imageGroupId: PropTypes.string,
+    mediaGroupId: PropTypes.string,
     collectionId: PropTypes.string.isRequired,
     defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
     items: PropTypes.array,
+    media: PropTypes.array,
   }).isRequired,
   depth: PropTypes.number,
   updateItemFunction: PropTypes.func.isRequired,
