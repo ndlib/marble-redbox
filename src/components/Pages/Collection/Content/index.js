@@ -13,7 +13,7 @@ import SourceId from './SourceId'
 
 import sx from './sx'
 
-const Content = ({ updateItemFunction }) => {
+const Content = ({ updateItemFunction, updateCopyrightFunction }) => {
   const { collection } = useCollectionContext()
   const data = useStaticQuery(graphql`
     query MarbleUrlQuery {
@@ -37,7 +37,12 @@ const Content = ({ updateItemFunction }) => {
           View in MARBLE
         </a>
       </Flex>
-      <EditMetadataForm updateItemFunction={updateItemFunction} item={collection} startExpanded />
+      <EditMetadataForm
+        updateItemFunction={updateItemFunction}
+        updateCopyrightFunction={updateCopyrightFunction}
+        item={collection}
+        startExpanded
+      />
       <Divider />
 
       <Flex sx={sx.itemSection}>
@@ -49,5 +54,6 @@ const Content = ({ updateItemFunction }) => {
 
 Content.propTypes = {
   updateItemFunction: PropTypes.func.isRequired,
+  updateCopyrightFunction: PropTypes.func.isRequired,
 }
 export default Content

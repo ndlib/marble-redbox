@@ -12,7 +12,7 @@ import MediaList from '../MediaList'
 import typy from 'typy'
 import Item from '../'
 
-const Content = ({ item, depth, updateItemFunction }) => {
+const Content = ({ item, depth, updateItemFunction, updateCopyrightFunction }) => {
   const [expanded, setExpanded] = useState(true)
 
   let thumbnail = ''
@@ -49,7 +49,13 @@ const Content = ({ item, depth, updateItemFunction }) => {
       <Box sx={{ display: expanded ? 'block' : 'none' }}>
         {item.level !== 'collection' && (
           <Box ml={`${depth + 4}rem`} mb='1rem'>
-            {thumbnail && (<EditMetadataForm updateItemFunction={updateItemFunction} item={item} />)}
+            {thumbnail && (
+              <EditMetadataForm
+                updateItemFunction={updateItemFunction}
+                updateCopyrightFunction={updateCopyrightFunction}
+                item={item}
+              />
+            )}
             <DefaultImage
               imageUrl={thumbnail}
               imageGroupId={item.imageGroupId}
@@ -107,10 +113,13 @@ Content.propTypes = {
     defaultFilePath: PropTypes.string,
     partiallyDigitized: PropTypes.bool,
     items: PropTypes.array,
-    media: PropTypes.array,
+    media: PropTypes.shape({
+      items: PropTypes.array,
+    }),
   }).isRequired,
   depth: PropTypes.number,
   updateItemFunction: PropTypes.func.isRequired,
+  updateCopyrightFunction: PropTypes.func.isRequired,
 }
 
 Content.defaultProps = {

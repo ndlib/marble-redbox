@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import { copyrightStatements } from 'utils/general'
 
 export const initialContext = {
   collection: { },
@@ -24,6 +25,7 @@ const collectionGrapgqlQuery = (id) => {
       copyrightStatement
       copyrightStatus
       copyrightUrl
+      additionalNotes
       partiallyDigitized
       images {
         items {
@@ -108,6 +110,49 @@ export const updateItemFunctionBase = ({ itemId, generalDefaultFilePath, general
         }
         `
   }
+  return fetch(
+    graphqlApiUrl,
+    {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      signal: abortController.signal,
+      mode: 'cors',
+      body: JSON.stringify({ query: query }),
+
+    })
+    .then(result => {
+      return result.json()
+    })
+}
+
+// eslint-disable-next-line complexity
+export const updateCopyrightFunctionBase = ({
+  itemId,
+  statementUri,
+  usePermissions,
+  additionalNotes,
+  token,
+  graphqlApiUrl,
+  abortController,
+}) => {
+  const statementInfo = copyrightStatements.find(statement => statement.uri === statementUri)
+  const inCopyright = statementInfo?.inCopyright || false
+  const query = `mutation {
+    saveCopyrightForWebsite(
+      itemId: "${itemId}",
+      copyrightStatement: "${usePermissions || ''}"
+      copyrightStatus: "${inCopyright ? 'Copyright' : 'not in copyright'}"
+      copyrightUrl: "${statementUri || ''}"
+      inCopyright: ${inCopyright}
+      additionalNotes: "${additionalNotes || ''}"
+    ) {
+      id
+    }
+  }
+  `
   return fetch(
     graphqlApiUrl,
     {

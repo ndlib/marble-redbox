@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   fetchAndParseCollection,
   updateItemFunctionBase,
+  updateCopyrightFunctionBase,
 } from 'context/CollectionContext'
 
 import Loading from 'components/Layout/Loading'
@@ -64,10 +65,41 @@ const Item = ({ item, depth }) => {
       })
   }
 
+  const updateCopyrightFunction = ({
+    itemId,
+    statementUri,
+    usePermissions,
+    additionalNotes,
+  }) => {
+    const abortController = new AbortController()
+
+    updateCopyrightFunctionBase({
+      itemId,
+      statementUri,
+      usePermissions,
+      additionalNotes,
+      token,
+      graphqlApiUrl,
+      abortController,
+    })
+      .then(() => {
+        setItemNeedsReloaded(itemNeedsReloaded + 1)
+      }).catch((error) => {
+        console.error(error)
+      })
+  }
+
   if (itemStatus === fetchStatus.FETCHING) {
     return (<Loading />)
   } else {
-    return (<Content item={editableData} updateItemFunction={updateItemFunction} depth={depth} />)
+    return (
+      <Content
+        item={editableData}
+        updateItemFunction={updateItemFunction}
+        updateCopyrightFunction={updateCopyrightFunction}
+        depth={depth}
+      />
+    )
   }
 }
 

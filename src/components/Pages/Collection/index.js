@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import {
   useCollectionContext,
   fetchAndParseCollection,
+  updateItemFunctionBase,
+  updateCopyrightFunctionBase,
 } from 'context/CollectionContext'
 import { useDirectoriesContext } from 'context/DirectoriesContext'
 import ErrorMessage from 'components/Layout/ErrorMessage'
@@ -298,55 +300,17 @@ const Collection = ({ id, location }) => {
 
   const updateItemFunction = ({ itemId, generalDefaultFilePath, generalImageGroupId, generalMediaGroupId, generalPartiallyDigitized }) => {
     const abortController = new AbortController()
-    let query = ''
-    if (typeof generalPartiallyDigitized !== 'undefined') {
-      query = `mutation {
-          savePartiallyDigitizedForWebsite(
-            itemId: "${itemId}",
-            partiallyDigitized: ${generalPartiallyDigitized},
-          ) {
-            id
-          }
-        }
-        `
-    } else if (typeof generalMediaGroupId !== 'undefined') {
-      query = `mutation {
-          saveMediaGroupForWebsite(
-            itemId: "${itemId}",
-            mediaGroupId: "${generalMediaGroupId}",
-          ) {
-            id
-          }
-        }
-        `
-    } else {
-      query = `mutation {
-          saveDefaultImageForWebsite(
-            itemId: "${itemId}",
-            defaultFilePath: "${generalDefaultFilePath}",
-            imageGroupId: "${generalImageGroupId}",
-          ) {
-            id
-          }
-        }
-        `
-    }
-    fetch(
-      graphqlApiUrl,
-      {
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        signal: abortController.signal,
-        mode: 'cors',
-        body: JSON.stringify({ query: query }),
 
-      })
-      .then(result => {
-        return result.json()
-      })
+    updateItemFunctionBase({
+      itemId,
+      generalDefaultFilePath,
+      generalImageGroupId,
+      generalMediaGroupId,
+      generalPartiallyDigitized,
+      token,
+      graphqlApiUrl,
+      abortController,
+    })
       .then(() => {
         setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
       })
@@ -354,17 +318,38 @@ const Collection = ({ id, location }) => {
         setErrorMsg(error)
         setCollectionStatus(fetchStatus.ERROR)
       })
+  }
 
-    return () => {
-      abortController.abort()
-    }
+  const updateCopyrightFunction = ({
+    itemId,
+    statementUri,
+    usePermissions,
+    additionalNotes,
+  }) => {
+    const abortController = new AbortController()
+
+    updateCopyrightFunctionBase({
+      itemId,
+      statementUri,
+      usePermissions,
+      additionalNotes,
+      token,
+      graphqlApiUrl,
+      abortController,
+    })
+      .then(() => {
+        setCollectionNeedsReloaded(collectionNeedsReloaded + 1)
+      }).catch((error) => {
+        setErrorMsg(error)
+        setCollectionStatus(fetchStatus.ERROR)
+      })
   }
 
   const allStatuses = [collectionStatus, imageDirectoriesStatus, mediaDirectoriesStatus]
   if (allStatuses.some(status => status === fetchStatus.ERROR) || errorMsg) {
     return <ErrorMessage error={errorMsg} />
   } else if (allStatuses.every(status => status === fetchStatus.SUCCESS)) {
-    return <Content updateItemFunction={updateItemFunction} />
+    return <Content updateItemFunction={updateItemFunction} updateCopyrightFunction={updateCopyrightFunction} />
   } else {
     return <Loading />
   }
