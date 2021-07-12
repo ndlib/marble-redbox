@@ -74,3 +74,63 @@ export const compareStrings = (a, b) => {
 
   return a.toString().localeCompare(b, undefined, { sensitivity: 'accent', ignorePunctuation: true })
 }
+
+export const copyrightStatements = [
+  {
+    uri: 'http://rightsstatements.org/vocab/InC/1.0/',
+    name: 'IN COPYRIGHT',
+    inCopyright: true,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/InC-OW-EU/1.0/',
+    name: 'IN COPYRIGHT - EU ORPHAN WORK',
+    inCopyright: true,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/InC-EDU/1.0/',
+    name: 'IN COPYRIGHT - EDUCATIONAL USE PERMITTED',
+    inCopyright: true,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/InC-NC/1.0/',
+    name: 'IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED',
+    inCopyright: true,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/InC-RUU/1.0/',
+    name: 'IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE',
+    inCopyright: true,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/NoC-CR/1.0/',
+    name: 'NO COPYRIGHT - CONTRACTUAL RESTRICTIONS',
+    inCopyright: false,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/NoC-NC/1.0/',
+    name: 'NO COPYRIGHT - NON-COMMERCIAL USE ONLY',
+    inCopyright: false,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/NoC-OKLR/1.0/',
+    name: 'NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS',
+    inCopyright: false,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/NoC-US/1.0/',
+    name: 'NO COPYRIGHT - UNITED STATES',
+    inCopyright: false,
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/CNE/1.0/',
+    name: 'COPYRIGHT NOT EVALUATED',
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/UND/1.0/',
+    name: 'COPYRIGHT UNDETERMINED',
+  },
+  {
+    uri: 'http://rightsstatements.org/vocab/NKC/1.0/',
+    name: 'NO KNOWN COPYRIGHT',
+  },
+]
