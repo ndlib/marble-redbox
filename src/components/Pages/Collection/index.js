@@ -12,7 +12,6 @@ import Loading from 'components/Layout/Loading'
 import Content from './Content'
 import { useAPIContext } from 'context/APIContext'
 import { useAuthContext } from 'context/AuthContext'
-import _ from 'lodash'
 
 export const fetchStatus = {
   FETCHING: 'FETCHING',
@@ -100,7 +99,8 @@ const Collection = ({ id, location }) => {
           return result.json()
         })
         .then(async (result) => {
-          _.merge(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          singleLevelMerge(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          console.log('ig', imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
           // If there's a nextToken, we have more results to fetch and append to the array
           const nextToken = result.data.listImageGroupsForS3.nextToken
 
@@ -397,6 +397,17 @@ const mapMediaDirectories = (data) => {
     }
   })
   return directories
+}
+
+const singleLevelMerge = (hash1, hash2) => {
+  const keys = Object.keys(hash2)
+  for (let i = 0; i < keys.length; i++) {
+    if (!hash1[keys[i]]) {
+      hash1[keys[i]] = hash2[keys[i]]
+    } else {
+      Object.assign(hash1[keys[i]], hash2[keys[i]])
+    }
+  }
 }
 
 Collection.propTypes = {
