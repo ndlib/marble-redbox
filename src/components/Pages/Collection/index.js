@@ -99,9 +99,10 @@ const Collection = ({ id, location }) => {
           return result.json()
         })
         .then(async (result) => {
-          Object.assign(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          twoLevelMerge(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
           // If there's a nextToken, we have more results to fetch and append to the array
           const nextToken = result.data.listImageGroupsForS3.nextToken
+
           if (nextToken) {
             imageGroups = await fetchImageGroups(imageGroups, nextToken)
           } else {
@@ -395,6 +396,18 @@ const mapMediaDirectories = (data) => {
     }
   })
   return directories
+}
+
+// note this only merges the first 2 levels of the hash
+const twoLevelMerge = (hash1, hash2) => {
+  const keys = Object.keys(hash2)
+  for (let i = 0; i < keys.length; i++) {
+    if (!hash1[keys[i]]) {
+      hash1[keys[i]] = hash2[keys[i]]
+    } else {
+      Object.assign(hash1[keys[i]], hash2[keys[i]])
+    }
+  }
 }
 
 Collection.propTypes = {
