@@ -20,7 +20,6 @@ import sx from './sx'
 const ImageSelection = ({ selected, onSelect, imageGroupId, showUsedGroups }) => {
   const { imageDirectories, imageDirectoriesReferenced } = useDirectoriesContext()
   const { imageGroup, setImageGroup } = useImageGroupContext()
-
   // search and sort all the options for the top select box.
   const baseSearchOptions = []
   Object.keys(imageDirectories).forEach((directory) => {

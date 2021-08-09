@@ -12,6 +12,7 @@ import Loading from 'components/Layout/Loading'
 import Content from './Content'
 import { useAPIContext } from 'context/APIContext'
 import { useAuthContext } from 'context/AuthContext'
+import _ from 'lodash'
 
 export const fetchStatus = {
   FETCHING: 'FETCHING',
@@ -99,9 +100,11 @@ const Collection = ({ id, location }) => {
           return result.json()
         })
         .then(async (result) => {
-          Object.assign(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
+          _.merge(imageGroups, mapImageDirectories(result.data.listImageGroupsForS3.items))
           // If there's a nextToken, we have more results to fetch and append to the array
           const nextToken = result.data.listImageGroupsForS3.nextToken
+          console.log('ig' + nextToken, imageGroups['none'], mapImageDirectories(result.data.listImageGroupsForS3.items)['none'])
+
           if (nextToken) {
             imageGroups = await fetchImageGroups(imageGroups, nextToken)
           } else {
@@ -358,6 +361,9 @@ const Collection = ({ id, location }) => {
 const mapImageDirectories = (data) => {
   const directories = {}
   data.forEach(d => {
+    if (d.imageGroupId === 'BOO_004961752') {
+      console.log(d)
+    }
     const split = d.imageGroupId.split('-')
     let baseDirectoryGroup = 'none'
     if (split.length > 1) {
@@ -366,6 +372,9 @@ const mapImageDirectories = (data) => {
 
     if (!directories[baseDirectoryGroup]) {
       directories[baseDirectoryGroup] = {}
+    }
+    if (d.imageGroupId === 'BOO_004961752') {
+      console.log(baseDirectoryGroup)
     }
     directories[baseDirectoryGroup][d.imageGroupId] = {
       id: d.imageGroupId,
