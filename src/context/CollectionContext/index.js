@@ -15,6 +15,7 @@ const collectionGrapgqlQuery = (id) => {
       id
       title
       level
+      uniqueIdentifier
       imageGroupId
       mediaGroupId
       collectionId

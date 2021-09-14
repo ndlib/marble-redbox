@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
+  Heading,
 } from 'theme-ui'
 import EditMetadataForm from '../../../EditMetadataForm'
 import DefaultImage from '../../../DefaultImage'
@@ -56,6 +57,7 @@ const Content = ({ item, depth, updateItemFunction, updateCopyrightFunction }) =
                 item={item}
               />
             )}
+            <Heading as='h4' sx={{ color: 'gray', display: 'block', fontSize: 3, my: '5px' }}>{item.uniqueIdentifier}</Heading>
             <DefaultImage
               imageUrl={thumbnail}
               imageGroupId={item.imageGroupId}
