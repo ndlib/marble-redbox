@@ -13,9 +13,9 @@ const EditMetadataForm = ({ updateItemFunction, updateCopyrightFunction, item, s
     <div>
       <Button onClick={() => setExpanded(!expanded)} sx={sx.showEditButton}>
         {expanded ? (
-          <><MdExpandLess sx={sx.expandIcon} /> Hide Edit</>
+          <><MdExpandLess sx={sx.expandIcon} /> Edit</>
         ) : (
-          <><MdExpandMore sx={sx.expandIcon} /> Show Edit</>
+          <><MdExpandMore sx={sx.expandIcon} /> Edit</>
         )}
       </Button>
       {expanded && (
