@@ -7,12 +7,12 @@ require('dotenv').config({
   path: `.env.${activeEnv}`,
 })
 
-const s3BucketName = process.env.S3_DEST_BUCKET || ''
+const s3BucketName = process.env.S3_DEST_BUCKET || 'ci-bucket'
 const graphqlApiUrl = process.env.GRAPHQL_API_URL || ''
-const authClientURL = process.env.AUTH_CLIENT_URL || ''
-const authClientClientId = process.env.AUTH_CLIENT_ID || ''
-const authClientIssuer = process.env.AUTH_CLIENT_ISSUER || ''
-const marbleUrl = process.env.MARBLE_URL || ''
+const authClientURL = process.env.AUTH_CLIENT_URL || 'https://okta.nd.edu'
+const authClientClientId = process.env.AUTH_CLIENT_ID || '0oa4tlda8nvJGLv9i357'
+const authClientIssuer = process.env.AUTH_CLIENT_ISSUER || 'https://okta.nd.edu/oauth2/ausxosq06SDdaFNMB356'
+const marbleUrl = process.env.BUILD_ENVIRONMENT === 'production' ? 'https://marble.nd.edu' : 'https://marble-test.library.nd.edu'
 
 console.table([
   { variable: 'GRAPHQL_API_URL:', value: graphqlApiUrl },
