@@ -14,7 +14,7 @@ import typy from 'typy'
 import Item from '../'
 
 const Content = ({ item, depth, updateItemFunction, updateCopyrightFunction }) => {
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
 
   let thumbnail = ''
   const defaultImage = determineDefaultImage(item)

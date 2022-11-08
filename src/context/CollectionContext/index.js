@@ -42,7 +42,7 @@ const collectionGrapgqlQuery = (id) => {
           mediaResourceId
         }
       }
-      children {
+      children(limit: 10000) {
         items {
           id
         }
