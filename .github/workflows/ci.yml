@@ -1,9 +1,9 @@
 name: Node Unit Test CI
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
@@ -14,24 +14,24 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - uses: c-hive/gha-yarn-cache@v1
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: c-hive/gha-yarn-cache@v1
 
-    - name: "Install Main App"
-      run: |
-        yarn global add gatsby-cli
-        mkdir ~/.config/gatsby
-        cp ./scripts/codebuild/config.json ~/.config/gatsby/
-        yarn install
-        cp ".env.test" ".env.production"
+      - name: 'Install Main App'
+        run: |
+          yarn global add gatsby-cli@4.24.0
+          mkdir ~/.config/gatsby
+          cp ./scripts/codebuild/config.json ~/.config/gatsby/
+          yarn install
+          cp ".env.test" ".env.production"
 
-    - name: "Unit Tests"
-      run: yarn test
+      - name: 'Unit Tests'
+        run: yarn test
 
-    - name: "Build"
-      run: |
-        yarn build
+      - name: 'Build'
+        run: |
+          yarn build
