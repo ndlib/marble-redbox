@@ -18,7 +18,7 @@ const retrieveStageParameters = async () => {
     WithDecryption: true,
   });
 
-  const params = await ssmClient.send(command)
+  const params = ssmClient.send(command)
     .catch((err) => {
       console.error('Failed getting parameter: ' + appConfig)
       console.error(err)
